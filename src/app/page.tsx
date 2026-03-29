@@ -274,7 +274,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:hello@wizeapps.com"
+                href="mailto:hello@wizeapps.agency"
                 className="inline-flex items-center justify-center gap-2 bg-foreground text-white text-base font-medium px-8 py-3.5 rounded-full hover:opacity-90 transition-opacity"
               >
                 Start a conversation
