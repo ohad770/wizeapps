@@ -8,7 +8,7 @@ import { resources } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Resources | WizeApps",
   description:
-    "Practical guides about booking automation, MVP planning, manual operations, and preparing for software builds.",
+    "Practical guides about booking automation, MVP planning, website tools, app development tools, manual operations, and preparing for software builds.",
 };
 
 export default function ResourcesPage() {
@@ -19,7 +19,7 @@ export default function ResourcesPage() {
         <PageIntro
           eyebrow="Resources"
           title="Practical notes for building less software and getting better outcomes."
-          description="Short, plain-language guides for business owners and founders who want to improve a workflow before turning it into software."
+          description="Short, plain-language guides and comparisons for business owners and founders who want to improve a workflow before turning it into software."
         />
         <section className="max-w-5xl mx-auto px-6 pb-20 md:pb-28">
           <div className="grid gap-6 md:grid-cols-2">
@@ -27,7 +27,7 @@ export default function ResourcesPage() {
               <Link
                 key={resource.slug}
                 href={`/resources/${resource.slug}`}
-                className="rounded-xl border border-gray-100 p-6 hover:border-gray-200 hover:-translate-y-0.5 transition"
+                className="rounded-lg border border-gray-100 p-6 hover:border-gray-200 hover:-translate-y-0.5 transition"
               >
                 <span className="text-sm text-muted">{resource.readTime}</span>
                 <h2 className="mt-3 text-xl font-semibold">

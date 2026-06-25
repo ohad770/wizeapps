@@ -61,6 +61,61 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                     <p key={paragraph}>{paragraph}</p>
                   ))}
                 </div>
+                {section.bullets ? (
+                  <div className="mt-6 grid gap-3">
+                    {section.bullets.map((bullet) => (
+                      <div
+                        key={bullet.label}
+                        className="rounded-lg border border-gray-100 p-4"
+                      >
+                        <h3 className="font-semibold text-foreground">
+                          {bullet.label}
+                        </h3>
+                        <p className="mt-2 text-muted leading-relaxed">
+                          {bullet.text}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                {section.comparison ? (
+                  <div className="mt-6 grid gap-4">
+                    {section.comparison.map((row) => (
+                      <div
+                        key={row.tool}
+                        className="rounded-lg border border-gray-100 p-5"
+                      >
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {row.tool}
+                        </h3>
+                        <dl className="mt-4 grid gap-4 text-sm leading-relaxed md:grid-cols-3">
+                          <div>
+                            <dt className="font-semibold text-foreground">
+                              Best for
+                            </dt>
+                            <dd className="mt-1 text-muted">{row.bestFor}</dd>
+                          </div>
+                          <div>
+                            <dt className="font-semibold text-foreground">
+                              Strengths
+                            </dt>
+                            <dd className="mt-1 text-muted">
+                              {row.strengths}
+                            </dd>
+                          </div>
+                          <div>
+                            <dt className="font-semibold text-foreground">
+                              Tradeoffs
+                            </dt>
+                            <dd className="mt-1 text-muted">
+                              {row.tradeoffs}
+                            </dd>
+                          </div>
+                        </dl>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </section>
             ))}
           </div>

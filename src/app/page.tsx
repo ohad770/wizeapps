@@ -230,8 +230,9 @@ export default function Home() {
                 Useful notes before you build
               </h2>
               <p className="mt-4 text-muted leading-relaxed max-w-xl">
-                Short guides for business owners and founders who want to make
-                better software decisions before spending money on development.
+                Short guides and tool comparisons for business owners and
+                founders who want to make better software decisions before
+                spending money on development.
               </p>
             </div>
             <Link
@@ -242,7 +243,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {resources.slice(0, 4).map((resource) => (
+            {resources.slice(0, 6).map((resource) => (
               <Link
                 key={resource.slug}
                 href={`/resources/${resource.slug}`}
