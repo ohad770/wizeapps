@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AdSense from "@/components/AdSense";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -40,6 +41,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <AdSense />
       <SiteHeader />
       <main className="flex-1">
         {/* Hero */}

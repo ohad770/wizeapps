@@ -19,11 +19,20 @@ export default function CaseStudiesPage() {
       <SiteHeader />
       <main className="flex-1">
         <PageIntro
-          eyebrow="Case studies"
-          title="Realistic examples of what a focused build can change."
-          description="These examples show the kind of operational problems WizeApps is built to solve: repeated work, unclear handoffs, and product ideas that need a usable first version."
+          eyebrow="Example scenarios"
+          title="Illustrative examples of what a focused build can change."
+          description="The scenarios below show the kinds of operational problems WizeApps is built to solve — repeated work, unclear handoffs, and product ideas that need a usable first version."
         />
         <section className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+          <Reveal className="mb-10 rounded-2xl border border-accent/20 bg-accent-soft/50 p-5 text-sm text-muted leading-relaxed md:p-6">
+            <span className="font-semibold text-accent-deep">
+              A note on these examples:
+            </span>{" "}
+            the following are illustrative scenarios built from common patterns
+            we see across small businesses and early-stage teams. They are
+            written to explain how we approach problems — they are not
+            descriptions of specific named clients or guaranteed results.
+          </Reveal>
           <div className="space-y-8">
             {caseStudies.map((study, i) => (
               <Reveal
