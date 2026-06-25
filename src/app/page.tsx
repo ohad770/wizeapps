@@ -1,21 +1,12 @@
-import Logo from "@/components/Logo";
+import Link from "next/link";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+import { resources, services } from "@/lib/site";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Logo />
-          <a
-            href="#contact"
-            className="hidden sm:inline-flex items-center gap-1 bg-accent text-white text-sm font-medium px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity"
-          >
-            Start a conversation
-            <span aria-hidden="true">&rarr;</span>
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1">
         {/* ── Section 1: Hero ── */}
@@ -30,13 +21,13 @@ export default function Home() {
             not months. No tech jargon. No wasted features. Just a system that
             does what you actually need.
           </p>
-          <a
-            href="#contact"
+          <Link
+            href="/contact"
             className="inline-flex items-center gap-2 mt-10 bg-foreground text-white text-base font-medium px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
           >
             Tell us what you&apos;re trying to solve
             <span aria-hidden="true">&rarr;</span>
-          </a>
+          </Link>
         </section>
 
         {/* ── Section 2: The Problem ── */}
@@ -187,13 +178,86 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <a
-            href="#contact"
+          <Link
+            href="/contact"
             className="inline-flex items-center gap-2 mt-12 text-accent font-medium hover:underline"
           >
             That sound like your situation? Let&apos;s talk
             <span aria-hidden="true">&rarr;</span>
-          </a>
+          </Link>
+        </section>
+
+        <section className="bg-muted-light">
+          <div className="max-w-5xl mx-auto px-6 py-20 md:py-28">
+            <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+                  Practical systems we build
+                </h2>
+                <p className="mt-4 text-muted leading-relaxed max-w-xl">
+                  These are the kinds of focused builds that usually create the
+                  fastest operational lift for small businesses and early-stage
+                  teams.
+                </p>
+              </div>
+              <Link
+                href="/services"
+                className="text-accent font-medium hover:underline"
+              >
+                View all services &rarr;
+              </Link>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {services.slice(0, 4).map((service) => (
+                <article
+                  key={service.slug}
+                  className="bg-white rounded-xl p-6 border border-gray-100"
+                >
+                  <h3 className="text-lg font-semibold">{service.title}</h3>
+                  <p className="mt-3 text-muted text-[15px] leading-relaxed">
+                    {service.summary}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-5xl mx-auto px-6 py-20 md:py-28">
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+                Useful notes before you build
+              </h2>
+              <p className="mt-4 text-muted leading-relaxed max-w-xl">
+                Short guides for business owners and founders who want to make
+                better software decisions before spending money on development.
+              </p>
+            </div>
+            <Link
+              href="/resources"
+              className="text-accent font-medium hover:underline"
+            >
+              Read resources &rarr;
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {resources.slice(0, 4).map((resource) => (
+              <Link
+                key={resource.slug}
+                href={`/resources/${resource.slug}`}
+                className="block border-l-2 border-accent pl-6 hover:translate-x-1 transition-transform"
+              >
+                <span className="text-sm text-muted">{resource.readTime}</span>
+                <h3 className="mt-2 text-lg font-semibold">
+                  {resource.title}
+                </h3>
+                <p className="mt-2 text-muted text-[15px] leading-relaxed">
+                  {resource.description}
+                </p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         {/* ── Section 6: What Makes This Different ── */}
@@ -280,26 +344,18 @@ export default function Home() {
                 Start a conversation
                 <span aria-hidden="true">&rarr;</span>
               </a>
-              <a
-                href="#process"
+              <Link
+                href="/services"
                 className="inline-flex items-center justify-center gap-2 bg-white text-foreground text-base font-medium px-8 py-3.5 rounded-full border border-gray-200 hover:border-gray-300 transition-colors"
               >
-                See how the process works
-              </a>
+                See what we build
+              </Link>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-100">
-        <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Logo />
-          <p className="text-sm text-muted">
-            &copy; {new Date().getFullYear()} WizeApps. Clarity before code.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
