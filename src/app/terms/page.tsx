@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageIntro from "@/components/PageIntro";
+import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 
@@ -19,11 +20,13 @@ export default function TermsPage() {
           title="Website terms for WizeApps visitors."
           description="These terms explain the basic conditions for using this website and contacting WizeApps about software services."
         />
-        <section className="max-w-3xl mx-auto px-6 pb-20 md:pb-28">
-          <p className="text-sm text-muted">Last updated: June 25, 2026</p>
-          <div className="mt-10 space-y-10 text-muted leading-relaxed">
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground">
+        <section className="max-w-3xl mx-auto px-6 py-14 md:py-20">
+          <span className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-deep">
+            Last updated: June 25, 2026
+          </span>
+          <div className="mt-10 space-y-5 text-muted leading-relaxed">
+            <Reveal as="section" className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">
+              <h2 className="text-xl font-semibold text-foreground">
                 Website information
               </h2>
               <p className="mt-4">
@@ -32,9 +35,9 @@ export default function TermsPage() {
                 systems WizeApps may build and how we think about process
                 design. It is not a guarantee of a specific project outcome.
               </p>
-            </section>
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground">
+            </Reveal>
+            <Reveal as="section" delay={80} className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">
+              <h2 className="text-xl font-semibold text-foreground">
                 Project discussions
               </h2>
               <p className="mt-4">
@@ -42,9 +45,9 @@ export default function TermsPage() {
                 itself. Project scope, pricing, timeline, ownership, support,
                 and delivery terms are agreed separately before work begins.
               </p>
-            </section>
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground">
+            </Reveal>
+            <Reveal as="section" delay={80} className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">
+              <h2 className="text-xl font-semibold text-foreground">
                 Acceptable use
               </h2>
               <p className="mt-4">
@@ -52,9 +55,9 @@ export default function TermsPage() {
                 with its operation, submit harmful files, or use the contact
                 address for spam or automated solicitation.
               </p>
-            </section>
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground">
+            </Reveal>
+            <Reveal as="section" delay={80} className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">
+              <h2 className="text-xl font-semibold text-foreground">
                 External links
               </h2>
               <p className="mt-4">
@@ -62,9 +65,9 @@ export default function TermsPage() {
                 sites have their own terms and privacy practices, and WizeApps is
                 not responsible for their content or operation.
               </p>
-            </section>
-            <section>
-              <h2 className="text-2xl font-semibold text-foreground">
+            </Reveal>
+            <Reveal as="section" delay={80} className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">
+              <h2 className="text-xl font-semibold text-foreground">
                 Contact
               </h2>
               <p className="mt-4">
@@ -77,7 +80,7 @@ export default function TermsPage() {
                 </a>
                 .
               </p>
-            </section>
+            </Reveal>
           </div>
         </section>
       </main>

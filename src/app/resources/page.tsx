@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
+import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { resources } from "@/lib/site";
@@ -21,25 +22,35 @@ export default function ResourcesPage() {
           title="Practical notes for building less software and getting better outcomes."
           description="Short, plain-language guides and comparisons for business owners and founders who want to improve a workflow before turning it into software."
         />
-        <section className="max-w-5xl mx-auto px-6 pb-20 md:pb-28">
+        <section className="max-w-5xl mx-auto px-6 py-16 md:py-24">
           <div className="grid gap-6 md:grid-cols-2">
-            {resources.map((resource) => (
-              <Link
+            {resources.map((resource, i) => (
+              <Reveal
                 key={resource.slug}
-                href={`/resources/${resource.slug}`}
-                className="rounded-lg border border-gray-100 p-6 hover:border-gray-200 hover:-translate-y-0.5 transition"
+                delay={(i % 2) * 100}
+                className="h-full"
               >
-                <span className="text-sm text-muted">{resource.readTime}</span>
-                <h2 className="mt-3 text-xl font-semibold">
-                  {resource.title}
-                </h2>
-                <p className="mt-3 text-muted leading-relaxed">
-                  {resource.description}
-                </p>
-                <span className="mt-5 inline-flex text-accent font-medium">
-                  Read guide &rarr;
-                </span>
-              </Link>
+                <Link
+                  href={`/resources/${resource.slug}`}
+                  className="card-fancy group flex h-full flex-col p-7"
+                >
+                  <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-deep">
+                    {resource.readTime}
+                  </span>
+                  <h2 className="mt-4 text-xl font-semibold transition-colors duration-300 group-hover:text-accent-deep">
+                    {resource.title}
+                  </h2>
+                  <p className="mt-3 text-muted leading-relaxed">
+                    {resource.description}
+                  </p>
+                  <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-accent font-medium">
+                    Read guide
+                    <span aria-hidden="true" className="arrow-nudge">
+                      &rarr;
+                    </span>
+                  </span>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </section>

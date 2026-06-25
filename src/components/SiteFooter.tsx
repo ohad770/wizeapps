@@ -4,10 +4,18 @@ import { navigation } from "@/lib/site";
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-gray-100">
-      <div className="max-w-5xl mx-auto px-6 py-10 grid gap-8 md:grid-cols-[1.2fr_1fr_1fr]">
+    <footer className="relative mt-auto border-t border-gray-100 bg-gradient-to-b from-white to-accent-soft/40">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
+      />
+      <div className="max-w-5xl mx-auto px-6 py-12 grid gap-8 md:grid-cols-[1.2fr_1fr_1fr]">
         <div>
-          <Link href="/" aria-label="WizeApps home">
+          <Link
+            href="/"
+            aria-label="WizeApps home"
+            className="inline-block transition-transform duration-300 hover:scale-[1.03]"
+          >
             <Logo />
           </Link>
           <p className="mt-4 text-sm text-muted leading-relaxed max-w-sm">
@@ -17,12 +25,12 @@ export default function SiteFooter() {
         </div>
         <div>
           <h2 className="text-sm font-semibold">Explore</h2>
-          <ul className="mt-4 space-y-2 text-sm text-muted">
+          <ul className="mt-4 space-y-2.5 text-sm text-muted">
             {navigation.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="hover:text-foreground transition-colors"
+                  className="link-underline hover:text-foreground transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -32,11 +40,11 @@ export default function SiteFooter() {
         </div>
         <div>
           <h2 className="text-sm font-semibold">Trust</h2>
-          <ul className="mt-4 space-y-2 text-sm text-muted">
+          <ul className="mt-4 space-y-2.5 text-sm text-muted">
             <li>
               <Link
                 href="/privacy"
-                className="hover:text-foreground transition-colors"
+                className="link-underline hover:text-foreground transition-colors"
               >
                 Privacy policy
               </Link>
@@ -44,7 +52,7 @@ export default function SiteFooter() {
             <li>
               <Link
                 href="/terms"
-                className="hover:text-foreground transition-colors"
+                className="link-underline hover:text-foreground transition-colors"
               >
                 Terms of use
               </Link>
@@ -52,7 +60,7 @@ export default function SiteFooter() {
             <li>
               <a
                 href="mailto:hello@wizeapps.agency"
-                className="hover:text-foreground transition-colors"
+                className="link-underline hover:text-foreground transition-colors"
               >
                 hello@wizeapps.agency
               </a>
