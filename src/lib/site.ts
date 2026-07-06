@@ -779,7 +779,6 @@ export const resources: Resource[] = [
       },
       {
         heading: "How to choose for a real business",
-        interactiveToolId: "build-vs-buy",
         paragraphs: [
           "For a service business that wants leads and credibility, the safest choice is often a custom Next.js site or a visual platform like Webflow. Next.js is stronger when the site also needs booking logic, forms that connect to internal tools, CRM integrations, or future product features. Webflow is attractive when design control and marketing edits matter more than custom workflows.",
           "For a content-heavy site, WordPress and Astro solve different versions of the same problem. WordPress is good when editors need a dashboard and plugin ecosystem. Astro is good when the team prefers a developer-controlled content workflow and very fast static pages. For a store, Shopify should be considered first unless the commerce requirements are unusual.",
@@ -1243,6 +1242,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "The path most businesses should take",
+        interactiveToolId: "build-vs-buy",
         paragraphs: [
           "In practice, the best answer is rarely pure build or pure buy. Most businesses are best served by buying mature tools for the solved problems and building only the thin layer that is genuinely specific to them — often a small system that connects existing tools together and automates the handoffs between them.",
           "Before commissioning any custom software, do a serious search for an existing product first, and try to live with it honestly. If a tool gets you 80% of the way, the remaining 20% may not be worth a custom build at all. And if you do build, aim to build the smallest piece that existing tools cannot provide, rather than recreating capabilities you could have rented. The goal is leverage, not ownership for its own sake.",
