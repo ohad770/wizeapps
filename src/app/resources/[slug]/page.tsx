@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdSense from "@/components/AdSense";
+import InteractiveResourceTool from "@/components/InteractiveResourceTool";
 import Reveal from "@/components/Reveal";
 import { diagrams } from "@/components/ResourceDiagrams";
 import SiteFooter from "@/components/SiteFooter";
@@ -228,6 +229,9 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                   <div className="mt-6 rounded-xl border border-gray-100 bg-white p-5 md:p-7">
                     {diagrams[section.diagramId]()}
                   </div>
+                ) : null}
+                {section.interactiveToolId ? (
+                  <InteractiveResourceTool id={section.interactiveToolId} />
                 ) : null}
                 {section.bullets ? (
                   <div className="mt-6 grid gap-3">

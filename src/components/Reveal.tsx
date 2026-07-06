@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ElementType,
+  type ReactNode,
+} from "react";
 
 type RevealProps = {
   children: ReactNode;
@@ -25,8 +31,8 @@ export default function Reveal({
     if (!el) return;
 
     if (typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
+      const fallback = window.setTimeout(() => setVisible(true), 0);
+      return () => window.clearTimeout(fallback);
     }
 
     const observer = new IntersectionObserver(

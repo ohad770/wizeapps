@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
@@ -38,30 +40,57 @@ export default function CaseStudiesPage() {
                 as="article"
                 key={project.slug}
                 delay={(i % 2) * 90}
-                className="card-fancy p-7 md:p-9 group"
+                className="card-fancy overflow-hidden group"
               >
-                <div className="flex flex-wrap items-center gap-3">
-                  <p className="eyebrow-badge">{project.industry}</p>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
-                    <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-green-600" />
-                    Live project
-                  </span>
-                  <span className="text-xs font-medium text-muted">
-                    {project.timeline}
-                  </span>
+                <div className="grid md:grid-cols-[0.9fr_1.1fr]">
+                  <div className="relative min-h-64 bg-muted-light">
+                    <Image
+                      src={project.screenshot}
+                      alt={`Screenshot of ${project.title}`}
+                      width={900}
+                      height={720}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="p-7 md:p-9">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <p className="eyebrow-badge">{project.industry}</p>
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
+                        <span
+                          aria-hidden="true"
+                          className="h-1.5 w-1.5 rounded-full bg-green-600"
+                        />
+                        Live project
+                      </span>
+                      <span className="text-xs font-medium text-muted">
+                        {project.timeline}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-2xl font-semibold tracking-tight transition-colors duration-300 group-hover:text-accent-deep">
+                      {project.title}
+                    </h3>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <Link
+                        href={project.detailHref}
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
+                      >
+                        Read teardown
+                        <span aria-hidden="true" className="arrow-nudge">
+                          &rarr;
+                        </span>
+                      </Link>
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-foreground"
+                      >
+                        View live project
+                      </a>
+                    </div>
+                  </div>
                 </div>
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-1.5 text-2xl font-semibold tracking-tight transition-colors duration-300 group-hover:text-accent-deep"
-                >
-                  {project.title}
-                  <span aria-hidden="true" className="arrow-nudge text-lg">
-                    &rarr;
-                  </span>
-                </a>
-                <div className="mt-7 grid gap-6 md:grid-cols-3">
+                <div className="grid gap-6 p-7 pt-0 md:grid-cols-3 md:p-9 md:pt-0">
                   {stages.map((stage) => {
                     const key = stage.toLowerCase() as
                       | "problem"

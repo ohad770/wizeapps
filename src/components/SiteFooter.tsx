@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { navigation } from "@/lib/site";
 
 export default function SiteFooter() {
@@ -9,7 +10,7 @@ export default function SiteFooter() {
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
       />
-      <div className="max-w-5xl mx-auto px-6 py-12 grid gap-8 md:grid-cols-[1.2fr_1fr_1fr]">
+      <div className="max-w-5xl mx-auto px-6 py-12 grid gap-8 md:grid-cols-[1.15fr_0.75fr_0.75fr_1.1fr]">
         <div>
           <Link
             href="/"
@@ -67,6 +68,7 @@ export default function SiteFooter() {
             </li>
           </ul>
         </div>
+        <NewsletterSignup />
       </div>
       <div className="border-t border-gray-100">
         <div className="max-w-5xl mx-auto px-6 py-5 text-xs text-muted">

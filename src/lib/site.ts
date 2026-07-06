@@ -13,6 +13,7 @@ export const navigation = [
   { href: "/services", label: "Services" },
   { href: "/case-studies", label: "Case studies" },
   { href: "/about", label: "About" },
+  { href: "/he", label: "עברית" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -80,6 +81,8 @@ export const realProjects = [
     slug: "mincha-alarm",
     title: "Mincha Alarm",
     url: "https://mincha-alarm.com/",
+    detailHref: "/case-studies/mincha-alarm",
+    screenshot: "/case-studies/mincha-alarm.png",
     industry: "Consumer web app",
     timeline: "Built in about 1 month",
     problem:
@@ -88,11 +91,54 @@ export const realProjects = [
       "We built a location-aware web app that calculates the correct mincha window for wherever the user is and sends an automatic reminder before it closes, with no manual setup per day.",
     outcome:
       "The tool is live and handles the calculation and reminder automatically, so users do not have to look up times themselves. A focused scope like this — one calculation, one reminder, no accounts — is what kept it to about a month.",
+    builtWith: ["Vite", "React", "Base44", "GPS-based zmanim", "Push reminder UX"],
+    teardown: {
+      intro: [
+        "Mincha Alarm was intentionally smaller than a typical religious calendar app. The first version did not try to become a full siddur, calendar, community platform, or settings-heavy utility. It focused on one daily outcome: help a person know when mincha is relevant in their current location and remind them before they miss it.",
+        "That narrow scope made the product useful quickly, but it also exposed the real technical challenge: the app had to explain a time-sensitive calculation clearly enough that non-technical users would trust it.",
+      ],
+      decisions: [
+        {
+          label: "Location first, account later",
+          text: "The key input is the user's location, not a user profile. The experience asks for location permission because the zman changes by city and travel matters more than account history.",
+        },
+        {
+          label: "Zmanim explained in plain language",
+          text: "The public page explains that times are based on GPS, sunrise, sunset, and solar noon rather than hiding the logic behind a vague 'smart reminder' claim.",
+        },
+        {
+          label: "Multilingual from the landing page",
+          text: "The app includes Hebrew, English, French, Russian, Spanish, and Yiddish copy paths, with direction changes for RTL languages.",
+        },
+        {
+          label: "Auto language detection",
+          text: "A Base44 function detects language and stores lightweight page-visit context, so the landing page can start closer to the visitor's language without asking them first.",
+        },
+      ],
+      whatShipped: [
+        "A public landing page with multilingual messaging.",
+        "A phone-style notification preview showing the two important reminder moments.",
+        "FAQ content around calculation method, offline behavior after setup, and halachic method support.",
+        "Admin views for FAQ and contact-message handling.",
+      ],
+      trickyParts: [
+        "The product has to earn trust before the user installs anything. That made the explanation of GPS-based zmanim part of the product, not just marketing copy.",
+        "RTL and LTR languages needed to share the same page without text alignment, ordering, and font choices making one language feel like an afterthought.",
+        "The landing page had to communicate a technical calculation without overwhelming a user who only wants a reliable reminder.",
+      ],
+      nextTime: [
+        "Add a small public demo that lets a visitor choose a city and preview today's mincha window before installing.",
+        "Separate the calculation explanation into a dedicated article for people searching around zmanim, GPS, and travel questions.",
+        "Track which FAQ questions get clicked most often so the product copy can answer real hesitation, not guessed hesitation.",
+      ],
+    },
   },
   {
     slug: "domino-ranana",
     title: "Domino's Pizza Ra'anana — online ordering",
     url: "https://domino-rn.co.il/",
+    detailHref: "/case-studies/domino-ranana",
+    screenshot: "/case-studies/domino-ranana.png",
     industry: "Food and delivery",
     timeline: "Built in about 2 months",
     problem:
@@ -101,11 +147,55 @@ export const realProjects = [
       "We built a branded ordering site: browsable menu, active promotions, and a delivery checkout flow, deployed as the branch's own web presence.",
     outcome:
       "The branch has a live ordering channel it fully owns, separate from marketplace apps and their fees and constraints. The menu, promotions, and checkout flow took about 2 months end to end.",
+    builtWith: ["Vite", "React", "Base44", "Cardcom", "Aviv POS", "Admin order tools"],
+    teardown: {
+      intro: [
+        "The Domino Ra'anana build looks like a menu site from the outside, but the real work is operational. A pizza order touches product availability, deals, toppings, delivery zones, payment status, customer messages, admin visibility, and the point-of-sale flow.",
+        "The important product decision was to treat checkout as the center of the system, not as the final screen after the design was finished.",
+      ],
+      decisions: [
+        {
+          label: "Menu, deals, and products share one cart",
+          text: "The menu combines active products and active deals, with deals shown first. Both paths write structured cart items so checkout can calculate totals consistently.",
+        },
+        {
+          label: "Local cart state keeps ordering fast",
+          text: "Cart, delivery method, selected delivery zone, payment method, and checkout form fields are persisted in localStorage to reduce accidental loss during the order flow.",
+        },
+        {
+          label: "Admin operations are part of the build",
+          text: "The project includes management screens for products, deals, categories, pizza sizes, beverages, sauces, delivery zones, site settings, and orders.",
+        },
+        {
+          label: "Payment and POS are treated separately",
+          text: "Credit-card orders create a pending order and Cardcom payment URL first; successful payment updates the order and then runs post-order handling, including email and Aviv POS delivery.",
+        },
+      ],
+      whatShipped: [
+        "Public menu with search, category filtering, products, deals, and configurable add-ons.",
+        "Cart and checkout flow for delivery or pickup.",
+        "Cardcom payment iframe path for card payments and a cash-order path.",
+        "Customer and admin email templates with full order details.",
+        "Aviv POS order handoff and test pages for payment/POS validation.",
+      ],
+      trickyParts: [
+        "Deals are not just discounted products. A deal can contain multiple products and its own selectable options, so the cart had to preserve deal structure instead of flattening everything too early.",
+        "Payment success is asynchronous. The site must handle an order that exists before payment is completed, then update status, send messages, clear the cart, and send to POS only after success.",
+        "Delivery zones have operational rules — delivery cost and minimum order amount — that affect checkout eligibility, not just display.",
+      ],
+      nextTime: [
+        "Move more checkout validation into shared pure functions so pricing, minimums, and delivery rules can be tested without rendering the full checkout page.",
+        "Add an internal event timeline per order, so staff can see payment, email, and POS handoff status in one place.",
+        "Add a lightweight abandoned-cart follow-up only if the branch sees enough dropped orders to justify it.",
+      ],
+    },
   },
   {
     slug: "djob-agency",
     title: "Djob — recruitment platform",
     url: "https://djob.agency/",
+    detailHref: "/case-studies/djob-agency",
+    screenshot: "/case-studies/djob-agency.png",
     industry: "Recruitment",
     timeline: "Built in about 6 months",
     problem:
@@ -114,6 +204,56 @@ export const realProjects = [
       "We built an end-to-end recruitment platform: candidates browse and apply to open positions, and the process is tracked in one system instead of scattered inboxes.",
     outcome:
       "The platform is live at djob.agency, giving candidates a real place to find open roles and apply directly. Covering both the candidate and employer sides of the workflow took about 6 months, reflecting the wider scope of a two-sided platform.",
+    builtWith: [
+      "Vite",
+      "React",
+      "Base44",
+      "Postgres",
+      "OpenAI embeddings",
+      "Snapshot matching",
+    ],
+    teardown: {
+      intro: [
+        "Djob is the kind of project where the public website is only the visible edge. The harder product is the admin and matching layer behind it: jobs, candidates, applications, CV-derived statements, embeddings, score gates, snapshot tables, and workflows for contacting matched people.",
+        "That is why the timeline was closer to six months. A two-sided platform is not one user flow; it is two user flows plus the operating system that connects them.",
+      ],
+      decisions: [
+        {
+          label: "Quick apply and full candidate records coexist",
+          text: "The public job card supports quick apply without a CV, while the modal still tries to find or create a candidate record so the admin side does not lose the applicant in a disconnected application table.",
+        },
+        {
+          label: "Embeddings are built from structured statements",
+          text: "Jobs and candidates are synced into statement-part tables and embedding tables, rather than embedding one large unstructured blob per record.",
+        },
+        {
+          label: "Matching uses gates, not only one score",
+          text: "The matching service computes title score, required score, optional score, time gates, pass/fail reasons, and final totals so the UI can explain why a match passed or failed.",
+        },
+        {
+          label: "Snapshot tables keep the UI usable",
+          text: "Candidate and job match views read from snapshot tables for ranked results instead of recalculating every match live every time a recruiter opens a page.",
+        },
+      ],
+      whatShipped: [
+        "Public job board with job cards, categories, regions, dates, external links, and quick apply.",
+        "Candidate creation, job creation, and admin editing flows.",
+        "Candidate-to-job and job-to-candidate matching views.",
+        "OpenAI embedding service using text-embedding-3-small.",
+        "Daily rebuild scripts and snapshot tables for match results.",
+        "Controls for email/WhatsApp follow-up tracking on matched roles.",
+      ],
+      trickyParts: [
+        "A single match score is not enough in recruiting. A candidate can be semantically close to a role but fail a hard requirement or time requirement, so the system needed visible gates and reasons.",
+        "The first matching implementation had to evolve into a snapshot model because recruiter screens need fast, repeatable rankings.",
+        "Job and candidate data comes from different shapes and levels of completeness, so the sync layer has to validate, normalize, and rebuild safely.",
+      ],
+      nextTime: [
+        "Expose a plain-English explanation of match reasons on more screens so recruiters can trust the ranking without opening debug views.",
+        "Move more of the threshold configuration into admin settings once enough real usage shows which defaults are too strict or too loose.",
+        "Add analytics around which matches are emailed, WhatsApped, ignored, or converted so the matching model can be tuned from outcomes, not just scores.",
+      ],
+    },
   },
 ];
 
@@ -171,6 +311,7 @@ type ResourceSection = {
   bullets?: ResourceBullet[];
   comparison?: ResourceComparison[];
   diagramId?: string;
+  interactiveToolId?: string;
 };
 
 type ResourceFaq = {
@@ -354,6 +495,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "Build for learning speed, then decide",
+        interactiveToolId: "scope-calculator",
         paragraphs: [
           "The real output of an MVP is not the software. It is evidence: do people understand the offer, where do they drop off, what do they email you asking for, which part of the promise do they actually value, and what are staff quietly doing by hand to keep things working? A first version that produces these answers in three weeks is worth far more than a polished build that takes six months to tell you the same thing.",
           "Plan the MVP with the next decision in mind. Before you start, write down what result would convince you to invest more, what result would make you change direction, and what result would tell you to stop. Deciding this in advance protects you from the most common trap in early products: building more because it is easier than admitting you have not yet proven the idea.",
@@ -425,6 +567,7 @@ export const resources: Resource[] = [
       {
         heading: "What to do with the signals",
         diagramId: "manual-vs-system",
+        interactiveToolId: "automation-score",
         paragraphs: [
           "Noticing these signals does not mean rushing to build. It means you have found a process worth examining closely. Start by writing down how the work actually flows today, where it slows down, and which steps are judgment versus handoff. That map alone often reveals quick fixes that need no software at all.",
           "Where a system does make sense, keep the first version small: target the single most painful signal, automate only the predictable steps, and leave the judgment with people. The aim is never to remove humans from the work — it is to stop spending them on the parts a system handles better, so their time goes to the parts only a person can do.",
@@ -636,6 +779,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "How to choose for a real business",
+        interactiveToolId: "build-vs-buy",
         paragraphs: [
           "For a service business that wants leads and credibility, the safest choice is often a custom Next.js site or a visual platform like Webflow. Next.js is stronger when the site also needs booking logic, forms that connect to internal tools, CRM integrations, or future product features. Webflow is attractive when design control and marketing edits matter more than custom workflows.",
           "For a content-heavy site, WordPress and Astro solve different versions of the same problem. WordPress is good when editors need a dashboard and plugin ecosystem. Astro is good when the team prefers a developer-controlled content workflow and very fast static pages. For a store, Shopify should be considered first unless the commerce requirements are unusual.",
@@ -1670,9 +1814,12 @@ export const resources: Resource[] = [
 
 export const publicPaths = [
   "/",
+  "/he",
   "/about",
   "/services",
+  ...services.map((service) => `/services/${service.slug}`),
   "/case-studies",
+  ...realProjects.map((project) => project.detailHref),
   "/resources",
   ...resources.map((resource) => `/resources/${resource.slug}`),
   "/contact",

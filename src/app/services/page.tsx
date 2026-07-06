@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
@@ -66,6 +67,12 @@ export default function ServicesPage() {
                     </li>
                   ))}
                 </ul>
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="mt-6 inline-flex items-center text-sm font-semibold text-accent-deep transition-colors hover:text-accent"
+                >
+                  Explore service &rarr;
+                </Link>
               </Reveal>
             ))}
           </div>
