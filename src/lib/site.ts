@@ -5,6 +5,7 @@ export const author = {
   role: "Founder, WizeApps",
   bio: "Ohad Mayrom is the founder of WizeApps, where he designs and builds booking systems, client intake flows, internal operations tools, and MVPs for small businesses and early-stage founders. He writes plain-language guides to help non-technical owners commission software with confidence.",
   url: `${siteUrl}/about`,
+  linkedin: "https://www.linkedin.com/in/ohad-mayrom-124125/",
 };
 
 export const navigation = [

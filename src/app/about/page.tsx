@@ -41,6 +41,7 @@ export default function AboutPage() {
     },
     url: `${siteUrl}/about`,
     email: "mailto:hello@wizeapps.agency",
+    sameAs: [author.linkedin],
   };
 
   return (
@@ -117,6 +118,17 @@ export default function AboutPage() {
                 </a>
                 .
               </p>
+              <a
+                href={author.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 font-medium text-accent hover:underline"
+              >
+                Connect on LinkedIn
+                <span aria-hidden="true" className="arrow-nudge">
+                  &rarr;
+                </span>
+              </a>
             </div>
           </Reveal>
         </section>

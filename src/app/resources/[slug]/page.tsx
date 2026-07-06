@@ -5,7 +5,7 @@ import AdSense from "@/components/AdSense";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { resources, siteUrl } from "@/lib/site";
+import { author, resources, siteUrl } from "@/lib/site";
 
 type ResourcePageProps = {
   params: Promise<{ slug: string }>;
@@ -39,7 +39,7 @@ export async function generateMetadata({
   return {
     title: `${resource.title} | WizeApps`,
     description: resource.description,
-    authors: [{ name: "WizeApps", url: siteUrl }],
+    authors: [{ name: author.name, url: author.url }],
     alternates: { canonical: url },
     openGraph: {
       type: "article",
@@ -49,7 +49,7 @@ export async function generateMetadata({
       description: resource.description,
       publishedTime: resource.datePublished,
       modifiedTime: resource.dateModified,
-      authors: ["WizeApps"],
+      authors: [author.name],
     },
   };
 }
@@ -78,9 +78,10 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     dateModified: resource.dateModified,
     mainEntityOfPage: url,
     author: {
-      "@type": "Organization",
-      name: "WizeApps",
-      url: siteUrl,
+      "@type": "Person",
+      name: author.name,
+      url: author.url,
+      sameAs: [author.linkedin],
     },
     publisher: {
       "@type": "Organization",
@@ -188,8 +189,9 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
               <span>
                 By{" "}
                 <Link href="/about" className="font-medium text-foreground hover:text-accent-deep">
-                  WizeApps
+                  {author.name}
                 </Link>
+                , {author.role}
               </span>
               <span aria-hidden="true">·</span>
               <time dateTime={resource.datePublished}>
@@ -301,22 +303,26 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
             </Reveal>
           ) : null}
 
-          {/* Publisher */}
+          {/* Author */}
           <Reveal className="mt-16 rounded-2xl border border-gray-100 bg-muted-light/50 p-6 md:p-7">
             <p className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
-              About WizeApps
+              About the author
             </p>
-            <h2 className="mt-3 font-semibold text-foreground">WizeApps</h2>
-            <p className="mt-2 text-muted leading-relaxed">
-              WizeApps designs and builds booking systems, client intake
-              flows, internal operations tools, and MVPs for small businesses
-              and early-stage founders. This guide reflects patterns we see
-              repeatedly across real client work.{" "}
-              <Link href="/about" className="text-accent hover:underline">
-                Learn more about us
-              </Link>
-              .
-            </p>
+            <h2 className="mt-3 font-semibold text-foreground">
+              {author.name} — {author.role}
+            </h2>
+            <p className="mt-2 text-muted leading-relaxed">{author.bio}</p>
+            <a
+              href={author.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
+            >
+              Connect on LinkedIn
+              <span aria-hidden="true" className="arrow-nudge">
+                &rarr;
+              </span>
+            </a>
           </Reveal>
 
           {/* Related guides */}

@@ -22,6 +22,7 @@ export default function Home() {
       "@type": "Person",
       name: author.name,
       url: author.url,
+      sameAs: [author.linkedin],
     },
   };
 
