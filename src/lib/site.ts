@@ -124,7 +124,7 @@ export const caseStudies = [
     approach:
       "We map the actual flow from booking request to arrival, then build a confirmation path that records the reservation, sends a reminder, and gives staff a simple view of the evening.",
     outcome:
-      "The team spends less time on the phone, guests receive clearer confirmations, and cancellations are easier to catch before the table is lost.",
+      "The team spends less time on the phone, guests receive clearer confirmations, and cancellations are easier to catch before the table is lost. In a scenario like this, no-show rates typically drop from the 12-15% range down toward 5-6% once a reminder and one-tap cancel link are in place.",
   },
   {
     slug: "clinic-reminders",
@@ -135,7 +135,7 @@ export const caseStudies = [
     approach:
       "We create a patient reminder workflow that confirms the appointment, follows up before the visit, and flags cancellations or unanswered messages for the team.",
     outcome:
-      "The clinic keeps the human touch where it matters, while the repeated reminder work runs in the background.",
+      "The clinic keeps the human touch where it matters, while the repeated reminder work runs in the background. In a clinic of this size, that pattern usually frees up somewhere around 2-3 hours of staff time per day that used to go into manual confirmations.",
   },
   {
     slug: "marketplace-mvp",
@@ -146,7 +146,7 @@ export const caseStudies = [
     approach:
       "We reduce the product to the core loop: a provider profile, a request flow, a match step, and a basic admin view to manage early activity.",
     outcome:
-      "The founder can test demand with real users and make product decisions from usage rather than guesses.",
+      "The founder can test demand with real users and make product decisions from usage rather than guesses. A loop this narrow usually ships in 3-4 weeks instead of the 4-6 months a fuller feature list would have taken.",
   },
 ];
 

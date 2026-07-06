@@ -94,7 +94,8 @@ export default function CaseStudiesPage() {
             the following are illustrative scenarios built from common patterns
             we see across small businesses and early-stage teams. They are
             written to explain how we approach problems — they are not
-            descriptions of specific named clients or guaranteed results.
+            descriptions of specific named clients, and any numbers shown are
+            illustrative ranges, not measured results or guaranteed outcomes.
           </Reveal>
           <div className="space-y-8">
             {caseStudies.map((study, i) => (
