@@ -71,6 +71,46 @@ export default function Home() {
           </Link>
         </section>
 
+        {/* ── Section 1b: Latest Guides ── */}
+        <section className="max-w-5xl mx-auto px-6 pb-20 md:pb-28">
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="eyebrow-badge">Latest guides</p>
+              <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight">
+                Useful notes before you build
+              </h2>
+              <p className="mt-4 text-muted leading-relaxed max-w-xl">
+                Short guides and tool comparisons for business owners and
+                founders who want to make better software decisions before
+                spending money on development.
+              </p>
+            </div>
+            <Link
+              href="/resources"
+              className="text-accent font-medium hover:underline shrink-0"
+            >
+              Read all guides &rarr;
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {resources.slice(0, 6).map((resource) => (
+              <Link
+                key={resource.slug}
+                href={`/resources/${resource.slug}`}
+                className="block border-l-2 border-accent pl-6 hover:translate-x-1 transition-transform"
+              >
+                <span className="text-sm text-muted">{resource.readTime}</span>
+                <h3 className="mt-2 text-lg font-semibold">
+                  {resource.title}
+                </h3>
+                <p className="mt-2 text-muted text-[15px] leading-relaxed">
+                  {resource.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ── Section 2: The Problem ── */}
         <section className="bg-muted-light">
           <div className="max-w-5xl mx-auto px-6 py-20 md:py-28">
@@ -261,44 +301,6 @@ export default function Home() {
                 </article>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="max-w-5xl mx-auto px-6 py-20 md:py-28">
-          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-                Useful notes before you build
-              </h2>
-              <p className="mt-4 text-muted leading-relaxed max-w-xl">
-                Short guides and tool comparisons for business owners and
-                founders who want to make better software decisions before
-                spending money on development.
-              </p>
-            </div>
-            <Link
-              href="/resources"
-              className="text-accent font-medium hover:underline"
-            >
-              Read resources &rarr;
-            </Link>
-          </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {resources.slice(0, 6).map((resource) => (
-              <Link
-                key={resource.slug}
-                href={`/resources/${resource.slug}`}
-                className="block border-l-2 border-accent pl-6 hover:translate-x-1 transition-transform"
-              >
-                <span className="text-sm text-muted">{resource.readTime}</span>
-                <h3 className="mt-2 text-lg font-semibold">
-                  {resource.title}
-                </h3>
-                <p className="mt-2 text-muted text-[15px] leading-relaxed">
-                  {resource.description}
-                </p>
-              </Link>
-            ))}
           </div>
         </section>
 

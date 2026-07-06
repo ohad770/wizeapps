@@ -9,9 +9,9 @@ export const author = {
 };
 
 export const navigation = [
+  { href: "/resources", label: "Resources" },
   { href: "/services", label: "Services" },
   { href: "/case-studies", label: "Case studies" },
-  { href: "/resources", label: "Resources" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
