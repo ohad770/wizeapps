@@ -46,6 +46,9 @@ export default function CaseStudiesPage() {
                     <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-green-600" />
                     Live project
                   </span>
+                  <span className="text-xs font-medium text-muted">
+                    {project.timeline}
+                  </span>
                 </div>
                 <a
                   href={project.url}

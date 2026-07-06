@@ -81,36 +81,39 @@ export const realProjects = [
     title: "Mincha Alarm",
     url: "https://mincha-alarm.com/",
     industry: "Consumer web app",
+    timeline: "Built in about 1 month",
     problem:
       "Mincha (the afternoon prayer) has a window that shifts every day with sunset, and it is different in every city. Without checking a calendar daily, people miss the window without realizing it.",
     approach:
       "We built a location-aware web app that calculates the correct mincha window for wherever the user is and sends an automatic reminder before it closes, with no manual setup per day.",
     outcome:
-      "The tool is live and handles the calculation and reminder automatically, so users do not have to look up times themselves.",
+      "The tool is live and handles the calculation and reminder automatically, so users do not have to look up times themselves. A focused scope like this — one calculation, one reminder, no accounts — is what kept it to about a month.",
   },
   {
     slug: "domino-ranana",
     title: "Domino's Pizza Ra'anana — online ordering",
     url: "https://domino-rn.co.il/",
     industry: "Food and delivery",
+    timeline: "Built in about 2 months",
     problem:
       "A local Domino's branch needed a fast, direct ordering experience — full menu, current deals, and delivery — without relying only on phone orders or a generic third-party app.",
     approach:
       "We built a branded ordering site: browsable menu, active promotions, and a delivery checkout flow, deployed as the branch's own web presence.",
     outcome:
-      "The branch has a live ordering channel it fully owns, separate from marketplace apps and their fees and constraints.",
+      "The branch has a live ordering channel it fully owns, separate from marketplace apps and their fees and constraints. The menu, promotions, and checkout flow took about 2 months end to end.",
   },
   {
     slug: "djob-agency",
     title: "Djob — recruitment platform",
     url: "https://djob.agency/",
     industry: "Recruitment",
+    timeline: "Built in about 6 months",
     problem:
       "Matching candidates to open roles usually means juggling job boards, spreadsheets, and email threads with no single place to track who applied to what.",
     approach:
       "We built an end-to-end recruitment platform: candidates browse and apply to open positions, and the process is tracked in one system instead of scattered inboxes.",
     outcome:
-      "The platform is live at djob.agency, giving candidates a real place to find open roles and apply directly.",
+      "The platform is live at djob.agency, giving candidates a real place to find open roles and apply directly. Covering both the candidate and employer sides of the workflow took about 6 months, reflecting the wider scope of a two-sided platform.",
   },
 ];
 
