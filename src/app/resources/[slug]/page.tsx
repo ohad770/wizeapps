@@ -233,6 +233,22 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                 {section.interactiveToolId ? (
                   <InteractiveResourceTool id={section.interactiveToolId} />
                 ) : null}
+                {section.relatedCaseStudy ? (
+                  <Link
+                    href={section.relatedCaseStudy.href}
+                    className="mt-6 block rounded-xl border border-accent/20 bg-accent-soft/50 p-5 transition-colors hover:border-accent/50 hover:bg-accent-soft"
+                  >
+                    <span className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
+                      {section.relatedCaseStudy.label}
+                    </span>
+                    <span className="mt-2 block font-semibold text-foreground">
+                      {section.relatedCaseStudy.title}
+                    </span>
+                    <span className="mt-2 block text-sm leading-relaxed text-muted">
+                      {section.relatedCaseStudy.text}
+                    </span>
+                  </Link>
+                ) : null}
                 {section.bullets ? (
                   <div className="mt-6 grid gap-3">
                     {section.bullets.map((bullet) => (

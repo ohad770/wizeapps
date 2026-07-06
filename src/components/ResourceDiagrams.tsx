@@ -199,9 +199,97 @@ export function PrepFlowDiagram() {
   );
 }
 
+export function WebsiteToolLadderDiagram() {
+  return (
+    <svg viewBox="0 0 720 250" className="w-full h-auto" role="img" aria-label="Website tool choice ladder from simple brochure site to workflow-heavy custom website">
+      <Box x={30} y={95} w={120} h={58} label="Website job" sub="what must happen?" fill="#fff" stroke={MUTED} />
+      <Arrow x1={150} y1={124} x2={210} y2={124} />
+      <Box x={210} y={20} w={130} h={54} label="Builder" sub="simple site" />
+      <Box x={210} y={98} w={130} h={54} label="CMS" sub="publishing" />
+      <Box x={210} y={176} w={130} h={54} label="Custom" sub="workflow logic" />
+      <Arrow x1={340} y1={47} x2={425} y2={47} />
+      <Arrow x1={340} y1={125} x2={425} y2={125} />
+      <Arrow x1={340} y1={203} x2={425} y2={203} />
+      <Box x={425} y={20} w={250} h={54} label="Launch fast" sub="lowest maintenance" fill="#fff" stroke={MUTED} />
+      <Box x={425} y={98} w={250} h={54} label="Publish often" sub="editorial control" fill="#fff" stroke={MUTED} />
+      <Box x={425} y={176} w={250} h={54} label="Own the process" sub="integrations, checkout, portals" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+    </svg>
+  );
+}
+
+export function AppPathDiagram() {
+  return (
+    <svg viewBox="0 0 720 260" className="w-full h-auto" role="img" aria-label="Choosing between responsive web app, cross-platform app, and native app based on distribution and device requirements">
+      <Box x={30} y={100} w={150} h={60} label="App need" sub="who uses it?" fill="#fff" stroke={MUTED} />
+      <Arrow x1={180} y1={130} x2={250} y2={45} />
+      <Arrow x1={180} y1={130} x2={250} y2={130} />
+      <Arrow x1={180} y1={130} x2={250} y2={215} />
+      <Box x={250} y={15} w={160} h={60} label="Known users" sub="internal or portal" />
+      <Box x={250} y={100} w={160} h={60} label="Both stores" sub="shared product" />
+      <Box x={250} y={185} w={160} h={60} label="Deep device" sub="camera, offline, OS" />
+      <Arrow x1={410} y1={45} x2={505} y2={45} />
+      <Arrow x1={410} y1={130} x2={505} y2={130} />
+      <Arrow x1={410} y1={215} x2={505} y2={215} />
+      <Box x={505} y={15} w={170} h={60} label="Web app / PWA" fill="#fff" stroke={MUTED} />
+      <Box x={505} y={100} w={170} h={60} label="Expo or Flutter" fill={ACCENT_SOFT} stroke={ACCENT} />
+      <Box x={505} y={185} w={170} h={60} label="Native build" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+    </svg>
+  );
+}
+
+export function CostDriversDiagram() {
+  const drivers = [
+    { label: "Scope", x: 50, y: 25 },
+    { label: "Roles", x: 50, y: 95 },
+    { label: "Integrations", x: 50, y: 165 },
+    { label: "Unknowns", x: 250, y: 95 },
+  ];
+  return (
+    <svg viewBox="0 0 720 240" className="w-full h-auto" role="img" aria-label="Cost drivers such as scope, roles, integrations, and unknowns flow into estimate, buffer, and launch budget">
+      {drivers.map((driver) => (
+        <Box key={driver.label} x={driver.x} y={driver.y} w={135} h={48} label={driver.label} fill="#fff" stroke={MUTED} />
+      ))}
+      <Arrow x1={185} y1={49} x2={420} y2={112} />
+      <Arrow x1={185} y1={119} x2={420} y2={119} />
+      <Arrow x1={185} y1={189} x2={420} y2={126} />
+      <Arrow x1={385} y1={119} x2={420} y2={119} />
+      <Box x={420} y={82} w={130} h={74} label="Estimate" sub="work + risk" />
+      <Arrow x1={550} y1={119} x2={610} y2={119} />
+      <Box x={610} y={82} w={90} h={74} label="Budget" sub="+ buffer" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+    </svg>
+  );
+}
+
+export function MaintenanceCycleDiagram() {
+  return (
+    <svg viewBox="0 0 620 250" className="w-full h-auto" role="img" aria-label="Maintenance cycle after launch: monitor, update, fix, improve, then feed learning back into the product">
+      <Box x={240} y={10} w={140} h={54} label="Monitor" sub="errors, usage" />
+      <Box x={430} y={98} w={140} h={54} label="Update" sub="platforms" fill="#fff" stroke={MUTED} />
+      <Box x={240} y={186} w={140} h={54} label="Improve" sub="real use" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+      <Box x={50} y={98} w={140} h={54} label="Fix" sub="bugs, changes" fill="#fff" stroke={MUTED} />
+      <path d="M 380 38 C 455 42, 490 62, 500 98" fill="none" stroke={MUTED} strokeWidth={1.5} markerEnd="url(#maintenance-arrow)" />
+      <path d="M 500 152 C 485 190, 430 214, 380 214" fill="none" stroke={MUTED} strokeWidth={1.5} markerEnd="url(#maintenance-arrow)" />
+      <path d="M 240 214 C 170 210, 110 190, 105 152" fill="none" stroke={MUTED} strokeWidth={1.5} markerEnd="url(#maintenance-arrow)" />
+      <path d="M 105 98 C 115 60, 165 38, 240 38" fill="none" stroke={MUTED} strokeWidth={1.5} markerEnd="url(#maintenance-arrow)" />
+      <defs>
+        <marker id="maintenance-arrow" markerWidth={8} markerHeight={8} refX={6} refY={4} orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill={MUTED} />
+        </marker>
+      </defs>
+      <text x={310} y={128} textAnchor="middle" fontSize={12} fill={MUTED}>
+        launch starts the loop
+      </text>
+    </svg>
+  );
+}
+
 export const diagrams: Record<string, () => React.ReactElement> = {
   "booking-flow": BookingFlowDiagram,
   "mvp-loop": MvpLoopDiagram,
   "manual-vs-system": ManualVsSystemDiagram,
   "prep-flow": PrepFlowDiagram,
+  "website-tool-ladder": WebsiteToolLadderDiagram,
+  "app-path": AppPathDiagram,
+  "cost-drivers": CostDriversDiagram,
+  "maintenance-cycle": MaintenanceCycleDiagram,
 };

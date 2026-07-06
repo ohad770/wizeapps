@@ -5,7 +5,14 @@ import SiteHeader from "@/components/SiteHeader";
 import { author, resources, services, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: {
+      en: "/",
+      he: "/he",
+      "x-default": "/",
+    },
+  },
 };
 
 export default function Home() {

@@ -9,7 +9,14 @@ export const metadata: Metadata = {
   title: "WizeApps בעברית | פיתוח אתרים, אפליקציות ואוטומציות לעסקים",
   description:
     "וויזאפס בונה מערכות הזמנות, טפסי קליטה, MVP וכלים פנימיים לעסקים שרוצים להפוך תהליך ידני למערכת שעובדת.",
-  alternates: { canonical: `${siteUrl}/he` },
+  alternates: {
+    canonical: `${siteUrl}/he`,
+    languages: {
+      en: siteUrl,
+      he: `${siteUrl}/he`,
+      "x-default": siteUrl,
+    },
+  },
 };
 
 const hebrewServices = [

@@ -82,7 +82,7 @@ export const realProjects = [
     title: "Mincha Alarm",
     url: "https://mincha-alarm.com/",
     detailHref: "/case-studies/mincha-alarm",
-    screenshot: "/case-studies/mincha-alarm.png",
+    screenshot: "/case-studies/mincha-alarm.webp",
     industry: "Consumer web app",
     timeline: "Built in about 1 month",
     problem:
@@ -138,7 +138,7 @@ export const realProjects = [
     title: "Domino's Pizza Ra'anana — online ordering",
     url: "https://domino-rn.co.il/",
     detailHref: "/case-studies/domino-ranana",
-    screenshot: "/case-studies/domino-ranana.png",
+    screenshot: "/case-studies/domino-ranana.webp",
     industry: "Food and delivery",
     timeline: "Built in about 2 months",
     problem:
@@ -195,7 +195,7 @@ export const realProjects = [
     title: "Djob — recruitment platform",
     url: "https://djob.agency/",
     detailHref: "/case-studies/djob-agency",
-    screenshot: "/case-studies/djob-agency.png",
+    screenshot: "/case-studies/djob-agency.webp",
     industry: "Recruitment",
     timeline: "Built in about 6 months",
     problem:
@@ -312,6 +312,12 @@ type ResourceSection = {
   comparison?: ResourceComparison[];
   diagramId?: string;
   interactiveToolId?: string;
+  relatedCaseStudy?: {
+    href: string;
+    label: string;
+    title: string;
+    text: string;
+  };
 };
 
 type ResourceFaq = {
@@ -460,6 +466,12 @@ export const resources: Resource[] = [
       {
         heading: "Find the smallest proof loop",
         diagramId: "mvp-loop",
+        relatedCaseStudy: {
+          href: "/case-studies/mincha-alarm",
+          label: "Real build example",
+          title: "How Mincha Alarm stayed small enough to ship quickly",
+          text: "A focused product loop — location, zman calculation, reminder — kept the first version useful without turning it into a full calendar app.",
+        },
         paragraphs: [
           "Most products have one core loop — the repeating sequence that delivers the value you promised. If users can complete that loop and get the outcome, the idea has a pulse. If they cannot, no amount of polish elsewhere will save it. So the first thing to build is that loop, end to end, and almost nothing else.",
           "The loop is usually three or four steps. For a marketplace it might be request, match, respond. For a clinic tool it might be book, remind, confirm. For an internal operations app it might be submit, review, complete. Write your loop as a single sentence. If you cannot, the product is not yet clear enough to build, and that clarity is the cheapest thing to fix.",
@@ -692,6 +704,7 @@ export const resources: Resource[] = [
     sections: [
       {
         heading: "Start with the job of the website",
+        diagramId: "website-tool-ladder",
         paragraphs: [
           "The best website tool is not the newest framework or the tool with the prettiest templates. It is the tool that matches the job the website must do every week. A service business usually needs trust, clear offers, fast pages, contact paths, and enough useful content to answer common questions. A software product may need authentication, dashboards, integrations, and a backend. An online store needs product management, checkout, shipping, taxes, and inventory flows.",
           "Before choosing a platform, define the main job: publish content, sell products, collect leads, book appointments, show a portfolio, or run a custom web app. That one decision narrows the field more than any trend report.",
@@ -779,6 +792,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "How to choose for a real business",
+        relatedCaseStudy: {
+          href: "/case-studies/domino-ranana",
+          label: "Real build example",
+          title: "How Domino Ra'anana became more than a menu page",
+          text: "The ordering site needed checkout, delivery rules, payment state, admin tools, and POS handoff — the kind of workflow that changes the website stack decision.",
+        },
         paragraphs: [
           "For a service business that wants leads and credibility, the safest choice is often a custom Next.js site or a visual platform like Webflow. Next.js is stronger when the site also needs booking logic, forms that connect to internal tools, CRM integrations, or future product features. Webflow is attractive when design control and marketing edits matter more than custom workflows.",
           "For a content-heavy site, WordPress and Astro solve different versions of the same problem. WordPress is good when editors need a dashboard and plugin ecosystem. Astro is good when the team prefers a developer-controlled content workflow and very fast static pages. For a store, Shopify should be considered first unless the commerce requirements are unusual.",
@@ -851,6 +870,13 @@ export const resources: Resource[] = [
     sections: [
       {
         heading: "The first question is what kind of app you need",
+        diagramId: "app-path",
+        relatedCaseStudy: {
+          href: "/case-studies/mincha-alarm",
+          label: "Real build example",
+          title: "Why Mincha Alarm started as a focused web app",
+          text: "The important job was a reliable location-based reminder, so the first version did not need two native apps before the core behavior was proven.",
+        },
         paragraphs: [
           "Many teams say they need an app when they really need one of three things: a mobile-friendly web app, a native app in the app stores, or an internal tool that works well on phones. Each path has a different cost, timeline, maintenance model, and user experience.",
           "A customer app that relies on push notifications, camera access, offline use, payments, or app store discovery may justify a native or cross-platform app. A business workflow that mainly needs forms, dashboards, approvals, and notifications may be better as a responsive web app or PWA. The cheapest app is not always the best app, but the most native app is not always necessary either.",
@@ -1013,6 +1039,13 @@ export const resources: Resource[] = [
       },
       {
         heading: "What actually drives the price",
+        diagramId: "cost-drivers",
+        relatedCaseStudy: {
+          href: "/case-studies/domino-ranana",
+          label: "Real build example",
+          title: "Why an ordering site scope grows around operations",
+          text: "Domino Ra'anana shows how delivery zones, payments, cart rules, admin screens, and POS integration drive build effort more than page count.",
+        },
         paragraphs: [
           "Software pricing is mostly a function of how much needs to be designed, built, and tested, and how much risk and uncertainty surrounds it. A handful of factors explain most of the difference between a small invoice and a large one.",
         ],
@@ -1235,6 +1268,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "When building actually makes sense",
+        relatedCaseStudy: {
+          href: "/case-studies/djob-agency",
+          label: "Real build example",
+          title: "Why Djob justified a custom platform",
+          text: "Recruiting needed two user flows, admin operations, embeddings, gates, and match snapshots — a real example of software being the product, not a generic back-office tool.",
+        },
         paragraphs: [
           "Building is justified when existing tools genuinely cannot do the job, or when the software itself is your advantage. If your workflow is unusual enough that every product forces awkward compromises, if you are stitching together five tools with manual copy-paste between them, or if the way you operate is a real competitive edge, custom software can be transformative rather than indulgent.",
           "The clearest case for building is when the software is the product — when what you sell is the application itself. In that situation, off-the-shelf tools cannot deliver your value, and owning the product is the whole point. Outside of that, building is usually about removing a specific, costly friction that no existing tool resolves, not about preferring something bespoke.",
@@ -1365,6 +1404,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "The four kinds of after-launch work",
+        diagramId: "maintenance-cycle",
         paragraphs: [
           "The word \"maintenance\" hides four different activities with different urgency and cost profiles. Separating them makes every conversation with a developer or agency clearer, because you can ask which of the four a support agreement actually covers.",
         ],
