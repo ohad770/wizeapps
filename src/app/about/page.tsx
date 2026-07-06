@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { author, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About WizeApps",
   description:
-    "Learn how WizeApps helps businesses turn manual processes into focused, working digital systems.",
+    "Learn how WizeApps helps businesses turn manual processes into focused, working digital systems, and who is behind it.",
+  alternates: { canonical: `${siteUrl}/about` },
 };
 
 const principles = [
@@ -26,8 +29,28 @@ const principles = [
 ];
 
 export default function AboutPage() {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: author.name,
+    jobTitle: "Founder",
+    worksFor: {
+      "@type": "Organization",
+      name: "WizeApps",
+      url: siteUrl,
+    },
+    url: `${siteUrl}/about`,
+    email: "mailto:hello@wizeapps.agency",
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <SiteHeader />
       <main className="flex-1">
         <PageIntro
@@ -64,6 +87,41 @@ export default function AboutPage() {
         </section>
 
         <section className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+          <Reveal as="h2" className="text-3xl font-semibold tracking-tight">
+            Who is behind WizeApps
+          </Reveal>
+          <Reveal
+            delay={100}
+            className="mt-8 rounded-2xl border border-gray-100 bg-muted-light/50 p-7 md:p-9"
+          >
+            <h3 className="text-xl font-semibold">
+              {author.name} <span className="text-muted font-normal">— Founder</span>
+            </h3>
+            <div className="mt-4 space-y-4 text-muted leading-relaxed max-w-3xl">
+              <p>{author.bio}</p>
+              <p>
+                Every guide published in the{" "}
+                <Link href="/resources" className="text-accent hover:underline">
+                  resources section
+                </Link>{" "}
+                is written and reviewed by Ohad, based on the patterns that come
+                up repeatedly in real client conversations — booking systems
+                that get routed around, MVPs that grew too large before launch,
+                and manual processes that quietly outgrew their spreadsheets.
+                Questions and corrections are welcome at{" "}
+                <a
+                  href="mailto:hello@wizeapps.agency"
+                  className="text-accent hover:underline"
+                >
+                  hello@wizeapps.agency
+                </a>
+                .
+              </p>
+            </div>
+          </Reveal>
+        </section>
+
+        <section className="max-w-5xl mx-auto px-6 pb-16 md:pb-24">
           <Reveal as="h2" className="text-3xl font-semibold tracking-tight">
             Principles that guide every build
           </Reveal>

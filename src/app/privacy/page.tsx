@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy | WizeApps",
   description:
     "Privacy policy for WizeApps, including contact data, cookies, analytics, and Google advertising disclosures.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

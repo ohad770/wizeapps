@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Case Studies | WizeApps",
   description:
     "Examples of how focused software systems can improve reservations, clinic operations, and early MVP launches.",
+  alternates: { canonical: "/case-studies" },
 };
 
 const stages = ["Problem", "Approach", "Outcome"] as const;

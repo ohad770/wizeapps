@@ -5,11 +5,20 @@ import AdSense from "@/components/AdSense";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { resources } from "@/lib/site";
+import { author, resources, siteUrl } from "@/lib/site";
 
 type ResourcePageProps = {
   params: Promise<{ slug: string }>;
 };
+
+function formatDate(date: string) {
+  return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
 
 export function generateStaticParams() {
   return resources.map((resource) => ({ slug: resource.slug }));
@@ -25,9 +34,23 @@ export async function generateMetadata({
     return {};
   }
 
+  const url = `${siteUrl}/resources/${resource.slug}`;
+
   return {
     title: `${resource.title} | WizeApps`,
     description: resource.description,
+    authors: [{ name: author.name, url: author.url }],
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      url,
+      siteName: "WizeApps",
+      title: resource.title,
+      description: resource.description,
+      publishedTime: resource.datePublished,
+      modifiedTime: resource.dateModified,
+      authors: [author.name],
+    },
   };
 }
 
@@ -39,8 +62,86 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     notFound();
   }
 
+  const url = `${siteUrl}/resources/${resource.slug}`;
+  const index = resources.indexOf(resource);
+  const related = Array.from(
+    { length: 3 },
+    (_, i) => resources[(index + i + 1) % resources.length],
+  );
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: resource.title,
+    description: resource.description,
+    datePublished: resource.datePublished,
+    dateModified: resource.dateModified,
+    mainEntityOfPage: url,
+    author: {
+      "@type": "Person",
+      name: author.name,
+      url: author.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "WizeApps",
+      url: siteUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/logo-180.png`,
+      },
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Resources",
+        item: `${siteUrl}/resources`,
+      },
+      { "@type": "ListItem", position: 3, name: resource.title, item: url },
+    ],
+  };
+
+  const faqJsonLd = resource.faq
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: resource.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
+        })),
+      }
+    : null;
+
   return (
     <div className="min-h-screen flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      ) : null}
       <AdSense />
       <SiteHeader />
       <main className="flex-1">
@@ -80,6 +181,30 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
             >
               {resource.description}
             </p>
+            <div
+              className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted"
+              style={{ animation: "fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 0.22s both" }}
+            >
+              <span>
+                By{" "}
+                <Link href="/about" className="font-medium text-foreground hover:text-accent-deep">
+                  {author.name}
+                </Link>
+                , {author.role}
+              </span>
+              <span aria-hidden="true">·</span>
+              <time dateTime={resource.datePublished}>
+                Published {formatDate(resource.datePublished)}
+              </time>
+              {resource.dateModified !== resource.datePublished ? (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <time dateTime={resource.dateModified}>
+                    Updated {formatDate(resource.dateModified)}
+                  </time>
+                </>
+              ) : null}
+            </div>
           </div>
         </section>
 
@@ -151,6 +276,65 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
               </Reveal>
             ))}
           </div>
+
+          {resource.faq ? (
+            <Reveal as="section" className="mt-16">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                <span className="bg-gradient-to-r from-accent to-accent-deep bg-clip-text text-transparent">
+                  Frequently asked questions
+                </span>
+              </h2>
+              <div className="mt-6 grid gap-4">
+                {resource.faq.map((item) => (
+                  <div
+                    key={item.question}
+                    className="rounded-xl border border-gray-100 bg-muted-light/60 p-5"
+                  >
+                    <h3 className="font-semibold text-foreground">
+                      {item.question}
+                    </h3>
+                    <p className="mt-2 text-muted leading-relaxed">
+                      {item.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          ) : null}
+
+          {/* Author */}
+          <Reveal className="mt-16 rounded-2xl border border-gray-100 bg-muted-light/50 p-6 md:p-7">
+            <p className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
+              About the author
+            </p>
+            <h2 className="mt-3 font-semibold text-foreground">
+              {author.name} — {author.role}
+            </h2>
+            <p className="mt-2 text-muted leading-relaxed">{author.bio}</p>
+          </Reveal>
+
+          {/* Related guides */}
+          <Reveal as="section" className="mt-16">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Keep reading
+            </h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {related.map((item) => (
+                <Link
+                  key={item.slug}
+                  href={`/resources/${item.slug}`}
+                  className="card-fancy group flex h-full flex-col p-5"
+                >
+                  <span className="text-xs font-medium text-accent-deep">
+                    {item.readTime}
+                  </span>
+                  <span className="mt-2 font-semibold leading-snug transition-colors duration-300 group-hover:text-accent-deep">
+                    {item.title}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </Reveal>
 
           {/* CTA */}
           <Reveal className="mt-16 overflow-hidden rounded-2xl bg-foreground text-white relative">

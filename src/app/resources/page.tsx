@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Resources | WizeApps",
   description:
     "Practical guides about booking automation, MVP planning, website tools, app development tools, manual operations, and preparing for software builds.",
+  alternates: { canonical: "/resources" },
 };
 
 export default function ResourcesPage() {
@@ -34,8 +35,24 @@ export default function ResourcesPage() {
                   href={`/resources/${resource.slug}`}
                   className="card-fancy group flex h-full flex-col p-7"
                 >
-                  <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-deep">
-                    {resource.readTime}
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-deep">
+                      {resource.readTime}
+                    </span>
+                    <time
+                      dateTime={resource.dateModified}
+                      className="text-xs text-muted"
+                    >
+                      Updated{" "}
+                      {new Date(
+                        `${resource.dateModified}T00:00:00Z`,
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        timeZone: "UTC",
+                      })}
+                    </time>
                   </span>
                   <h2 className="mt-4 text-xl font-semibold transition-colors duration-300 group-hover:text-accent-deep">
                     {resource.title}

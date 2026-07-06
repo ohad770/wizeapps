@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Services | WizeApps",
   description:
     "Focused software services for booking automation, client intake, MVP builds, and internal operations tools.",
+  alternates: { canonical: "/services" },
 };
 
 const avoided = [

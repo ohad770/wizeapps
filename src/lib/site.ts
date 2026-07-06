@@ -1,5 +1,12 @@
 export const siteUrl = "https://www.wizeapps.agency";
 
+export const author = {
+  name: "Ohad Mayrom",
+  role: "Founder, WizeApps",
+  bio: "Ohad Mayrom is the founder of WizeApps, where he designs and builds booking systems, client intake flows, internal operations tools, and MVPs for small businesses and early-stage founders. He writes plain-language guides to help non-technical owners commission software with confidence.",
+  url: `${siteUrl}/about`,
+};
+
 export const navigation = [
   { href: "/services", label: "Services" },
   { href: "/case-studies", label: "Case studies" },
@@ -122,17 +129,27 @@ type ResourceSection = {
   comparison?: ResourceComparison[];
 };
 
+type ResourceFaq = {
+  question: string;
+  answer: string;
+};
+
 type Resource = {
   slug: string;
   title: string;
   description: string;
   readTime: string;
+  datePublished: string;
+  dateModified: string;
   sections: ResourceSection[];
+  faq?: ResourceFaq[];
 };
 
 export const resources: Resource[] = [
   {
     slug: "booking-automation-checklist",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "A practical checklist before automating bookings",
     description:
       "What to decide before replacing phone calls and manual appointment confirmations with a booking system — and how to keep the first version small enough to actually launch.",
@@ -220,9 +237,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "Do I have to stop taking bookings by phone?",
+        answer:
+          "No. The phone can stay as a channel — the important change is that phone bookings get recorded into the same system as online ones, so reminders, cancellations, and the staff view all work from one source of truth instead of a notebook next to the till.",
+      },
+      {
+        question: "How much can reminders realistically reduce no-shows?",
+        answer:
+          "It varies by industry and how far ahead people book, which is why the checklist asks you to measure your current no-show rate first. A confirmation plus a 24-hour reminder with a one-tap cancel link is the pattern that moves the number for most service businesses — but the honest answer comes from comparing your own before and after.",
+      },
+      {
+        question: "Should the first version take deposits?",
+        answer:
+          "Only if no-shows are genuinely expensive for you. Deposits reduce no-shows but add friction, refund rules, and payment edge cases to version one. Many businesses launch reminders first, measure for a month, and add deposits only for the slots or services where no-shows still hurt.",
+      },
+    ],
   },
   {
     slug: "what-to-build-first-in-an-mvp",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "What to build first in an MVP",
     description:
       "A founder-friendly way to decide which product features should exist on day one, which should wait, and how to tell the difference before you spend a budget.",
@@ -278,9 +314,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "How long should an MVP take to build?",
+        answer:
+          "If the core loop is genuinely narrow, a few weeks is a realistic target for most business ideas. When an MVP estimate stretches to many months, that is usually a sign the scope still contains version-two features — go back to the loop and cut again.",
+      },
+      {
+        question: "Does an MVP need professional design?",
+        answer:
+          "It needs to be clear, not beautiful. Users forgive plain screens; they do not forgive confusion about what to do next. Spend design effort on the core loop's first-time experience and use standard components for everything else.",
+      },
+      {
+        question: "What if nobody uses the MVP?",
+        answer:
+          "That is a result, not a failure of the build. It tells you the offer, the audience, or the channel is wrong before you spent a full product budget finding out. Talk to the people who tried it and stopped — their reasons are the most valuable output the MVP can produce.",
+      },
+    ],
   },
   {
     slug: "manual-processes-that-should-not-stay-manual",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "Manual processes that should not stay manual",
     description:
       "How to spot when a spreadsheet, phone call, or chat-based workflow has quietly outgrown itself and is ready to become a small, focused system.",
@@ -329,9 +384,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "Which process should I automate first?",
+        answer:
+          "The one showing the strongest signal from this guide — usually the workflow with the most handoff mistakes or the most repeated status questions. Picking the most painful process first also makes adoption easier, because the team feels the relief immediately.",
+      },
+      {
+        question: "Will automating a process make my team feel replaced?",
+        answer:
+          "Not if the system targets handoffs rather than judgment. In practice teams adopt these tools fastest when the first thing automated is the part they complain about — retyping, chasing status, sending the same reminder. The decisions stay with people.",
+      },
+      {
+        question: "Is a spreadsheet ever the right long-term answer?",
+        answer:
+          "Yes. If volume is low, one person owns the data, and mistakes are rare and cheap, a well-kept spreadsheet is a perfectly good system. The signals in this guide matter precisely because they mark the point where that stops being true.",
+      },
+    ],
   },
   {
     slug: "how-to-prepare-for-a-software-build",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "How to prepare for a software build without writing a spec",
     description:
       "The plain-language information that helps a build start quickly and accurately, even when you are not technical and have never commissioned software before.",
@@ -398,9 +472,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "How much time should I spend preparing?",
+        answer:
+          "A few focused hours is usually enough: one hour narrating a real recent example from start to finish, one hour gathering screenshots, templates, and forms, and one hour writing down outcomes and constraints. That preparation routinely saves weeks of back-and-forth later.",
+      },
+      {
+        question: "What if I don't know what is technically possible?",
+        answer:
+          "You do not need to. Describe the outcome you want in plain words and let the team propose the mechanism. Guessing at technical solutions before the conversation usually anchors the project on the wrong feature.",
+      },
+      {
+        question: "Should I sign an NDA before sharing my workflow?",
+        answer:
+          "For most operational workflows the risk of sharing is low and the cost of secrecy is high — vague briefs produce vague quotes. If the idea itself is genuinely novel, a simple mutual NDA is a reasonable ask and any serious builder will sign one.",
+      },
+    ],
   },
   {
     slug: "best-tools-for-building-websites",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "Which tools should you use to build a website?",
     description:
       "A practical comparison of Next.js, Astro, WordPress, Webflow, Shopify, and simple site builders for business websites.",
@@ -538,9 +631,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "Can I switch platforms later if I choose wrong?",
+        answer:
+          "Content usually ports; structure and integrations usually do not. Moving a five-page brochure site is a small job, but moving a site with booking logic, CMS collections, or SEO history is a real project. That asymmetry is why the choice deserves an hour of honest thought up front.",
+      },
+      {
+        question: "Is WordPress outdated in 2026?",
+        answer:
+          "No. It still runs a huge share of the web and remains a sensible choice when editors need a familiar admin panel and a plugin ecosystem. The real question is whether someone will own updates and security — an unmaintained WordPress site ages badly, while a maintained one keeps working for years.",
+      },
+      {
+        question: "Which platform is best for SEO?",
+        answer:
+          "None of them wins by brand name. Search engines reward fast pages, clear structure, useful content, and working technical basics — sitemaps, canonical URLs, and sensible headings. Every platform in this comparison can achieve that; some just require more discipline than others.",
+      },
+    ],
   },
   {
     slug: "best-tools-for-building-apps",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "Which tools should you use to build an app?",
     description:
       "A practical comparison of Expo, React Native, Flutter, native iOS and Android, PWAs, and no-code app builders.",
@@ -674,9 +786,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "How much cheaper is a web app than a native app?",
+        answer:
+          "Often meaningfully cheaper, because there is one codebase, one deployment, and no app store review cycle. The saving disappears if the product genuinely needs native capabilities — then a PWA becomes a detour rather than a shortcut. The kind-of-app question in this guide exists to catch that early.",
+      },
+      {
+        question: "Can I start with a web app and go native later?",
+        answer:
+          "Yes, and it is a common path. The backend, data model, and business logic usually carry over; the client is what gets rebuilt. Starting on the web lets you validate the workflow before paying for platform polish.",
+      },
+      {
+        question: "How long does app store approval take?",
+        answer:
+          "Typically days, not weeks, for a well-behaved app — but plan for a rejection or two on the first submission, especially around privacy declarations, sign-in rules, and payment policies. Build the review cycle into the launch timeline instead of discovering it at the end.",
+      },
+    ],
   },
   {
     slug: "how-much-does-a-small-business-app-cost",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "How much does it cost to build a small business app?",
     description:
       "An honest breakdown of what drives software pricing, why quotes vary so widely, and how to get more product for the same budget.",
@@ -763,9 +894,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "Why do quotes for the same project differ so much?",
+        answer:
+          "Because each builder silently filled the gaps in the brief differently — one priced a form, another priced a platform. Wildly different quotes are a signal to tighten the definition of version one, not to pick the cheapest number.",
+      },
+      {
+        question: "Is a cheaper freelancer always the riskier option?",
+        answer:
+          "Not always, but the risks are different: continuity and availability rather than competence. A capable freelancer with a small, well-defined scope and clear code ownership can be excellent value. The risk grows when the project is large, long, or business-critical and depends on one person staying available.",
+      },
+      {
+        question: "What ongoing costs should I expect after launch?",
+        answer:
+          "Hosting and third-party services (often modest monthly amounts), plus a budget for fixes and small changes as real use reveals what to improve. A practical planning habit is to reserve a meaningful slice of the build budget — many teams use 15–25% per year — for post-launch iteration.",
+      },
+    ],
   },
   {
     slug: "no-code-vs-custom-code",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "No-code vs. custom code: which should you choose?",
     description:
       "A clear-headed comparison of no-code tools and custom development, with the honest trade-offs each side rarely admits.",
@@ -827,9 +977,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "Is no-code secure enough for customer data?",
+        answer:
+          "The major platforms invest seriously in security, often more than a small custom build would. The real questions are about your configuration — who has access, what is shared publicly by default — and about compliance: if your industry has specific data-residency or privacy requirements, check the platform can actually meet them before building.",
+      },
+      {
+        question: "How do I know I'm outgrowing a no-code tool?",
+        answer:
+          "The workarounds tell you. When new features take longer to configure than they would to code, when the platform's pricing tier jumps because of your usage, or when you maintain a document explaining the tricks that keep it working — the tool is now costing more than code would.",
+      },
+      {
+        question: "Can no-code and custom code work together?",
+        answer:
+          "Yes, and hybrids are often the best value: a custom core where the business logic is unusual, connected to no-code tools for the standard parts like forms, dashboards, or notifications. You pay for code only where code earns it.",
+      },
+    ],
   },
   {
     slug: "build-vs-buy-software",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "Build vs. buy: when off-the-shelf software is the right call",
     description:
       "How to decide whether to use existing software or build your own — and why building should usually be your second choice, not your first.",
@@ -888,9 +1057,28 @@ export const resources: Resource[] = [
         ],
       },
     ],
+    faq: [
+      {
+        question: "How do I find the existing tools worth trying?",
+        answer:
+          "Ask businesses like yours what they use, search for your workflow plus the word 'software', and look at what integrates with the tools you already run. A day of research and two or three free trials is cheap compared with commissioning a build for a solved problem.",
+      },
+      {
+        question: "What if an off-the-shelf tool does 80% of what I need?",
+        answer:
+          "Live with it honestly for a month before deciding the missing 20% justifies a build. Often the gap turns out to be a habit, not a requirement — and when it is real, a small connector or add-on around the tool is usually far cheaper than replacing it.",
+      },
+      {
+        question: "When is building clearly the right choice?",
+        answer:
+          "When the software is the product you sell, or when the way you operate is a genuine competitive edge that generic tools flatten. Outside those cases, build only the thin layer no existing tool provides — usually the glue between systems, not the systems themselves.",
+      },
+    ],
   },
   {
     slug: "how-to-choose-a-developer-or-agency",
+    datePublished: "2026-06-25",
+    dateModified: "2026-07-06",
     title: "How to choose a developer or agency without being technical",
     description:
       "A practical guide to evaluating who builds your software when you cannot judge the code yourself — and the warning signs that matter most.",
@@ -947,6 +1135,486 @@ export const resources: Resource[] = [
           "The smartest protection for a non-technical client is not a perfect contract — it is structuring the engagement to limit risk. Start with a small, well-defined first phase that produces something real. A modest initial project tells you more about how someone works than any interview, and it caps your exposure if the fit is wrong.",
           "Make a few things explicit in writing before you begin: that you will own the source code, domains, and service accounts; how changes are handled and priced; and what support looks like after launch. Insist on regular, understandable check-ins where you can see progress, not just hear that things are going well. A builder who welcomes these terms is showing you the most important quality of all — that they expect to earn your trust by being accountable.",
         ],
+      },
+    ],
+    faq: [
+      {
+        question: "How should I check references?",
+        answer:
+          "Ask for two or three past clients with projects similar in size to yours, and actually call them. Ask what went wrong during the project and how the builder handled it — every project hits problems, and the handling is the signal. A builder who cannot produce reachable references is telling you something.",
+      },
+      {
+        question: "Should the first engagement be fixed price or hourly?",
+        answer:
+          "For a first engagement with someone new, a small fixed-scope phase is usually the safest structure: it caps your exposure, forces a clear definition of done, and shows you how they work. Move to more flexible arrangements once trust is established.",
+      },
+      {
+        question: "What must be in writing before work starts?",
+        answer:
+          "Four things at minimum: that you own the source code, domains, and service accounts; exactly what version one includes and excludes; how change requests are priced; and what support costs after launch. None of this requires legal language — a plain email both sides confirm is far better than nothing.",
+      },
+    ],
+  },
+  {
+    slug: "software-maintenance-after-launch",
+    datePublished: "2026-07-06",
+    dateModified: "2026-07-06",
+    title: "What it really takes to keep software running after launch",
+    description:
+      "Launch is the halfway point, not the finish line. A plain-language guide to hosting, updates, monitoring, and the maintenance budget nobody mentions in the sales conversation.",
+    readTime: "9 min read",
+    sections: [
+      {
+        heading: "Launch is the halfway point",
+        paragraphs: [
+          "Most conversations about commissioning software end at the launch date, as if the story finishes when the product goes live. In reality, launch is when the software starts existing in the world — and the world keeps changing around it. Browsers update, phone operating systems update, the services your app connects to change their rules, security researchers find new classes of problems, and your own business changes what it needs.",
+          "None of this means software is fragile or that maintenance is a scam. It means software is more like a vehicle than a sculpture: it works for years, but only if someone checks the oil. This guide explains what that checking actually involves for a small business system, what it costs, and how to avoid the two classic failure modes — paying for maintenance that never happens, and paying nothing until something breaks expensively.",
+        ],
+      },
+      {
+        heading: "The four kinds of after-launch work",
+        paragraphs: [
+          "The word \"maintenance\" hides four different activities with different urgency and cost profiles. Separating them makes every conversation with a developer or agency clearer, because you can ask which of the four a support agreement actually covers.",
+        ],
+        bullets: [
+          {
+            label: "Keeping the lights on",
+            text: "Hosting, domains, SSL certificates, email delivery, and backups. Mostly automatic, mostly cheap, but someone must own the accounts and notice when a card expires or a renewal fails.",
+          },
+          {
+            label: "Staying current",
+            text: "Updating the frameworks, libraries, and platform versions the software is built on. Skipping this feels free for a year or two, then presents a large bill all at once when an old version stops being supported.",
+          },
+          {
+            label: "Fixing what breaks",
+            text: "Bugs found in real use, integrations that change on the other end, and edge cases the first version never met. This work is unpredictable by nature, which is why it suits a retainer or hourly arrangement rather than a fixed list.",
+          },
+          {
+            label: "Improving what works",
+            text: "Small changes real usage reveals: a field nobody fills in, a report everyone exports weekly, a step users keep asking about. This is the highest-value category — it is how a decent first version becomes a tool the team relies on.",
+          },
+        ],
+      },
+      {
+        heading: "What neglect actually looks like",
+        paragraphs: [
+          "Unmaintained software rarely fails on day one. It decays in a specific sequence. First, small annoyances appear — an integration hiccups, a page loads slower, an email lands in spam. Then a dependency somewhere announces its end of life, and the cost of every future change quietly doubles because updates must happen before anything else can. Finally something visible breaks — payments, logins, the booking form — and the fix is urgent, expensive, and performed under pressure by whoever is available rather than whoever is best.",
+          "The pattern to notice: the total cost of neglect is almost always higher than the cost of steady upkeep, but it arrives later and all at once, which makes it easy to choose by accident. Businesses that budget a small ongoing amount — and actually spend it — almost never experience the emergency version of this story.",
+        ],
+      },
+      {
+        heading: "A sensible maintenance budget",
+        paragraphs: [
+          "A widely used planning figure for software upkeep is 15–25% of the original build cost per year, covering updates, fixes, and small improvements. A simple internal tool with few integrations sits at the low end or below it; a customer-facing system with payments, messaging, and third-party connections sits higher because more of the outside world can change underneath it.",
+          "Structure matters as much as the amount. For most small systems, the practical options are: a modest monthly retainer that includes updates and a few hours of changes; a pay-as-you-go arrangement with an agreed response time; or scheduled check-ups — a half-day every quarter where someone updates dependencies, reviews errors, and flags risks. The wrong option is the default one: nobody responsible, nothing scheduled, and a plan that amounts to hoping.",
+        ],
+      },
+      {
+        heading: "Questions to settle before launch, not after",
+        paragraphs: [
+          "The cheapest time to arrange after-launch care is while the builder still knows the project intimately. A handful of questions, answered in writing before the final invoice, prevent most of the painful scenarios.",
+        ],
+        bullets: [
+          {
+            label: "Who owns what",
+            text: "Confirm you control the hosting account, domain, source code repository, and every third-party service — not just that you 'can have access if needed'.",
+          },
+          {
+            label: "Who watches for errors",
+            text: "Is there error monitoring, and does anyone receive the alerts? Software that fails silently fails longest.",
+          },
+          {
+            label: "What backups exist",
+            text: "What is backed up, how often, and — the question everyone skips — has a restore ever been tested?",
+          },
+          {
+            label: "What support costs",
+            text: "Response times, hourly rates or retainer terms, and what counts as an emergency. Agreeing this calmly beats negotiating it during an outage.",
+          },
+          {
+            label: "What handover looks like",
+            text: "If you ever change developers, what would the next person need? A short written overview of the system is cheap insurance.",
+          },
+        ],
+      },
+      {
+        heading: "The upside nobody advertises",
+        paragraphs: [
+          "Maintenance sounds like pure cost, but the improvement category is where small systems quietly compound. The businesses that get the most from custom software are rarely the ones that built the most ambitious first version — they are the ones that made twenty small, cheap changes over two years, each one guided by real use. A field removed here, a reminder reworded there, one report automated: individually trivial, together transformative.",
+          "Treat the months after launch as part of the project. Keep a running list of frictions the team notices, batch them into small change requests, and spend the improvement budget on what the list proves matters. That habit — not the size of the original build — is what separates software that gets adopted from software that gets abandoned.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Can I maintain the software myself without a developer?",
+        answer:
+          "You can and should own the accounts, monitor that things work, and keep the friction list. The technical categories — dependency updates, bug fixes, security patches — need someone who can read the code. The workable split for most small businesses: you own the watching, a developer owns the fixing, on a retainer or scheduled check-up basis.",
+      },
+      {
+        question: "My developer disappeared. How bad is it?",
+        answer:
+          "Usually recoverable, and faster than rebuilding. If you own the code repository and the accounts, a new developer can take over most small systems after a short review. If you do not own them, that recovery starts with regaining access — which is exactly why ownership belongs in writing before the first launch.",
+      },
+      {
+        question: "Does no-code software escape maintenance?",
+        answer:
+          "It trades one kind for another. The platform handles servers, updates, and security — genuinely valuable — but you still own integrations that break when connected services change, workflows that drift from how the business works, and price or feature changes the platform makes. Less maintenance, not none.",
+      },
+    ],
+  },
+  {
+    slug: "how-to-run-a-software-pilot",
+    datePublished: "2026-07-06",
+    dateModified: "2026-07-06",
+    title: "How to pilot new software without disrupting your team",
+    description:
+      "A step-by-step way to test a new system with real work and real people for a few weeks — and get a clear keep-or-kill answer instead of a stalled rollout.",
+    readTime: "9 min read",
+    sections: [
+      {
+        heading: "Why rollouts fail and pilots work",
+        paragraphs: [
+          "The classic failed rollout looks like this: a tool is chosen, everyone is told to use it from Monday, the old spreadsheet stays open 'just in case', and six weeks later the team has quietly returned to the old way while the subscription keeps billing. The failure is rarely the tool. It is the rollout — all-at-once adoption gives nobody room to find problems while they are still cheap to fix.",
+          "A pilot inverts this. A small slice of real work moves to the new system for a fixed period, with a named owner and a written definition of success. At the end there is a decision: expand, adjust, or stop. The stakes stay low, the feedback is real because the work is real, and — critically — stopping is a legitimate outcome rather than an admission of failure. Teams that know they can say no give far more honest feedback than teams told the decision is already made.",
+        ],
+      },
+      {
+        heading: "Design the slice carefully",
+        paragraphs: [
+          "The most important pilot decision is what slice of work to move. Too small or too artificial, and the pilot proves nothing — a test with fake data and one enthusiastic volunteer always succeeds. Too large, and you have done a risky rollout and called it a pilot.",
+          "A good slice is real, bounded, and representative: real customers or real jobs, a natural boundary that limits blast radius, and enough variety to meet the awkward cases. For a booking system, that might be one location or one service category. For an intake tool, every new client for three weeks. For an internal tracker, one team's active jobs. If the slice cannot hit at least a handful of the messy exceptions — the reschedules, the partial payments, the customer who replies by phone — widen it until it can.",
+        ],
+        bullets: [
+          {
+            label: "Real",
+            text: "Live work with real consequences, not a sandbox. Sandboxes are for training, not for deciding.",
+          },
+          {
+            label: "Bounded",
+            text: "A natural limit — one location, one team, one service — so problems stay small and reversible.",
+          },
+          {
+            label: "Representative",
+            text: "Enough volume and variety to surface the exceptions, because the exceptions are what kill tools after rollout.",
+          },
+        ],
+      },
+      {
+        heading: "Write the success criteria before day one",
+        paragraphs: [
+          "A pilot without written success criteria produces a feeling, not a decision — and the loudest voice in the room becomes the verdict. Before the pilot starts, write down two or three measurable outcomes and collect their current values. If nobody knows the current no-show rate or how long intake takes today, measuring that baseline is the first week of the pilot.",
+          "Good criteria are boring and specific: intake time per client drops from twenty minutes to under ten; double-bookings hit zero for the pilot slice; the team stops using the old spreadsheet for pilot jobs without being reminded. That last kind — a behavior, not a number — is often the most telling. People route around tools they distrust, so voluntary adoption is the strongest signal a pilot can produce.",
+        ],
+      },
+      {
+        heading: "Run it: two roles and a weekly rhythm",
+        paragraphs: [
+          "A pilot needs two named people. The owner is someone on the team who runs the pilot day to day, collects friction, and has the authority to pause it if something threatens real customers. The fixer is whoever can change the system quickly — a developer, the vendor, or whoever configured the tool. The single biggest predictor of a useful pilot is the speed of the loop between these two: friction reported on Tuesday and fixed by Thursday builds trust; friction that sits for three weeks teaches the team the tool cannot be influenced, and they stop reporting.",
+          "Keep the ceremony light. A shared friction list anyone can add to, a fifteen-minute weekly review of what was added and what was fixed, and a rule that during the pilot, pilot work happens only in the new system — running both systems in parallel for the same jobs doubles the work and guarantees resentment. Expect week one to be slower than the old way. Note it, tell the team it is expected, and measure the trend rather than the first impression.",
+        ],
+      },
+      {
+        heading: "Decide like you said you would",
+        paragraphs: [
+          "At the end of the period, hold the decision meeting the pilot was pointed at. Three outcomes are on the table. Expand: the criteria were met, so widen the slice — the next location, the next team — reusing the same pilot discipline at each step. Adjust: the idea works but something specific does not; fix that one thing and extend the pilot briefly. Stop: the criteria were not met and the fixes are not small. Stopping after three weeks and a modest cost is a success of the process — the same discovery after a full rollout would have cost ten times more.",
+          "Whatever the outcome, write down three sentences: what was tested, what happened, what was decided. This tiny document is disproportionately valuable — it stops the same tool being re-proposed next year on enthusiasm alone, and it turns each pilot into organizational memory instead of a forgotten experiment.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How long should a pilot run?",
+        answer:
+          "Long enough to cover a few full cycles of the workflow, including the exceptions — for most operational tools that is two to four weeks. Shorter tests measure first impressions, not fit. If a tool needs three months to show value, that is worth knowing, but structure it as staged pilots with checkpoints rather than one long leap of faith.",
+      },
+      {
+        question: "Should we pilot two competing tools at once?",
+        answer:
+          "Sequentially, not simultaneously. Splitting the team across two tools halves the signal from each and doubles the confusion. Pick the likelier candidate, pilot it properly, and keep the runner-up as the next pilot if the first one stops.",
+      },
+      {
+        question: "What if the team resists using the new system at all?",
+        answer:
+          "Treat resistance as data. It usually means the tool adds work for the people using it while the benefit lands elsewhere — the classic reason systems die after rollout. Ask what the tool costs them per task, fix that if you can, and if you cannot, the pilot has answered the question honestly.",
+      },
+    ],
+  },
+  {
+    slug: "ai-features-for-small-business-software",
+    datePublished: "2026-07-06",
+    dateModified: "2026-07-06",
+    title: "Where AI actually helps in small business software",
+    description:
+      "Past the hype: the specific jobs where AI features earn their cost in operational tools, the places they cause quiet damage, and how to add them safely.",
+    readTime: "10 min read",
+    sections: [
+      {
+        heading: "Skip the hype in both directions",
+        paragraphs: [
+          "Small businesses currently hear two stories about AI. One says every tool must have it or the business is falling behind. The other says it is all hype and hallucinations. Both are lazy. The accurate picture is narrower and more useful: AI is now genuinely good at a specific family of tasks — reading, summarizing, drafting, extracting, and classifying messy human language — and still unreliable as an unsupervised decision-maker.",
+          "That distinction does most of the work in deciding where AI belongs in an operational tool. The question is never \"should our software use AI?\" It is \"which steps in our workflow involve a person reading something messy and turning it into something structured — and what happens if that step is occasionally wrong?\" Where errors are cheap and reviewable, AI is often a bargain. Where errors are expensive and invisible, it is a liability wearing a feature's clothes.",
+        ],
+      },
+      {
+        heading: "The jobs where AI earns its keep",
+        paragraphs: [
+          "In the systems WizeApps builds — intake flows, booking systems, internal trackers — the same handful of AI applications keep proving worthwhile, because they sit at the messy boundary between human language and structured data.",
+        ],
+        bullets: [
+          {
+            label: "Structuring incoming requests",
+            text: "A customer writes three paragraphs by email or WhatsApp; AI extracts the service, the urgency, the contact details, and drops a structured request into the queue. The person still decides — they just stop retyping.",
+          },
+          {
+            label: "Drafting replies and follow-ups",
+            text: "First drafts of quotes, confirmations, and answers to common questions, written in your tone, edited by a human before sending. Cuts response time dramatically without removing the human from the conversation.",
+          },
+          {
+            label: "Summarizing history",
+            text: "Before a call, a three-line summary of a client's past bookings, issues, and preferences — assembled from notes nobody has time to reread. Cheap to generate, immediately felt.",
+          },
+          {
+            label: "Categorizing and routing",
+            text: "Tagging inbound messages as booking, complaint, invoice question, or spam, and routing them to the right person. Classification is one of the most reliable things current models do.",
+          },
+          {
+            label: "Search that understands meaning",
+            text: "Finding 'the client who complained about the delivery gate code' in your own notes, without remembering the exact words used at the time.",
+          },
+        ],
+      },
+      {
+        heading: "Where AI quietly causes damage",
+        paragraphs: [
+          "The failures worth worrying about are not the obvious ones. Nobody lets a chatbot sign contracts. The damage comes from plausible-looking output entering records unreviewed: an extracted phone number with two digits swapped, a summary stating a customer confirmed when they asked a question, a confident answer about a policy that does not exist. Each error is small; the cost is that the team stops trusting the data, and a system nobody trusts is worse than no system.",
+          "Three placements deserve particular caution. Customer-facing AI with no human review — an assistant that misquotes a price to one customer costs more trust than it saves in staff time. Compliance-adjacent language — anything touching health, legal, or financial claims needs a person who is accountable for the words. And silent automation — AI that acts without leaving a visible trace of what it did and why, which turns every small error into a mystery hunt.",
+        ],
+      },
+      {
+        heading: "The pattern that works: draft, don't decide",
+        paragraphs: [
+          "Almost every safe, high-value AI feature in operational software follows one pattern: the AI produces a draft — an extraction, a summary, a suggested reply, a proposed category — and a person confirms it with one glance and one click. The person stays accountable; the AI removes the typing and the searching. Review takes seconds; the work it replaces took minutes. That gap is the entire business case, and it is usually enough.",
+          "The pattern has a second virtue: it generates its own evidence. Because people confirm or correct each draft, you learn the real accuracy rate on your data within weeks. Where corrections are rare, you can consider automating that step fully, with spot checks. Where corrections are common, the AI stays a drafting assistant — still useful, honestly scoped. Compare that with launching full automation on faith and discovering the error rate from angry customers.",
+        ],
+      },
+      {
+        heading: "Adding AI to a system you already have",
+        paragraphs: [
+          "AI features are usually additions to a workflow, not replacements for one. If you already have a booking system or an intake flow, the practical path is to identify the single most annoying reading-or-writing step, add one draft-don't-decide feature there, and measure corrections for a month. The integration is typically an API call to a model provider from your existing backend — for most small systems this is days of work, not months.",
+          "Two cost notes worth knowing. Model usage is priced per amount of text processed, and for operational volumes — hundreds of requests a day, not millions — the monthly bill is usually a rounding error next to the staff time saved; a pilot answers this with your real numbers. And ask where your data goes: reputable providers offer terms under which your customers' messages are not used to train their models. That belongs in your privacy policy either way.",
+        ],
+      },
+      {
+        heading: "Questions that separate signal from sales pitch",
+        paragraphs: [
+          "When a vendor or developer proposes an AI feature, a few questions cut through the label to the substance. They are the same questions this guide has been circling, compressed into a checklist you can use in a meeting.",
+        ],
+        bullets: [
+          {
+            label: "What exactly does it read, and what does it produce?",
+            text: "A concrete answer — 'it reads inbound emails and produces a structured request' — is a feature. 'It leverages AI to optimize your workflow' is a brochure.",
+          },
+          {
+            label: "Who reviews the output?",
+            text: "If the answer is nobody, ask what a wrong output costs and how you would notice it happened.",
+          },
+          {
+            label: "What is the correction rate on our data?",
+            text: "Nobody knows before a pilot. A vendor claiming certainty without one is guessing on your behalf.",
+          },
+          {
+            label: "What happens without the AI?",
+            text: "Good designs degrade to the manual path when the model is down or wrong. If the workflow collapses without it, the dependency deserves more thought.",
+          },
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is AI too expensive for a small business tool?",
+        answer:
+          "Usually the opposite: at small-business volumes, model usage costs are typically small compared to the staff time the feature saves. The costs that matter are the build cost of the feature and the review time — which is why starting with one narrow feature and measuring is the sensible path.",
+      },
+      {
+        question: "Can we just use a general chatbot instead of building anything?",
+        answer:
+          "For drafting emails and answering general questions, yes — and many teams should start there. A built-in feature earns its cost when the AI needs your data (booking history, client notes, service rules) and needs to write results back into your system rather than into a chat window someone copies from.",
+      },
+      {
+        question: "Do we need to tell customers we use AI?",
+        answer:
+          "If AI talks to customers directly, disclose it — pretending a bot is a person is a trust risk and, in some places, a regulatory one. For internal drafting where a human reviews and sends, disclosure is not generally expected, but your privacy policy should reflect any customer data shared with a model provider.",
+      },
+    ],
+  },
+  {
+    slug: "software-project-glossary",
+    datePublished: "2026-07-06",
+    dateModified: "2026-07-06",
+    title: "A plain-language glossary for software projects",
+    description:
+      "The terms you will actually hear in proposals, quotes, and check-in meetings — explained in one breath each, with what they mean for your money and your decisions.",
+    readTime: "12 min read",
+    sections: [
+      {
+        heading: "Why this glossary exists",
+        paragraphs: [
+          "Every field has jargon, but software jargon has a particular cost: it appears in documents you are asked to approve and invoices you are asked to pay. Nodding through a term you half-understand in a kickoff meeting is how scope disputes are born three months later.",
+          "This glossary covers the terms that actually appear in proposals, quotes, and progress meetings for small business software projects. Each entry gives the plain meaning first, then — where it matters — what the term implies for your budget or your decisions. It is deliberately opinionated about that second part, because the definition is rarely the thing that bites.",
+        ],
+      },
+      {
+        heading: "The shape of the product",
+        paragraphs: [
+          "These terms describe what kind of thing is being built. They matter because they set expectations about cost, timeline, and what 'done' looks like.",
+        ],
+        bullets: [
+          {
+            label: "MVP (minimum viable product)",
+            text: "The smallest version of a product that can test the core idea with real users. Budget implication: an MVP that takes six months is not an MVP; the word is doing marketing work in that sentence.",
+          },
+          {
+            label: "Prototype",
+            text: "A demonstration of an idea — often clickable screens with nothing real behind them. Useful for alignment; not a head start on the build. Do not pay for a prototype expecting version one minus polish.",
+          },
+          {
+            label: "Web app",
+            text: "Software used in a browser, no installation. Usually the cheapest serious option and the easiest to update for everyone at once.",
+          },
+          {
+            label: "Native app",
+            text: "Software installed from an app store, built specifically for iPhone or Android. Best access to notifications, camera, and offline use; typically the costliest path because each platform is its own build.",
+          },
+          {
+            label: "PWA (progressive web app)",
+            text: "A web app that behaves somewhat like an installed app — home screen icon, some offline ability. A middle path worth asking about before committing to native.",
+          },
+          {
+            label: "CMS (content management system)",
+            text: "The admin panel through which non-developers edit website content. If your team will update text or images, the words 'includes a CMS' — or their absence — belong in the quote.",
+          },
+        ],
+      },
+      {
+        heading: "The parts you can't see",
+        paragraphs: [
+          "Most of a software budget goes to things that never appear on screen. These are the terms for them.",
+        ],
+        bullets: [
+          {
+            label: "Frontend",
+            text: "Everything the user sees and clicks. When people praise how software 'looks', they mean the frontend.",
+          },
+          {
+            label: "Backend",
+            text: "The logic and storage behind the screens — where bookings are saved, rules are enforced, and reminders are triggered. Usually the majority of the work, and invisible in a demo.",
+          },
+          {
+            label: "Database",
+            text: "Where the data lives: customers, bookings, jobs, messages. The key question for you is not which database, but who can access it and how it is backed up.",
+          },
+          {
+            label: "API (application programming interface)",
+            text: "The doorway one system offers another. 'It has an API' means other software can connect to it; 'we'll use their API' means your system will depend on someone else's doorway staying open.",
+          },
+          {
+            label: "Integration",
+            text: "Connecting your system to another — calendar, payments, accounting, WhatsApp. Each integration is real work and a real ongoing dependency; a quote that lists features but not integrations is incomplete.",
+          },
+          {
+            label: "Hosting / the cloud",
+            text: "The rented computers your software runs on. A modest monthly cost that continues forever, in an account you — not your developer — should own.",
+          },
+        ],
+      },
+      {
+        heading: "The words in the quote",
+        paragraphs: [
+          "These are the commercial terms — the ones that decide who pays when reality diverges from the plan.",
+        ],
+        bullets: [
+          {
+            label: "Scope",
+            text: "The agreed list of what is included. The single most important word in the project: almost every dispute is a scope dispute wearing a costume.",
+          },
+          {
+            label: "Scope creep",
+            text: "The gradual expansion of that list through small, reasonable-sounding additions. Not villainy — entropy. Managed by having a written scope and a named process for changes.",
+          },
+          {
+            label: "Change request",
+            text: "The formal name for 'can we also add…' after work has started. Healthy projects expect them and price them openly; unhealthy projects absorb them silently until the relationship snaps.",
+          },
+          {
+            label: "Fixed price vs. time and materials",
+            text: "Fixed price buys certainty and punishes change; time and materials buys flexibility and requires trust. For a first engagement, a small fixed-scope phase is usually the safest structure.",
+          },
+          {
+            label: "Milestone",
+            text: "A defined checkpoint, usually tied to payment. Good milestones are demonstrable ('booking flow works end to end'), not calendrical ('end of March').",
+          },
+          {
+            label: "Retainer",
+            text: "A monthly fee reserving ongoing time for fixes and small changes after launch. The alternative is paying emergency rates for attention when something breaks.",
+          },
+        ],
+      },
+      {
+        heading: "The words in the check-in meeting",
+        paragraphs: [
+          "Terms you will hear while the work is underway — knowing them lets you follow a progress update without pretending.",
+        ],
+        bullets: [
+          {
+            label: "Sprint",
+            text: "A short, fixed work cycle, commonly two weeks, ending with something reviewable. If you are shown nothing at the end of a sprint, ask why — the whole point is a steady rhythm of visible progress.",
+          },
+          {
+            label: "Staging",
+            text: "A private copy of the system where changes are tried before going live. 'It's on staging' means 'you can test it; customers can't see it yet'.",
+          },
+          {
+            label: "Production",
+            text: "The live system real customers use. 'Deployed to production' means the change is now real.",
+          },
+          {
+            label: "Bug vs. feature request",
+            text: "A bug is the software failing to do what was agreed; a feature request is asking it to do something new. The line matters because fixing bugs is usually included and new features usually are not — disagreements here are really scope disagreements.",
+          },
+          {
+            label: "Technical debt",
+            text: "Shortcuts taken to ship faster that make future changes slower until paid down. Some debt is rational; unmentioned debt is the kind that surprises you in next year's quotes.",
+          },
+          {
+            label: "QA (quality assurance)",
+            text: "Systematic testing before release. If a quote contains no testing time at all, the testing will happen anyway — performed by your customers.",
+          },
+        ],
+      },
+      {
+        heading: "How to use jargon you don't know",
+        paragraphs: [
+          "No glossary is complete, and new terms arrive constantly. The durable skill is not memorizing definitions — it is the habit of asking, in the meeting, \"what does that mean for this project, in plain words?\" Any builder worth hiring answers that question happily and concretely. Evasive or condescending answers to plain questions are among the most reliable early warnings you will ever get.",
+          "It may help to know the dynamic runs both ways: good developers prefer clients who ask. A client who understands what staging is, why scope is written down, and what a change request costs is easier to serve well. Asking plain questions does not mark you as naive — it marks you as the kind of client whose project tends to go smoothly.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Do I need to learn technical terms before hiring a developer?",
+        answer:
+          "No — you need enough to follow the money and the decisions, which is roughly the contents of this page. Deep technical vocabulary is the builder's job. Your job is refusing to approve sentences you do not understand.",
+      },
+      {
+        question: "A proposal is full of terms not on this page. Bad sign?",
+        answer:
+          "Not necessarily — some projects genuinely need specialized language. The test is what happens when you ask for plain-language translation. A good builder provides it without friction; a proposal that stays foggy after questions is foggy on purpose or foggy in the author's own head. Both are warnings.",
+      },
+      {
+        question: "What is the single most important term here?",
+        answer:
+          "Scope. Nearly every software dispute — budget, timeline, disappointment — is at bottom a disagreement about what was included. A written scope, plus a named process for changing it, prevents more pain than any other habit on this page.",
       },
     ],
   },

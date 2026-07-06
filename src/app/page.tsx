@@ -1,11 +1,51 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { resources, services } from "@/lib/site";
+import { author, resources, services, siteUrl } from "@/lib/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "WizeApps",
+    url: siteUrl,
+    logo: `${siteUrl}/logo-180.png`,
+    email: "mailto:hello@wizeapps.agency",
+    description:
+      "WizeApps builds focused digital systems for small businesses and founders: booking automation, client intake flows, internal operations tools, and MVPs.",
+    founder: {
+      "@type": "Person",
+      name: author.name,
+      url: author.url,
+    },
+  };
+
+  const webSiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "WizeApps",
+    url: siteUrl,
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webSiteJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <SiteHeader />
 
       <main className="flex-1">

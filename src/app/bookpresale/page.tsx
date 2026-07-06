@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   title: "פרי־מכירה: הספר שעוד לא ראיתם",
   description:
     "תומכים מוקדמים מקבלים את הספר ראשונים, במחיר מיוחד, עם פרקים בלעדיים. עזרו לנו להוציא את הספר לאור.",
+  // Private campaign page, unrelated to the agency site's content. Kept out
+  // of search indexes so crawlers and content reviewers never treat it as
+  // part of the public site.
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 const TIERS: Tier[] = [

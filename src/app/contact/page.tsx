@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Contact | WizeApps",
   description:
     "Contact WizeApps to discuss a workflow, automation project, MVP, or internal operations tool.",
+  alternates: { canonical: "/contact" },
 };
 
 const details = [

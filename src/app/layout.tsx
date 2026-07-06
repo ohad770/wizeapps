@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,9 +9,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "WizeApps — Your idea works. It just doesn't exist yet.",
   description:
     "We turn business problems into working digital products — in weeks, not months. No tech jargon. No wasted features. Just a system that does what you actually need.",
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "WizeApps",
+    title: "WizeApps — Your idea works. It just doesn't exist yet.",
+    description:
+      "We turn business problems into working digital products — in weeks, not months.",
+  },
   // Ownership verification only. The ad-serving script is loaded per-page on
   // content articles, not globally, to avoid ads on screens without
   // substantial publisher content (AdSense program policy).

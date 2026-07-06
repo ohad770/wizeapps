@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Terms of Use | WizeApps",
   description:
     "Terms of use for visiting the WizeApps website and contacting WizeApps about software services.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {
