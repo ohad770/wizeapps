@@ -75,6 +75,45 @@ export const services = [
   },
 ];
 
+export const realProjects = [
+  {
+    slug: "mincha-alarm",
+    title: "Mincha Alarm",
+    url: "https://mincha-alarm.com/",
+    industry: "Consumer web app",
+    problem:
+      "Mincha (the afternoon prayer) has a window that shifts every day with sunset, and it is different in every city. Without checking a calendar daily, people miss the window without realizing it.",
+    approach:
+      "We built a location-aware web app that calculates the correct mincha window for wherever the user is and sends an automatic reminder before it closes, with no manual setup per day.",
+    outcome:
+      "The tool is live and handles the calculation and reminder automatically, so users do not have to look up times themselves.",
+  },
+  {
+    slug: "domino-ranana",
+    title: "Domino's Pizza Ra'anana — online ordering",
+    url: "https://domino-rn.co.il/",
+    industry: "Food and delivery",
+    problem:
+      "A local Domino's branch needed a fast, direct ordering experience — full menu, current deals, and delivery — without relying only on phone orders or a generic third-party app.",
+    approach:
+      "We built a branded ordering site: browsable menu, active promotions, and a delivery checkout flow, deployed as the branch's own web presence.",
+    outcome:
+      "The branch has a live ordering channel it fully owns, separate from marketplace apps and their fees and constraints.",
+  },
+  {
+    slug: "djob-agency",
+    title: "Djob — recruitment platform",
+    url: "https://djob.agency/",
+    industry: "Recruitment",
+    problem:
+      "Matching candidates to open roles usually means juggling job boards, spreadsheets, and email threads with no single place to track who applied to what.",
+    approach:
+      "We built an end-to-end recruitment platform: candidates browse and apply to open positions, and the process is tracked in one system instead of scattered inboxes.",
+    outcome:
+      "The platform is live at djob.agency, giving candidates a real place to find open roles and apply directly.",
+  },
+];
+
 export const caseStudies = [
   {
     slug: "restaurant-reservations",
@@ -128,6 +167,7 @@ type ResourceSection = {
   paragraphs: string[];
   bullets?: ResourceBullet[];
   comparison?: ResourceComparison[];
+  diagramId?: string;
 };
 
 type ResourceFaq = {
@@ -190,6 +230,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "Decide what runs without any staff involvement",
+        diagramId: "booking-flow",
         paragraphs: [
           "A good booking flow should handle the predictable steps on its own: confirming the slot, writing it to the calendar, sending a reminder before the appointment, offering a self-service cancellation or reschedule link, and alerting a staff member only when something genuinely needs a human.",
           "The goal is not to remove people from the relationship. It is to stop spending people on repetitive reminders when they could be helping customers in front of them. A useful test: for each step, ask \"if this happened at 2am with nobody watching, would the right thing still happen?\" If yes, automate it. If no, that step is a decision point that belongs to a person.",
@@ -274,6 +315,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "Find the smallest proof loop",
+        diagramId: "mvp-loop",
         paragraphs: [
           "Most products have one core loop — the repeating sequence that delivers the value you promised. If users can complete that loop and get the outcome, the idea has a pulse. If they cannot, no amount of polish elsewhere will save it. So the first thing to build is that loop, end to end, and almost nothing else.",
           "The loop is usually three or four steps. For a marketplace it might be request, match, respond. For a clinic tool it might be book, remind, confirm. For an internal operations app it might be submit, review, complete. Write your loop as a single sentence. If you cannot, the product is not yet clear enough to build, and that clarity is the cheapest thing to fix.",
@@ -379,6 +421,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "What to do with the signals",
+        diagramId: "manual-vs-system",
         paragraphs: [
           "Noticing these signals does not mean rushing to build. It means you have found a process worth examining closely. Start by writing down how the work actually flows today, where it slows down, and which steps are judgment versus handoff. That map alone often reveals quick fixes that need no software at all.",
           "Where a system does make sense, keep the first version small: target the single most painful signal, automate only the predictable steps, and leave the judgment with people. The aim is never to remove humans from the work — it is to stop spending them on the parts a system handles better, so their time goes to the parts only a person can do.",
@@ -414,6 +457,7 @@ export const resources: Resource[] = [
     sections: [
       {
         heading: "You do not need a spec — you need clarity",
+        diagramId: "prep-flow",
         paragraphs: [
           "Many business owners delay a software project because they think they need a formal specification first: a long document full of requirements, screens, and technical terms. They do not. A heavy spec written by someone who is not technical often does more harm than good, because it locks in guesses about how the software should work before anyone has thought hard about the problem.",
           "What a good build actually needs from you is clarity about the problem, not a design for the solution. If you can explain what is painful today, show real examples, and describe what a better outcome looks like, a capable team can turn that into the right product. This guide covers exactly what to bring, in plain language, so the work can start quickly and accurately.",

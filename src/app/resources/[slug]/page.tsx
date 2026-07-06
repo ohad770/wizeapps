@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdSense from "@/components/AdSense";
 import Reveal from "@/components/Reveal";
+import { diagrams } from "@/components/ResourceDiagrams";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { author, resources, siteUrl } from "@/lib/site";
@@ -223,6 +224,11 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                     <p key={paragraph}>{paragraph}</p>
                   ))}
                 </div>
+                {section.diagramId && diagrams[section.diagramId] ? (
+                  <div className="mt-6 rounded-xl border border-gray-100 bg-white p-5 md:p-7">
+                    {diagrams[section.diagramId]()}
+                  </div>
+                ) : null}
                 {section.bullets ? (
                   <div className="mt-6 grid gap-3">
                     {section.bullets.map((bullet) => (
