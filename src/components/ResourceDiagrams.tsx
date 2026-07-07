@@ -365,6 +365,24 @@ export function DraftDontDecideDiagram() {
   );
 }
 
+export function MatchingArchitectureDiagram() {
+  return (
+    <svg viewBox="0 0 720 280" className="w-full h-auto" role="img" aria-label="Matching architecture: jobs and candidates become structured statements, then embeddings, then pass through score gates, then land in snapshot tables for fast ranked results">
+      <Box x={20} y={20} w={150} h={50} label="Job" sub="raw fields" fill="#fff" stroke={MUTED} />
+      <Box x={20} y={90} w={150} h={50} label="Candidate" sub="raw fields, CV" fill="#fff" stroke={MUTED} />
+      <Arrow x1={170} y1={45} x2={230} y2={80} />
+      <Arrow x1={170} y1={115} x2={230} y2={80} />
+      <Box x={230} y={55} w={170} h={50} label="Structured statements" sub="not one big blob" fill="#fff" stroke={MUTED} />
+      <Arrow x1={400} y1={80} x2={460} y2={80} />
+      <Box x={460} y={55} w={150} h={50} label="Embeddings" sub="text-embedding-3-small" fill={ACCENT_SOFT} stroke={ACCENT} />
+      <Arrow x1={535} y1={105} x2={535} y2={150} />
+      <Box x={380} y={150} w={310} h={54} label="Score gates" sub="title, required, optional, time — pass/fail reasons" fill="#fff" stroke={MUTED} />
+      <Arrow x1={535} y1={204} x2={535} y2={230} />
+      <Box x={330} y={230} w={360} h={40} label="Snapshot tables" sub="ranked, precomputed, fast to read" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+    </svg>
+  );
+}
+
 export const diagrams: Record<string, () => React.ReactElement> = {
   "booking-flow": BookingFlowDiagram,
   "mvp-loop": MvpLoopDiagram,
@@ -379,4 +397,5 @@ export const diagrams: Record<string, () => React.ReactElement> = {
   "builder-tiers": BuilderTierDiagram,
   "pilot-decision": PilotDecisionDiagram,
   "draft-dont-decide": DraftDontDecideDiagram,
+  "matching-architecture": MatchingArchitectureDiagram,
 };

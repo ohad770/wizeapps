@@ -204,6 +204,12 @@ export const realProjects = [
     screenshot: "/case-studies/djob-agency.webp",
     industry: "Recruitment",
     timeline: "Built in about 6 months",
+    relatedResource: {
+      href: "/resources/ai-matching-without-ml-team",
+      label: "Technical deep-dive",
+      title: "How the matching layer actually works",
+      text: "Structured statements, embeddings, score gates, and snapshot tables — the full architecture behind the matching you see in this build.",
+    },
     problem:
       "Matching candidates to open roles usually means juggling job boards, spreadsheets, and email threads with no single place to track who applied to what.",
     approach:
@@ -1858,6 +1864,83 @@ export const resources: Resource[] = [
         question: "What is the single most important term here?",
         answer:
           "Scope. Nearly every software dispute — budget, timeline, disappointment — is at bottom a disagreement about what was included. A written scope, plus a named process for changing it, prevents more pain than any other habit on this page.",
+      },
+    ],
+  },
+  {
+    slug: "ai-matching-without-ml-team",
+    datePublished: "2026-07-07",
+    dateModified: "2026-07-07",
+    title: "How to build AI-powered matching without an ML team",
+    description:
+      "The real architecture behind a two-sided matching product — structured statements, embeddings, score gates, and snapshot tables — written from an actual build, not a tutorial.",
+    readTime: "10 min read",
+    sections: [
+      {
+        heading: "Matching is not a search bar with extra steps",
+        paragraphs: [
+          "The instinct when building any two-sided matching product — candidates and jobs, providers and requests, buyers and listings — is to treat it like search: index everything, embed everything, return the closest vectors. This works for a demo and falls apart in production, because matching has a requirement search does not: someone has to trust the result enough to act on it. A recruiter emailing a mismatched candidate, or a customer routed to the wrong provider, costs more than a search result that scrolls past unread.",
+          "This is the architecture we actually built for a two-sided recruitment platform, matching candidates to open roles. None of it needed a machine learning team, a labeled training set, or a model we trained ourselves. It needed a few structural decisions made early, before any embedding was generated.",
+        ],
+      },
+      {
+        heading: "Structured statements beat one big blob",
+        diagramId: "matching-architecture",
+        paragraphs: [
+          "The obvious approach is to take a job description or a CV, embed the whole thing as one block of text, and compare vectors. It works badly, because a single embedding averages everything together — seniority, location, tone, formatting noise — into one point in space, and two very different postings can land suspiciously close just because they share generic phrasing.",
+          "Instead, jobs and candidates are synced into statement-part tables first: title, required skills, optional skills, seniority, location, and a few other fields, each broken out as its own short statement. Each part gets its own embedding, generated with OpenAI's text-embedding-3-small. Comparing part-to-part instead of blob-to-blob is what makes the matches explainable later — you can point at exactly which part matched well and which did not, instead of shrugging at a single opaque similarity score.",
+        ],
+      },
+      {
+        heading: "A similarity score is not a verdict — use gates",
+        paragraphs: [
+          "The second mistake is trusting a single cosine similarity number as the final answer. A candidate can be semantically close to a role — same industry, similar language, overlapping vocabulary — and still fail a hard requirement: wrong seniority, wrong location, missing a required certification, or simply not available in the role's time window.",
+          "The matching service in this build computes several scores rather than one: a title score, a required-skills score, an optional-skills score, and a set of time gates, then combines them into pass/fail reasons alongside the final ranking. When a match is shown to a recruiter, the system can say why it passed or failed, not just how close the vectors were. That single change — gates plus reasons, not just a score — is what turns a similarity search into something a recruiter is willing to act on.",
+        ],
+      },
+      {
+        heading: "Recompute-on-view does not survive real usage",
+        paragraphs: [
+          "The first version of any matching feature usually recalculates matches live, every time someone opens a screen: fetch candidates, fetch jobs, embed anything new, score everything, sort, render. It feels fine with ten records in a demo and falls over the moment a recruiter has real volume — every page load turns into a full scoring pass across the dataset.",
+          "The fix was a snapshot model: a daily rebuild job walks new and changed jobs and candidates, computes scores, and writes the results into snapshot tables. Candidate and job match views then just read from those tables — fast, repeatable, and consistent within a day, at the cost of matches not being instantly live to the second. For recruiting, where nobody expects a response within seconds anyway, that trade is an easy one. For a use case with tighter real-time expectations, the same pattern still works — the rebuild just needs to run more often, or trigger on write instead of on a schedule.",
+        ],
+      },
+      {
+        heading: "What data quality actually breaks",
+        paragraphs: [
+          "Job and candidate data rarely arrive in the same shape. A job posting might be a clean structured form; a candidate might be a CV PDF, a pasted LinkedIn summary, or three sentences typed into a quick-apply box. The sync layer that turns raw input into statement parts has to validate, normalize, and safely rebuild — silently skipping a malformed record is worse than failing loudly, because a candidate who never gets matched looks identical to a candidate with no good matches.",
+          "In practice, most of the ongoing engineering effort in a system like this goes here, not into the embedding or scoring logic. The embeddings and gates were built once and rarely change. The normalization layer keeps needing small fixes as new, slightly-different input shapes show up — a CV with no clear job title line, a posting with the seniority buried in the free-text description instead of a field. Budget for that maintenance up front instead of treating the matching logic as the finish line.",
+        ],
+      },
+      {
+        heading: "What we would tell a small team starting this today",
+        paragraphs: [
+          "You do not need a vector database, a training pipeline, or an ML hire to ship a first version of this. A Postgres table with an embedding column, a straightforward cosine similarity query, and a scheduled rebuild script cover a real amount of scale before anything more specialized is justified. Start with the structural decisions — structured statements over blobs, gates over a bare score, snapshots over recompute-on-view — because those are expensive to retrofit later and cheap to get right from day one.",
+          "The embedding API cost itself is rarely the constraint at small-to-medium scale; a few thousand records re-embedded occasionally is a rounding error next to engineering time. The real cost is the normalization layer described above, and the discipline to keep showing users *why* a match happened rather than just *that* it happened.",
+        ],
+        relatedCaseStudy: {
+          href: "/case-studies/djob-agency",
+          label: "Real build example",
+          title: "See the full Djob build teardown",
+          text: "This architecture is the matching layer from a real, live two-sided recruitment platform — decisions, what shipped, and what we'd improve next time.",
+        },
+      },
+    ],
+    faq: [
+      {
+        question: "Do I need a dedicated vector database?",
+        answer:
+          "Not at small-to-medium scale. Postgres with an embedding column and a similarity query handles a real amount of volume before a dedicated vector database earns its added operational complexity. Move to one only once query latency or dataset size actually demands it, not in anticipation of scale you don't have yet.",
+      },
+      {
+        question: "How much do the embeddings cost to run?",
+        answer:
+          "At the volumes most small platforms deal with — thousands, not millions, of records — embedding cost is typically a small fraction of infrastructure spend, closer to a rounding error than a budget line. Re-embedding only changed records, not the whole dataset, keeps it that way.",
+      },
+      {
+        question: "Can this pattern work outside of recruiting?",
+        answer:
+          "Yes — the same shape applies to any two-sided matching problem: providers and service requests, listings and buyers, mentors and mentees. The specific fields in the structured statements change; the pattern of statements-then-embeddings-then-gates-then-snapshots does not.",
       },
     ],
   },

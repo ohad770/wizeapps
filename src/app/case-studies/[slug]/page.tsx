@@ -246,6 +246,23 @@ export default async function CaseStudyDetailPage({
             )}
           </div>
 
+          {project.relatedResource ? (
+            <Link
+              href={project.relatedResource.href}
+              className="mt-16 block rounded-2xl border border-accent/20 bg-accent-soft/50 p-6 transition-colors hover:border-accent/50 hover:bg-accent-soft md:p-7"
+            >
+              <span className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
+                {project.relatedResource.label}
+              </span>
+              <span className="mt-2 block text-lg font-semibold text-foreground">
+                {project.relatedResource.title}
+              </span>
+              <span className="mt-2 block text-sm leading-relaxed text-muted">
+                {project.relatedResource.text}
+              </span>
+            </Link>
+          ) : null}
+
           <Reveal className="mt-16 overflow-hidden rounded-2xl bg-foreground text-white">
             <div className="px-7 py-10 md:px-10">
               <h2 className="text-2xl font-semibold tracking-tight">
