@@ -1175,6 +1175,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "A simple way to decide",
+        diagramId: "no-code-vs-custom",
         paragraphs: [
           "Instead of debating the tools in the abstract, ask what role the software plays. If it is a supporting workflow or an experiment, lean no-code. If it is core to how the business makes money and will grow with you, lean custom. The questions below usually settle it quickly.",
         ],
@@ -1230,6 +1231,7 @@ export const resources: Resource[] = [
     sections: [
       {
         heading: "Building should be the exception, not the default",
+        diagramId: "buy-default",
         paragraphs: [
           "It is tempting to assume your business is unique enough to need its own software. Sometimes that is true. Far more often, the problem you are facing has already been solved well by an existing product, and building your own version means paying to recreate something you could rent for a fraction of the cost and effort.",
           "A good rule of thumb: buy by default, and build only when buying genuinely fails you. Custom software is powerful, but it carries a cost most people underestimate — not just to build, but to maintain, fix, secure, and improve forever. Existing products spread those costs across thousands of customers. Yours would carry them alone.",
@@ -1324,6 +1326,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "Freelancer, studio, or agency?",
+        diagramId: "builder-tiers",
         paragraphs: [
           "The three common options each have a personality. A freelancer is usually the most affordable and personal, but carries a key-person risk: if they get sick, busy, or disappear, your project stalls. A small studio brings a tight team and broader skills with more continuity, at a higher cost. A large agency offers scale, process, and reliability, but often at premium prices and with more layers between you and the people doing the work.",
           "There is no universally right answer — only a right fit for your project's size and risk. A small internal tool may be perfect for a trusted freelancer, while a product your business will depend on for years may justify a studio or agency with more resilience. What matters most is matching the level of risk you are taking to the stability of who you hire.",
@@ -1548,6 +1551,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "Decide like you said you would",
+        diagramId: "pilot-decision",
         paragraphs: [
           "At the end of the period, hold the decision meeting the pilot was pointed at. Three outcomes are on the table. Expand: the criteria were met, so widen the slice — the next location, the next team — reusing the same pilot discipline at each step. Adjust: the idea works but something specific does not; fix that one thing and extend the pilot briefly. Stop: the criteria were not met and the fixes are not small. Stopping after three weeks and a modest cost is a success of the process — the same discovery after a full rollout would have cost ten times more.",
           "Whatever the outcome, write down three sentences: what was tested, what happened, what was decided. This tiny document is disproportionately valuable — it stops the same tool being re-proposed next year on enthusiasm alone, and it turns each pilot into organizational memory instead of a forgotten experiment.",
@@ -1625,6 +1629,7 @@ export const resources: Resource[] = [
       },
       {
         heading: "The pattern that works: draft, don't decide",
+        diagramId: "draft-dont-decide",
         paragraphs: [
           "Almost every safe, high-value AI feature in operational software follows one pattern: the AI produces a draft — an extraction, a summary, a suggested reply, a proposed category — and a person confirms it with one glance and one click. The person stays accountable; the AI removes the typing and the searching. Review takes seconds; the work it replaces took minutes. That gap is the entire business case, and it is usually enough.",
           "The pattern has a second virtue: it generates its own evidence. Because people confirm or correct each draft, you learn the real accuracy rate on your data within weeks. Where corrections are rare, you can consider automating that step fully, with spot checks. Where corrections are common, the AI stays a drafting assistant — still useful, honestly scoped. Compare that with launching full automation on faith and discovering the error rate from angry customers.",

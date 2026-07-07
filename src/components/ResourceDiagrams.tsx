@@ -53,7 +53,7 @@ function Box({
           y={y + h / 2 + 14}
           textAnchor="middle"
           fontSize={11}
-          fill={MUTED}
+          fill={textFill === FOREGROUND ? MUTED : "rgba(255,255,255,0.75)"}
         >
           {sub}
         </text>
@@ -283,6 +283,88 @@ export function MaintenanceCycleDiagram() {
   );
 }
 
+export function NoCodeVsCustomDiagram() {
+  return (
+    <svg viewBox="0 0 720 230" className="w-full h-auto" role="img" aria-label="Deciding between no-code and custom code based on speed versus control, with a hybrid path in between">
+      <Box x={20} y={85} w={150} h={60} label="What's the role?" sub="convenience or core?" fill="#fff" stroke={MUTED} />
+      <Arrow x1={170} y1={95} x2={250} y2={35} />
+      <Arrow x1={170} y1={135} x2={250} y2={195} />
+      <Box x={250} y={5} w={170} h={60} label="Supporting workflow" sub="validating, internal" fill="#fff" stroke={MUTED} />
+      <Box x={250} y={165} w={170} h={60} label="Central to the business" sub="scale, unusual logic" fill="#fff" stroke={MUTED} />
+      <Arrow x1={420} y1={35} x2={490} y2={35} />
+      <Arrow x1={420} y1={195} x2={490} y2={195} />
+      <Box x={490} y={5} w={190} h={60} label="No-code" sub="fast, self-serve" fill={ACCENT_SOFT} stroke={ACCENT} />
+      <Box x={490} y={165} w={190} h={60} label="Custom code" sub="control, ownership" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+      <text x={360} y={112} textAnchor="middle" fontSize={11} fill={MUTED}>validate now, rebuild proven parts later</text>
+    </svg>
+  );
+}
+
+export function BuyDefaultDiagram() {
+  return (
+    <svg viewBox="0 0 700 180" className="w-full h-auto" role="img" aria-label="Default to buying software, only build when buying genuinely fails">
+      <Box x={20} y={60} w={130} h={60} label="New need" fill="#fff" stroke={MUTED} />
+      <Arrow x1={150} y1={90} x2={220} y2={90} />
+      <Box x={220} y={60} w={190} h={60} label="Buy or configure" sub="the default" fill={ACCENT_SOFT} stroke={ACCENT} />
+      <Arrow x1={410} y1={90} x2={480} y2={90} dashed />
+      <Box x={480} y={60} w={200} h={60} label="Build" sub="only if buying genuinely fails" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+      <text x={445} y={50} textAnchor="middle" fontSize={11} fill={MUTED}>rare exception</text>
+    </svg>
+  );
+}
+
+export function BuilderTierDiagram() {
+  const tiers = [
+    { label: "Freelancer", sub: "affordable, personal", risk: "key-person risk" },
+    { label: "Small studio", sub: "tight team, more skills", risk: "higher cost" },
+    { label: "Agency", sub: "scale, process", risk: "premium, more layers" },
+  ];
+  return (
+    <svg viewBox="0 0 720 210" className="w-full h-auto" role="img" aria-label="Freelancer, small studio, and agency compared by cost, continuity, and risk">
+      {tiers.map((tier, i) => (
+        <g key={tier.label}>
+          <Box x={20 + i * 235} y={20} w={210} h={60} label={tier.label} sub={tier.sub} fill={i === 1 ? ACCENT_SOFT : "#fff"} stroke={i === 1 ? ACCENT : MUTED} />
+          <text x={125 + i * 235} y={112} textAnchor="middle" fontSize={11} fill={MUTED}>{tier.risk}</text>
+        </g>
+      ))}
+      <text x={360} y={160} textAnchor="middle" fontSize={12} fill={MUTED}>match the tier to your project&apos;s size and risk, not to price alone</text>
+    </svg>
+  );
+}
+
+export function PilotDecisionDiagram() {
+  return (
+    <svg viewBox="0 0 700 220" className="w-full h-auto" role="img" aria-label="Pilot decision meeting outcomes: expand, adjust, or stop">
+      <Box x={20} y={80} w={150} h={60} label="Pilot ends" sub="criteria met?" fill="#fff" stroke={MUTED} />
+      <Arrow x1={170} y1={90} x2={250} y2={30} />
+      <Arrow x1={170} y1={110} x2={250} y2={110} />
+      <Arrow x1={170} y1={130} x2={250} y2={190} />
+      <Box x={250} y={0} w={170} h={60} label="Expand" sub="criteria met" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+      <Box x={250} y={80} w={170} h={60} label="Adjust" sub="close, fix one thing" fill={ACCENT_SOFT} stroke={ACCENT} />
+      <Box x={250} y={160} w={170} h={60} label="Stop" sub="criteria not met" fill="#fff" stroke={MUTED} />
+      <text x={550} y={30} textAnchor="middle" fontSize={11} fill={MUTED}>next slice, same discipline</text>
+      <text x={550} y={110} textAnchor="middle" fontSize={11} fill={MUTED}>fix, extend briefly</text>
+      <text x={550} y={190} textAnchor="middle" fontSize={11} fill={MUTED}>cheap discovery, not failure</text>
+    </svg>
+  );
+}
+
+export function DraftDontDecideDiagram() {
+  return (
+    <svg viewBox="0 0 700 200" className="w-full h-auto" role="img" aria-label="AI produces a draft, a person reviews and confirms or corrects it, and the correction rate decides whether to automate further">
+      <Box x={20} y={70} w={140} h={60} label="Input" sub="message, request" fill="#fff" stroke={MUTED} />
+      <Arrow x1={160} y1={100} x2={230} y2={100} />
+      <Box x={230} y={70} w={160} h={60} label="AI drafts" sub="extract, summarize" fill={ACCENT_SOFT} stroke={ACCENT} />
+      <Arrow x1={390} y1={100} x2={460} y2={100} />
+      <Box x={460} y={70} w={160} h={60} label="Person confirms" sub="one glance, one click" fill="#fff" stroke={MUTED} />
+      <Arrow x1={540} y1={70} x2={540} y2={20} />
+      <Box x={460} y={0} w={220} h={44} label="Rare corrections?" sub="consider automating" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+      <Arrow x1={620} y1={130} x2={620} y2={160} dashed />
+      <text x={620} y={180} textAnchor="middle" fontSize={11} fill={MUTED}>frequent corrections: stay a draft tool</text>
+    </svg>
+  );
+}
+
 export const diagrams: Record<string, () => React.ReactElement> = {
   "booking-flow": BookingFlowDiagram,
   "mvp-loop": MvpLoopDiagram,
@@ -292,4 +374,9 @@ export const diagrams: Record<string, () => React.ReactElement> = {
   "app-path": AppPathDiagram,
   "cost-drivers": CostDriversDiagram,
   "maintenance-cycle": MaintenanceCycleDiagram,
+  "no-code-vs-custom": NoCodeVsCustomDiagram,
+  "buy-default": BuyDefaultDiagram,
+  "builder-tiers": BuilderTierDiagram,
+  "pilot-decision": PilotDecisionDiagram,
+  "draft-dont-decide": DraftDontDecideDiagram,
 };
