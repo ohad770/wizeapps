@@ -383,6 +383,22 @@ export function MatchingArchitectureDiagram() {
   );
 }
 
+export function SchedulerLoopDiagram() {
+  return (
+    <svg viewBox="0 0 720 260" className="w-full h-auto" role="img" aria-label="Scheduler loop: a function runs every minute, checks for a matching time-bucket document, sends notifications if one exists, then fetches tomorrow's time and writes the next bucket">
+      <Box x={20} y={100} w={150} h={60} label="Runs every minute" fill={ACCENT_SOFT} stroke={ACCENT} />
+      <Arrow x1={170} y1={130} x2={220} y2={130} />
+      <Box x={220} y={100} w={160} h={60} label="Bucket exists for now?" fill="#fff" stroke={MUTED} />
+      <Arrow x1={380} y1={115} x2={430} y2={50} />
+      <Arrow x1={380} y1={145} x2={430} y2={210} dashed />
+      <Box x={430} y={20} w={270} h={60} label="Send via FCM" sub="to every token in the bucket" fill="#fff" stroke={MUTED} />
+      <Box x={430} y={180} w={270} h={60} label="Nothing due" sub="function exits" fill="#fff" stroke={MUTED} />
+      <Arrow x1={565} y1={80} x2={565} y2={110} />
+      <Box x={430} y={110} w={270} h={54} label="Fetch tomorrow's zman" sub="Hebcal API, writes tomorrow's bucket" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
+    </svg>
+  );
+}
+
 export const diagrams: Record<string, () => React.ReactElement> = {
   "booking-flow": BookingFlowDiagram,
   "mvp-loop": MvpLoopDiagram,
@@ -398,4 +414,5 @@ export const diagrams: Record<string, () => React.ReactElement> = {
   "pilot-decision": PilotDecisionDiagram,
   "draft-dont-decide": DraftDontDecideDiagram,
   "matching-architecture": MatchingArchitectureDiagram,
+  "scheduler-loop": SchedulerLoopDiagram,
 };

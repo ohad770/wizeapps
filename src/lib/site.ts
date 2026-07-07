@@ -85,51 +85,66 @@ export const realProjects = [
     screenshot: "/case-studies/mincha-alarm.webp",
     industry: "Consumer web app",
     timeline: "Built in about 1 month",
+    relatedResource: {
+      href: "/resources/scheduling-notifications-without-a-queue",
+      label: "Technical deep-dive",
+      title: "How the notification scheduler actually works",
+      text: "No task queue, no per-user cron — just time-bucketed Firestore documents and a function that reschedules itself one day at a time.",
+    },
     problem:
       "Mincha (the afternoon prayer) has a window that shifts every day with sunset, and it is different in every city. Without checking a calendar daily, people miss the window without realizing it.",
     approach:
       "We built a location-aware web app that calculates the correct mincha window for wherever the user is and sends an automatic reminder before it closes, with no manual setup per day.",
     outcome:
       "The tool is live and handles the calculation and reminder automatically, so users do not have to look up times themselves. A focused scope like this — one calculation, one reminder, no accounts — is what kept it to about a month.",
-    builtWith: ["Vite", "React", "Base44", "GPS-based zmanim", "Push reminder UX"],
+    builtWith: [
+      "Vite",
+      "React",
+      "Base44",
+      "Firebase Cloud Functions",
+      "Firestore",
+      "Firebase Cloud Messaging",
+      "Hebcal zmanim API",
+    ],
     teardown: {
       intro: [
         "Mincha Alarm was intentionally smaller than a typical religious calendar app. The first version did not try to become a full siddur, calendar, community platform, or settings-heavy utility. It focused on one daily outcome: help a person know when mincha is relevant in their current location and remind them before they miss it.",
-        "That narrow scope made the product useful quickly, but it also exposed the real technical challenge: the app had to explain a time-sensitive calculation clearly enough that non-technical users would trust it.",
+        "The landing page is the visible half. The other half is a scheduled notification engine that has to fire the right message, in the right language, at the right minute, every day, for every location — without a dedicated task queue.",
       ],
       decisions: [
         {
-          label: "Location first, account later",
-          text: "The key input is the user's location, not a user profile. The experience asks for location permission because the zman changes by city and travel matters more than account history.",
+          label: "Firestore documents as the schedule, not a queue",
+          text: "A Cloud Function runs every minute and checks whether a document exists at the path for the current time, grouped by location and notification type. No external queue or scheduler service — the current minute is just a document lookup.",
         },
         {
-          label: "Zmanim explained in plain language",
-          text: "The public page explains that times are based on GPS, sunrise, sunset, and solar noon rather than hiding the logic behind a vague 'smart reminder' claim.",
+          label: "Group by location, not by user",
+          text: "Users near the same coordinates share a notification group, so the zmanim calculation and the Hebcal API call happen once per location per day, not once per user. Personal, self-set reminder times run through a separate, simpler path.",
         },
         {
-          label: "Multilingual from the landing page",
-          text: "The app includes Hebrew, English, French, Russian, Spanish, and Yiddish copy paths, with direction changes for RTL languages.",
+          label: "Each run schedules the next day",
+          text: "After sending today's notifications for a location and type, the same function call fetches tomorrow's zmanim from Hebcal and writes forward to tomorrow's time-bucket document. The system advances itself one day at a time instead of precomputing a calendar in advance.",
         },
         {
-          label: "Auto language detection",
-          text: "A Base44 function detects language and stores lightweight page-visit context, so the landing page can start closer to the visitor's language without asking them first.",
+          label: "Six languages as plain lookup objects",
+          text: "Hebrew, English, Russian, Spanish, French, and Yiddish notification copy live in a simple translations map, keyed by a per-user language field — no i18n library, just small pure functions per language.",
         },
       ],
       whatShipped: [
         "A public landing page with multilingual messaging.",
         "A phone-style notification preview showing the two important reminder moments.",
+        "A minute-resolution scheduled notification engine (Firebase Cloud Functions + Firestore + FCM) covering both location-based group reminders and personal reminder times.",
+        "A monthly cleanup job that removes tokens and records for users inactive more than 30 days.",
         "FAQ content around calculation method, offline behavior after setup, and halachic method support.",
-        "Admin views for FAQ and contact-message handling.",
       ],
       trickyParts: [
-        "The product has to earn trust before the user installs anything. That made the explanation of GPS-based zmanim part of the product, not just marketing copy.",
-        "RTL and LTR languages needed to share the same page without text alignment, ordering, and font choices making one language feel like an afterthought.",
-        "The landing page had to communicate a technical calculation without overwhelming a user who only wants a reliable reminder.",
+        "Timezone handling for the next day's time-bucket comes from parsing the UTC offset out of the Hebcal API's response string — it works, but it is the kind of manual parsing that would need to become more robust if Hebcal ever changed its response format.",
+        "The scheduler runs every minute regardless of whether anything is due, which is simple and cheap at this scale but is the first thing that would need to change if the user base grew by an order of magnitude.",
+        "Two separate opt-out flags — a permanent disable and a same-day snooze — both have to be checked before every send, and both needed to be easy for a non-technical user to set from the app.",
       ],
       nextTime: [
+        "Move the offset parsing to a proper timezone library instead of slicing the API response string, now that the pattern has proven itself in production.",
+        "Batch the per-minute check across locations more efficiently as the number of distinct location groups grows.",
         "Add a small public demo that lets a visitor choose a city and preview today's mincha window before installing.",
-        "Separate the calculation explanation into a dedicated article for people searching around zmanim, GPS, and travel questions.",
-        "Track which FAQ questions get clicked most often so the product copy can answer real hesitation, not guessed hesitation.",
       ],
     },
   },
@@ -1941,6 +1956,82 @@ export const resources: Resource[] = [
         question: "Can this pattern work outside of recruiting?",
         answer:
           "Yes — the same shape applies to any two-sided matching problem: providers and service requests, listings and buyers, mentors and mentees. The specific fields in the structured statements change; the pattern of statements-then-embeddings-then-gates-then-snapshots does not.",
+      },
+    ],
+  },
+  {
+    slug: "scheduling-notifications-without-a-queue",
+    datePublished: "2026-07-07",
+    dateModified: "2026-07-07",
+    title: "How to schedule per-user notifications without a task queue",
+    description:
+      "The real architecture behind a location-aware, multilingual notification system that fires at the right minute every day — no task queue, no per-user cron job.",
+    readTime: "9 min read",
+    sections: [
+      {
+        heading: "The problem with 'just add a cron job'",
+        paragraphs: [
+          "A notification that has to fire at a different time for every user, every day, looks simple until the time itself is the hard part. This is a reminder system for halachic prayer times — the exact minute shifts daily with sunset, and sunset is different in every city. A naive version sets one cron job per user per day, which means creating and tearing down thousands of scheduled jobs continuously. That does not scale and is painful to debug when one job silently fails to get created.",
+          "The system actually running in production for this does something simpler: a single scheduled function runs every minute, and the question it answers is not \"who do I need to notify right now\" computed live, but \"does a document already exist for this exact minute.\" The scheduling problem gets pushed into data instead of into infrastructure.",
+        ],
+      },
+      {
+        heading: "Firestore documents as the schedule",
+        diagramId: "scheduler-loop",
+        paragraphs: [
+          "Notification groups are stored as Firestore documents keyed by time, in the shape hour_minute — for example 13_47. A function on a one-minute cron reads the current UTC time, builds that same key, and checks whether a document exists at that path for each active location and notification type. If nothing exists, the function does almost no work and exits. If something exists, it reads the tokens attached to that document and sends.",
+          "This turns scheduling into a lookup instead of a live computation. There is no queue product to operate, no per-job bookkeeping, and adding a new location or notification type is just a matter of writing a new document at the right time key — the polling function does not need to know about it in advance.",
+        ],
+      },
+      {
+        heading: "Group by location, not by person",
+        paragraphs: [
+          "The naive version of this computes each user's prayer time individually, which means calling an external zmanim API once per user, every day. Instead, users are grouped by rounded latitude and longitude into a shared location bucket. The external API — Hebcal's zmanim endpoint — gets called once per unique location per day, not once per person, and every user in that location subscribes to the same time-bucket document.",
+          "This is the same idea as caching, but framed as a scheduling decision rather than a performance afterthought: the expensive external call happens at the coarsest level that is still correct, and everything downstream reads from the cheap, shared result.",
+        ],
+      },
+      {
+        heading: "Each run schedules its own future",
+        paragraphs: [
+          "After sending today's notifications for a location and type, the same function call immediately fetches tomorrow's time from the zmanim API and writes a new document at tomorrow's time-bucket key. There is no separate nightly batch job that precomputes a week or a month of schedules in advance — the system advances itself exactly one day at a time, and only for the combinations that were actually active today.",
+          "The tradeoff is honest: this system cannot tell you next Tuesday's schedule right now, because it has not been computed yet. For a daily reminder product, that limitation never matters. For a use case where users need to see a future schedule in advance, the same pattern would need a small adjustment — precompute a few days ahead instead of one.",
+        ],
+      },
+      {
+        heading: "Two independent opt-out flags",
+        paragraphs: [
+          "Every send checks two separate flags on the user's token record: a permanent disable and a same-day snooze. Keeping them independent — rather than one combined \"notifications on/off\" toggle — makes a common case easy: a user who wants to skip just today without losing their setup entirely. Both flags are checked in the same place, right before a message goes out, so there is exactly one point in the code where an opt-out can be missed, not several scattered checks that could drift out of sync.",
+        ],
+      },
+      {
+        heading: "What this pattern is good for, and what it isn't",
+        paragraphs: [
+          "This approach earns its simplicity from a specific shape of problem: notifications keyed by a predictable, discrete time slot, at a scale where a once-a-minute poll across active documents is cheap. It is a poor fit for sub-minute precision, for schedules that need to be visible far in advance, or for volumes where per-minute polling itself becomes the bottleneck — at that point a real task queue or a managed scheduler product starts earning its operational cost.",
+          "For most small and mid-size products with daily or per-slot reminders — appointment reminders, daily digests, recurring check-ins — the time-bucketed document pattern is less infrastructure, fewer moving parts to operate, and easier for one person to fully understand than standing up a dedicated queue.",
+        ],
+        relatedCaseStudy: {
+          href: "/case-studies/mincha-alarm",
+          label: "Real build example",
+          title: "See the full Mincha Alarm build teardown",
+          text: "This scheduling engine is the backend behind a real, live multilingual reminder product — decisions, what shipped, and what we'd improve next time.",
+        },
+      },
+    ],
+    faq: [
+      {
+        question: "Why not just use Cloud Tasks or a real queue product?",
+        answer:
+          "You can, and at higher volume or with more complex scheduling needs, you should. For a scheduled-time notification with a predictable slot, a managed queue adds an operational dependency without solving a problem the document-lookup pattern doesn't already solve more simply. Reach for a queue when you need retries with backoff, priority ordering, or per-job observability that a simple existence check can't give you.",
+      },
+      {
+        question: "Does polling every minute waste resources?",
+        answer:
+          "At small-to-medium scale, a once-a-minute function that mostly does nothing is cheap on any serverless platform's free or low usage tiers. It becomes worth reconsidering once the number of active locations or notification types is large enough that the per-minute check itself takes meaningful time or cost — a scaling question, not a correctness one.",
+      },
+      {
+        question: "How do you handle a user who changes location mid-day?",
+        answer:
+          "The location grouping is read fresh each time a schedule is written forward, so a user who moves gets regrouped into whichever location bucket they belong to the next time their notification type is recalculated — normally the next day's write. It is not instantaneous, which is an acceptable tradeoff for a daily reminder product.",
       },
     ],
   },
