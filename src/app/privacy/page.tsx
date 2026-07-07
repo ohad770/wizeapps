@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ManageCookiePreferencesButton from "@/components/ManageCookiePreferencesButton";
 import PageIntro from "@/components/PageIntro";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
@@ -54,6 +55,13 @@ export default function PrivacyPage() {
                 Google advertising cookies
               </h2>
               <div className="mt-4 space-y-4">
+                <p>
+                  On your first visit, a cookie banner lets you accept all
+                  cookies or continue with only essential ones. Advertising
+                  cookies are set only after you choose to accept them, on
+                  pages that carry ads. You can change your choice at any
+                  time: <ManageCookiePreferencesButton />.
+                </p>
                 <p>
                   Third party vendors, including Google, use cookies to serve
                   ads based on a user&apos;s prior visits to this website or
