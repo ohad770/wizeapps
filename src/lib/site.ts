@@ -141,6 +141,12 @@ export const realProjects = [
     screenshot: "/case-studies/domino-ranana.webp",
     industry: "Food and delivery",
     timeline: "Built in about 2 months",
+    testimonial: {
+      quote:
+        "We've been running on this site for more than five years, and the order volume through it is strong. The biggest change was about two years ago, when we connected the site directly to the register — orders come straight in, no retyping. It's very convenient.",
+      author: "Eran Atra",
+      role: "Owner, Pizza Domino Ra'anana",
+    },
     problem:
       "A local Domino's branch needed a fast, direct ordering experience — full menu, current deals, and delivery — without relying only on phone orders or a generic third-party app.",
     approach:

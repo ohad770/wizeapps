@@ -165,6 +165,19 @@ export default async function CaseStudyDetailPage({
         </section>
 
         <article className="max-w-3xl mx-auto px-6 pb-20 md:pb-28">
+          {project.testimonial ? (
+            <Reveal className="mb-12 rounded-2xl border border-accent/20 bg-accent-soft/40 p-6 md:p-8">
+              <p className="text-lg leading-relaxed text-foreground">
+                &ldquo;{project.testimonial.quote}&rdquo;
+              </p>
+              <p className="mt-4 text-sm font-semibold text-accent-deep">
+                {project.testimonial.author}
+                <span className="ml-2 font-normal text-muted">
+                  {project.testimonial.role}
+                </span>
+              </p>
+            </Reveal>
+          ) : null}
           <Reveal className="rounded-2xl border border-gray-100 bg-muted-light/60 p-6 md:p-7">
             <p className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
               Stack
