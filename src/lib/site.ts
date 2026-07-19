@@ -78,11 +78,11 @@ export const services = [
 
 export const realProjects = [
   {
-    slug: "mincha-alarm",
-    title: "Mincha Alarm",
-    url: "https://mincha-alarm.com/",
-    detailHref: "/case-studies/mincha-alarm",
-    screenshot: "/case-studies/mincha-alarm.webp",
+    slug: "mincha-time",
+    title: "Mincha Time",
+    url: "https://mincha-time.com/",
+    detailHref: "/case-studies/mincha-time",
+    screenshot: "/case-studies/mincha-time.webp",
     industry: "Consumer web app",
     timeline: "Built in about 1 month",
     relatedResource: {
@@ -108,7 +108,7 @@ export const realProjects = [
     ],
     teardown: {
       intro: [
-        "Mincha Alarm was intentionally smaller than a typical religious calendar app. The first version did not try to become a full siddur, calendar, community platform, or settings-heavy utility. It focused on one daily outcome: help a person know when mincha is relevant in their current location and remind them before they miss it.",
+        "Mincha Time was intentionally smaller than a typical religious calendar app. The first version did not try to become a full siddur, calendar, community platform, or settings-heavy utility. It focused on one daily outcome: help a person know when mincha is relevant in their current location and remind them before they miss it.",
         "The landing page is the visible half. The other half is a scheduled notification engine that has to fire the right message, in the right language, at the right minute, every day, for every location — without a dedicated task queue.",
       ],
       decisions: [
@@ -494,9 +494,9 @@ export const resources: Resource[] = [
         heading: "Find the smallest proof loop",
         diagramId: "mvp-loop",
         relatedCaseStudy: {
-          href: "/case-studies/mincha-alarm",
+          href: "/case-studies/mincha-time",
           label: "Real build example",
-          title: "How Mincha Alarm stayed small enough to ship quickly",
+          title: "How Mincha Time stayed small enough to ship quickly",
           text: "A focused product loop — location, zman calculation, reminder — kept the first version useful without turning it into a full calendar app.",
         },
         paragraphs: [
@@ -899,9 +899,9 @@ export const resources: Resource[] = [
         heading: "The first question is what kind of app you need",
         diagramId: "app-path",
         relatedCaseStudy: {
-          href: "/case-studies/mincha-alarm",
+          href: "/case-studies/mincha-time",
           label: "Real build example",
-          title: "Why Mincha Alarm started as a focused web app",
+          title: "Why Mincha Time started as a focused web app",
           text: "The important job was a reliable location-based reminder, so the first version did not need two native apps before the core behavior was proven.",
         },
         paragraphs: [
@@ -2010,9 +2010,9 @@ export const resources: Resource[] = [
           "For most small and mid-size products with daily or per-slot reminders — appointment reminders, daily digests, recurring check-ins — the time-bucketed document pattern is less infrastructure, fewer moving parts to operate, and easier for one person to fully understand than standing up a dedicated queue.",
         ],
         relatedCaseStudy: {
-          href: "/case-studies/mincha-alarm",
+          href: "/case-studies/mincha-time",
           label: "Real build example",
-          title: "See the full Mincha Alarm build teardown",
+          title: "See the full Mincha Time build teardown",
           text: "This scheduling engine is the backend behind a real, live multilingual reminder product — decisions, what shipped, and what we'd improve next time.",
         },
       },
