@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HtmlLang from "@/components/HtmlLang";
 import Reveal from "@/components/Reveal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -9,6 +10,15 @@ export const metadata: Metadata = {
   title: "WizeApps בעברית | פיתוח אתרים, אפליקציות ואוטומציות לעסקים",
   description:
     "וויזאפס בונה מערכות הזמנות, טפסי קליטה, MVP וכלים פנימיים לעסקים שרוצים להפוך תהליך ידני למערכת שעובדת.",
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/he`,
+    siteName: "WizeApps",
+    locale: "he_IL",
+    title: "WizeApps בעברית | פיתוח אתרים, אפליקציות ואוטומציות לעסקים",
+    description:
+      "וויזאפס בונה מערכות הזמנות, טפסי קליטה, MVP וכלים פנימיים לעסקים שרוצים להפוך תהליך ידני למערכת שעובדת.",
+  },
   alternates: {
     canonical: `${siteUrl}/he`,
     languages: {
@@ -47,6 +57,7 @@ const proofPoints = [
 export default function HebrewPage() {
   return (
     <div className="min-h-screen flex flex-col">
+      <HtmlLang lang="he" dir="rtl" />
       <SiteHeader />
       <main dir="rtl" lang="he" className="flex-1 text-right">
         <section className="max-w-5xl mx-auto px-6 pt-20 pb-14 md:pt-28">

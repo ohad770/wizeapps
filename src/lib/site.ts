@@ -415,6 +415,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "Plan the reminder rhythm carefully",
+        relatedCaseStudy: {
+          href: "/case-studies/mincha-time",
+          label: "Real build example",
+          title: "How Mincha Time sends each user a reminder at their own minute",
+          text: "The reminder rhythm above is not theory — Mincha Time runs it in production, scheduling per-user reminders with Firestore time buckets and a once-a-minute check instead of a heavy queue.",
+        },
         paragraphs: [
           "Reminders are where booking automation earns its keep — and where it most often annoys people. Too few reminders and no-shows stay high. Too many and customers feel spammed and start ignoring all of them. The right rhythm depends on how far in advance people book and how costly a no-show is.",
           "As a starting point, an immediate confirmation plus one reminder 24 hours before the appointment covers most service businesses. Add a second, shorter reminder a few hours before only if no-shows remain a real problem. Always give people a one-tap way to cancel inside the reminder — a cancelled slot you can refill is far better than a silent no-show.",
@@ -605,6 +611,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "What to do with the signals",
+        relatedCaseStudy: {
+          href: "/case-studies/domino-ranana",
+          label: "Real build example",
+          title: "How Domino Ra'anana moved phone orders into a system",
+          text: "Orders that arrived by phone all day showed every signal on this list. The ordering site that replaced them — menu, cart, delivery rules, POS handoff — has been running for over five years.",
+        },
         diagramId: "manual-vs-system",
         interactiveToolId: "automation-score",
         paragraphs: [
@@ -657,6 +669,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "Bring examples from real work",
+        relatedCaseStudy: {
+          href: "/case-studies/domino-ranana",
+          label: "Real build example",
+          title: "How Domino Ra'anana's build started from real orders",
+          text: "The build was scoped from how orders actually arrived at the restaurant — menu, cart, delivery zones, payment, kitchen handoff — not from a feature list. That is what a good brief looks like in practice.",
+        },
         paragraphs: [
           "Artifacts from how you work today are often more valuable than any document you could write specially for the project. They show the real workflow and expose details that are easy to forget in conversation — the awkward field everyone hates, the copy-paste step between two tools, the message everyone sends slightly differently.",
           "Gather whatever you already have. None of it needs to be tidy; the messiness is informative.",
@@ -1223,6 +1241,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "The hybrid path most businesses miss",
+        relatedCaseStudy: {
+          href: "/case-studies/domino-ranana",
+          label: "Real build example",
+          title: "A hybrid build that has run for five years",
+          text: "Domino Ra'anana pairs a platform foundation with custom code where it matters — Cardcom payments, delivery-zone rules, and a handoff to the Aviv POS. Exactly the hybrid path this section describes.",
+        },
         paragraphs: [
           "The choice is not always permanent or all-or-nothing. A common and sensible path is to start with no-code to validate demand and learn how the workflow really behaves, then rebuild the proven core as custom software once you understand it well. The no-code version becomes a detailed, working specification — far more useful than any document — for the custom build that follows.",
           "The mistake to avoid is drifting into a heavy no-code build for something you already know will need custom code, simply because no-code felt easier to start. If the destination clearly requires ownership, scale, or unusual logic, it is often cheaper to begin building the right foundation than to construct an elaborate temporary version you will dismantle. Decide based on where the product is going, not only on what is quickest today.",
@@ -1346,6 +1370,12 @@ export const resources: Resource[] = [
     sections: [
       {
         heading: "You can judge the work without reading the code",
+        relatedCaseStudy: {
+          href: "/case-studies",
+          label: "See the work",
+          title: "Three real builds, documented as teardowns",
+          text: "This is what judging the work looks like in practice: each case study walks through the problem, the approach, and what shipped — the same questions you should ask anyone you evaluate.",
+        },
         paragraphs: [
           "Hiring someone to build software when you are not technical feels like buying a car with the hood welded shut. You cannot inspect the engine, so it is natural to fall back on price or a slick portfolio. But the things that most determine whether a software project succeeds are things you can absolutely judge: how clearly someone communicates, how they think about your problem, and how they handle uncertainty and disagreement.",
           "In fact, the best signal is rarely technical brilliance. It is whether the person or team understands your business problem and is willing to push back on bad ideas. A brilliant developer who builds exactly the wrong thing helps no one. This guide focuses on what you can actually assess.",
@@ -1427,6 +1457,12 @@ export const resources: Resource[] = [
     sections: [
       {
         heading: "Launch is the halfway point",
+        relatedCaseStudy: {
+          href: "/case-studies/domino-ranana",
+          label: "Real build example",
+          title: "A site that has kept taking orders for five-plus years",
+          text: "Domino Ra'anana launched in about two months and has stayed in daily use for over five years — because payments, delivery rules, and the POS handoff kept getting small, unglamorous maintenance.",
+        },
         paragraphs: [
           "Most conversations about commissioning software end at the launch date, as if the story finishes when the product goes live. In reality, launch is when the software starts existing in the world — and the world keeps changing around it. Browsers update, phone operating systems update, the services your app connects to change their rules, security researchers find new classes of problems, and your own business changes what it needs.",
           "None of this means software is fragile or that maintenance is a scam. It means software is more like a vehicle than a sculpture: it works for years, but only if someone checks the oil. This guide explains what that checking actually involves for a small business system, what it costs, and how to avoid the two classic failure modes — paying for maintenance that never happens, and paying nothing until something breaks expensively.",
@@ -1543,6 +1579,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "Design the slice carefully",
+        relatedCaseStudy: {
+          href: "/case-studies/mincha-time",
+          label: "Real build example",
+          title: "How Mincha Time stayed small enough to ship in a month",
+          text: "The first version did one loop — location, zman calculation, reminder — and shipped in about a month. That deliberately narrow slice is what made the pilot readable: it either reminded people on time or it didn't.",
+        },
         paragraphs: [
           "The most important pilot decision is what slice of work to move. Too small or too artificial, and the pilot proves nothing — a test with fake data and one enthusiastic volunteer always succeeds. Too large, and you have done a risky rollout and called it a pilot.",
           "A good slice is real, bounded, and representative: real customers or real jobs, a natural boundary that limits blast radius, and enough variety to meet the awkward cases. For a booking system, that might be one location or one service category. For an intake tool, every new client for three weeks. For an internal tracker, one team's active jobs. If the slice cannot hit at least a handful of the messy exceptions — the reschedules, the partial payments, the customer who replies by phone — widen it until it can.",
@@ -1621,6 +1663,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "The jobs where AI earns its keep",
+        relatedCaseStudy: {
+          href: "/case-studies/djob-agency",
+          label: "Real build example",
+          title: "AI matching in production without an ML team",
+          text: "Djob ranks candidate-job matches with off-the-shelf embeddings (OpenAI text-embedding-3-small) gated by plain business rules — the AI drafts the match, the rules decide. No ML team involved.",
+        },
         paragraphs: [
           "In the systems WizeApps builds — intake flows, booking systems, internal trackers — the same handful of AI applications keep proving worthwhile, because they sit at the messy boundary between human language and structured data.",
         ],
