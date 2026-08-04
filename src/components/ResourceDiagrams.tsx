@@ -38,6 +38,7 @@ function Box({
         strokeWidth={1.5}
       />
       <text
+        aria-hidden="true"
         x={x + w / 2}
         y={sub ? y + h / 2 - 6 : y + h / 2 + 5}
         textAnchor="middle"
@@ -49,6 +50,7 @@ function Box({
       </text>
       {sub ? (
         <text
+          aria-hidden="true"
           x={x + w / 2}
           y={y + h / 2 + 14}
           textAnchor="middle"
@@ -118,8 +120,8 @@ export function BookingFlowDiagram() {
       <Box x={630} y={10} w={80} h={60} label="Done" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
       <Arrow x1={570} y1={220} x2={630} y2={220} />
       <Box x={630} y={190} w={80} h={60} label="Done" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
-      <text x={360} y={95} textAnchor="middle" fontSize={11} fill={MUTED}>~80% of requests</text>
-      <text x={430} y={185} textAnchor="middle" fontSize={11} fill={MUTED}>~20% of requests</text>
+      <text aria-hidden="true" x={360} y={95} textAnchor="middle" fontSize={11} fill={MUTED}>~80% of requests</text>
+      <text aria-hidden="true" x={430} y={185} textAnchor="middle" fontSize={11} fill={MUTED}>~20% of requests</text>
     </svg>
   );
 }
@@ -149,7 +151,7 @@ export function MvpLoopDiagram() {
           <path d="M0,0 L8,4 L0,8 Z" fill={MUTED} />
         </marker>
       </defs>
-      <text x={310} y={175} textAnchor="middle" fontSize={11} fill={MUTED}>
+      <text aria-hidden="true" x={310} y={175} textAnchor="middle" fontSize={11} fill={MUTED}>
         everything else waits until this loop is proven
       </text>
     </svg>
@@ -159,7 +161,7 @@ export function MvpLoopDiagram() {
 export function ManualVsSystemDiagram() {
   return (
     <svg viewBox="0 0 720 260" className="w-full h-auto" role="img" aria-label="Manual workflow with scattered handoffs between inbox, spreadsheet, and chat, compared to a system with one shared source of truth">
-      <text x={170} y={24} textAnchor="middle" fontSize={12} fontWeight={600} fill={MUTED}>MANUAL</text>
+      <text aria-hidden="true" x={170} y={24} textAnchor="middle" fontSize={12} fontWeight={600} fill={MUTED}>MANUAL</text>
       <Box x={40} y={40} w={100} h={50} label="Inbox" fill="#fff" stroke={MUTED} />
       <Box x={200} y={40} w={100} h={50} label="Spreadsheet" fill="#fff" stroke={MUTED} />
       <Box x={120} y={140} w={100} h={50} label="Chat" fill="#fff" stroke={MUTED} />
@@ -168,7 +170,7 @@ export function ManualVsSystemDiagram() {
       <Arrow x1={220} y1={90} x2={195} y2={140} dashed />
       <Arrow x1={140} y1={155} x2={40} y2={90} dashed />
       <line x1={370} y1={0} x2={370} y2={260} stroke="#e5e5e5" strokeWidth={1} />
-      <text x={540} y={24} textAnchor="middle" fontSize={12} fontWeight={600} fill={ACCENT_DEEP}>SYSTEM</text>
+      <text aria-hidden="true" x={540} y={24} textAnchor="middle" fontSize={12} fontWeight={600} fill={ACCENT_DEEP}>SYSTEM</text>
       <Box x={480} y={100} w={140} h={60} label="One source of truth" fill={ACCENT_SOFT} stroke={ACCENT} />
       <Box x={420} y={20} w={100} h={44} label="Request" fill="#fff" stroke={MUTED} />
       <Box x={600} y={20} w={100} h={44} label="Staff view" fill="#fff" stroke={MUTED} />
@@ -276,7 +278,7 @@ export function MaintenanceCycleDiagram() {
           <path d="M0,0 L8,4 L0,8 Z" fill={MUTED} />
         </marker>
       </defs>
-      <text x={310} y={128} textAnchor="middle" fontSize={12} fill={MUTED}>
+      <text aria-hidden="true" x={310} y={128} textAnchor="middle" fontSize={12} fill={MUTED}>
         launch starts the loop
       </text>
     </svg>
@@ -295,7 +297,7 @@ export function NoCodeVsCustomDiagram() {
       <Arrow x1={420} y1={195} x2={490} y2={195} />
       <Box x={490} y={5} w={190} h={60} label="No-code" sub="fast, self-serve" fill={ACCENT_SOFT} stroke={ACCENT} />
       <Box x={490} y={165} w={190} h={60} label="Custom code" sub="control, ownership" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
-      <text x={360} y={112} textAnchor="middle" fontSize={11} fill={MUTED}>validate now, rebuild proven parts later</text>
+      <text aria-hidden="true" x={360} y={112} textAnchor="middle" fontSize={11} fill={MUTED}>validate now, rebuild proven parts later</text>
     </svg>
   );
 }
@@ -308,7 +310,7 @@ export function BuyDefaultDiagram() {
       <Box x={220} y={60} w={190} h={60} label="Buy or configure" sub="the default" fill={ACCENT_SOFT} stroke={ACCENT} />
       <Arrow x1={410} y1={90} x2={480} y2={90} dashed />
       <Box x={480} y={60} w={200} h={60} label="Build" sub="only if buying genuinely fails" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
-      <text x={445} y={50} textAnchor="middle" fontSize={11} fill={MUTED}>rare exception</text>
+      <text aria-hidden="true" x={445} y={50} textAnchor="middle" fontSize={11} fill={MUTED}>rare exception</text>
     </svg>
   );
 }
@@ -324,10 +326,10 @@ export function BuilderTierDiagram() {
       {tiers.map((tier, i) => (
         <g key={tier.label}>
           <Box x={20 + i * 235} y={20} w={210} h={60} label={tier.label} sub={tier.sub} fill={i === 1 ? ACCENT_SOFT : "#fff"} stroke={i === 1 ? ACCENT : MUTED} />
-          <text x={125 + i * 235} y={112} textAnchor="middle" fontSize={11} fill={MUTED}>{tier.risk}</text>
+          <text aria-hidden="true" x={125 + i * 235} y={112} textAnchor="middle" fontSize={11} fill={MUTED}>{tier.risk}</text>
         </g>
       ))}
-      <text x={360} y={160} textAnchor="middle" fontSize={12} fill={MUTED}>match the tier to your project&apos;s size and risk, not to price alone</text>
+      <text aria-hidden="true" x={360} y={160} textAnchor="middle" fontSize={12} fill={MUTED}>match the tier to your project&apos;s size and risk, not to price alone</text>
     </svg>
   );
 }
@@ -342,9 +344,9 @@ export function PilotDecisionDiagram() {
       <Box x={250} y={0} w={170} h={60} label="Expand" sub="criteria met" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
       <Box x={250} y={80} w={170} h={60} label="Adjust" sub="close, fix one thing" fill={ACCENT_SOFT} stroke={ACCENT} />
       <Box x={250} y={160} w={170} h={60} label="Stop" sub="criteria not met" fill="#fff" stroke={MUTED} />
-      <text x={550} y={30} textAnchor="middle" fontSize={11} fill={MUTED}>next slice, same discipline</text>
-      <text x={550} y={110} textAnchor="middle" fontSize={11} fill={MUTED}>fix, extend briefly</text>
-      <text x={550} y={190} textAnchor="middle" fontSize={11} fill={MUTED}>cheap discovery, not failure</text>
+      <text aria-hidden="true" x={550} y={30} textAnchor="middle" fontSize={11} fill={MUTED}>next slice, same discipline</text>
+      <text aria-hidden="true" x={550} y={110} textAnchor="middle" fontSize={11} fill={MUTED}>fix, extend briefly</text>
+      <text aria-hidden="true" x={550} y={190} textAnchor="middle" fontSize={11} fill={MUTED}>cheap discovery, not failure</text>
     </svg>
   );
 }
@@ -360,7 +362,7 @@ export function DraftDontDecideDiagram() {
       <Arrow x1={540} y1={70} x2={540} y2={20} />
       <Box x={460} y={0} w={220} h={44} label="Rare corrections?" sub="consider automating" fill={ACCENT_DEEP} textFill="#fff" stroke={ACCENT_DEEP} />
       <Arrow x1={620} y1={130} x2={620} y2={160} dashed />
-      <text x={620} y={180} textAnchor="middle" fontSize={11} fill={MUTED}>frequent corrections: stay a draft tool</text>
+      <text aria-hidden="true" x={620} y={180} textAnchor="middle" fontSize={11} fill={MUTED}>frequent corrections: stay a draft tool</text>
     </svg>
   );
 }
@@ -415,4 +417,37 @@ export const diagrams: Record<string, () => React.ReactElement> = {
   "draft-dont-decide": DraftDontDecideDiagram,
   "matching-architecture": MatchingArchitectureDiagram,
   "scheduler-loop": SchedulerLoopDiagram,
+};
+
+export const diagramCaptions: Record<string, string> = {
+  "booking-flow":
+    "The split that matters in a booking flow. Requests that clearly fit your rules get confirmed, written to the calendar, and reminded without anyone touching them. The ones that need judgment — an unusual party size, a late reschedule, a deposit question — are routed to a person instead.",
+  "mvp-loop":
+    "The core loop of a first version: a request comes in, it gets matched, someone responds, and then the loop runs again. Everything outside those three steps waits until the loop has been proven with real users.",
+  "manual-vs-system":
+    "On the left, the same job moving by hand between an inbox, a spreadsheet, and a chat thread, where every handoff is a place the information can go stale. On the right, one shared record that the request form, the staff view, the reminder, and the status all read from.",
+  "prep-flow":
+    "What a developer actually needs from you before starting: one real recent example told end to end, the screenshots and forms you use today, the outcome you want rather than the feature you imagine, your hard constraints, and how you will know it worked. Those five inputs are a brief, and a brief is enough — no formal specification required.",
+  "website-tool-ladder":
+    "Three website jobs and the tool each one points to. Decide first whether the site mainly has to launch and then sit still, be published to often, or carry workflow logic such as checkout, integrations, and customer portals. That answer narrows the platform choice more than any comparison of features.",
+  "app-path":
+    "Who uses the app and what it needs from the device decide the path more than the budget does. A known set of users — staff, or customers behind a login — is often served well by a responsive web app or PWA. A product that has to sit in both app stores points at Expo or Flutter. Deep camera, offline, or operating-system work is what genuinely justifies a native build.",
+  "cost-drivers":
+    "Scope, the number of distinct user roles, the systems you have to integrate with, and the questions still unanswered are what an estimate is actually made of. The budget is that estimate plus a buffer sized to the unknowns, which is why resolving unknowns early is the cheapest way to lower a quote.",
+  "maintenance-cycle":
+    "The four activities that hide behind the word maintenance, drawn as the loop they form in practice: monitor errors and usage, update for platform changes you did not choose, fix what breaks, and improve based on how the software is really being used. Launch starts this loop rather than closing the project.",
+  "no-code-vs-custom":
+    "The deciding question is what role the software plays. A supporting workflow, or one you are still validating, leans no-code. Something central to how the business earns money, with unusual logic or growth ahead of it, leans custom. Starting on no-code and rebuilding only the parts that prove themselves is a legitimate middle path, not a compromise.",
+  "buy-default":
+    "Buying or configuring something that already exists is the default route for a new need. Building your own is the branch you take after buying has genuinely failed, and that branch stays rare — an existing product spreads the cost of maintenance, security, and updates across all its customers, while your own build carries those costs alone.",
+  "builder-tiers":
+    "Each tier trades cost against continuity. A freelancer is the most affordable and personal but concentrates the whole project in one person. A small studio adds broader skills and cover, at a higher cost. An agency adds scale and process, usually at a premium and with more layers between you and the people writing the code. Match the tier to the project's size and risk rather than to price alone.",
+  "pilot-decision":
+    "The three outcomes a pilot decision meeting can end in: expand to the next slice with the same discipline, adjust the one specific thing that did not work and extend briefly, or stop. Stopping at the end of a pilot is cheap discovery — reaching the same conclusion after a full rollout costs far more.",
+  "draft-dont-decide":
+    "The shape that makes AI safe in operational software: the model produces a draft, and a person confirms it with one glance and one click. How often people correct those drafts is the evidence that tells you whether the step is ready to run on its own or should stay a drafting tool.",
+  "matching-architecture":
+    "How matching works inside Djob. Jobs and candidates are broken into short structured statements — title, required skills, optional skills, seniority, location — before anything is embedded, and each part gets its own OpenAI text-embedding-3-small vector. Similarity between parts is then gated by pass/fail business rules, and the ranked results are written into precomputed snapshot tables that the recruiter screens read from.",
+  "scheduler-loop":
+    "How the Mincha Time scheduler runs. A Cloud Function wakes every minute, builds the hour_minute key for the current time, and checks whether a Firestore document exists at that key. If none does, the function exits having done almost nothing. If one does, it sends to the tokens attached to that document, then fetches tomorrow's zman from the Hebcal API and writes the next day's bucket forward.",
 };

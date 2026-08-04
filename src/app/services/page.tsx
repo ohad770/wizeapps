@@ -19,6 +19,42 @@ const avoided = [
   "Generic tools that duplicate what an existing platform already does well.",
 ];
 
+const howToChoose = [
+  {
+    heading: "Start from where the work currently jams",
+    body: "The four services below are not packages to pick from a menu — they are the four shapes this work usually takes. If the jam is customers trying to reach you and staff answering the phone mid-service, that is booking automation. If it is unqualified enquiries arriving through five channels and the first call starting from zero, that is client intake. If nothing exists yet and you need evidence before spending more, that is an MVP build. If the process works but only when one specific person is present, that is an internal operations tool.",
+  },
+  {
+    heading: "Most first versions are smaller than expected",
+    body: "Every service page below has a section on what version one deliberately leaves out, because that is where these projects are won or lost. A booking flow does not need deposits, waitlists and loyalty points to be worth launching. An intake system does not need scoring before anyone has seen the raw enquiries. Cutting version two before estimating version one is the single habit that keeps a build launchable.",
+  },
+  {
+    heading: "Integrations are the part that surprises people",
+    body: "The screens are rarely the expensive part. The expensive part is the payment provider, the point-of-sale system, the calendar, the messaging channel — each one a real dependency on software we do not control. When we quote, integrations are named individually rather than folded into a feature list, because that is where scope quietly grows.",
+  },
+];
+
+const serviceProof = [
+  {
+    service: "Reservation and booking automation",
+    project: "Domino Ra'anana",
+    href: "/case-studies/domino-ranana",
+    body: "An ordering flow with delivery-zone rules that decide checkout eligibility, Cardcom card payments, and a handoff into the Aviv POS. Built in about two months and in daily use for more than five years.",
+  },
+  {
+    service: "Reservation reminders at scale",
+    project: "Mincha Time",
+    href: "/case-studies/mincha-time",
+    body: "Per-user reminders sent at each user's own minute, using Firestore time-bucket documents checked once a minute instead of a task queue. Six languages, and users grouped by rounded location so the source API is called once per location per day.",
+  },
+  {
+    service: "Client intake systems",
+    project: "Djob",
+    href: "/case-studies/djob-agency",
+    body: "Structured intake feeding a matching layer: statements stored as separate parts rather than one text blob, embeddings for similarity, and plain pass/fail business rules deciding what actually qualifies. About six months of scope.",
+  },
+];
+
 export default function ServicesPage() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -77,6 +113,55 @@ export default function ServicesPage() {
             ))}
           </div>
         </section>
+        <section className="bg-muted-light">
+          <div className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+            <Reveal as="h2" className="text-3xl font-semibold tracking-tight">
+              How to tell which one you need
+            </Reveal>
+            <div className="mt-10 space-y-10">
+              {howToChoose.map((item, i) => (
+                <Reveal as="section" key={item.heading} delay={i * 90}>
+                  <h3 className="text-xl font-semibold">{item.heading}</h3>
+                  <p className="mt-3 text-muted leading-relaxed">{item.body}</p>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+          <Reveal as="h2" className="text-3xl font-semibold tracking-tight">
+            What each of these looks like once it is built
+          </Reveal>
+          <p className="mt-4 max-w-3xl text-muted leading-relaxed">
+            Every service above has shipped at least once. These are the live
+            builds behind them, with the technical decisions that shaped each
+            one.
+          </p>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {serviceProof.map((item, i) => (
+              <Reveal
+                as="article"
+                key={item.project}
+                delay={i * 110}
+                className="card-fancy p-7"
+              >
+                <p className="eyebrow-badge">{item.service}</p>
+                <h3 className="mt-4 text-lg font-semibold">{item.project}</h3>
+                <p className="mt-3 text-muted text-[15px] leading-relaxed">
+                  {item.body}
+                </p>
+                <Link
+                  href={item.href}
+                  className="mt-5 inline-flex items-center text-sm font-semibold text-accent-deep transition-colors hover:text-accent"
+                >
+                  Read the build notes &rarr;
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
         <section className="relative overflow-hidden bg-foreground text-white">
           <div
             aria-hidden="true"

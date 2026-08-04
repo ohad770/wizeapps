@@ -141,6 +141,18 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
     serviceType: service.title,
   };
 
+  const faqJsonLd = service.faq
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: service.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
+        })),
+      }
+    : null;
+
   return (
     <div className="min-h-screen flex flex-col">
       <script
@@ -149,6 +161,14 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
           __html: JSON.stringify(serviceJsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      ) : null}
       <SiteHeader />
       <main className="flex-1">
         <section className="max-w-5xl mx-auto px-6 pt-20 pb-12 md:pt-28">
@@ -210,6 +230,118 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
 
           {service.slug === "reservation-and-booking-automation" ? (
             <BookingFlowDemo />
+          ) : null}
+
+          {service.sections ? (
+            <div className="mt-14 space-y-12">
+              {service.sections.map((section) => (
+                <Reveal as="section" key={section.heading}>
+                  <h2 className="text-2xl font-semibold tracking-tight">
+                    <span className="bg-gradient-to-r from-accent to-accent-deep bg-clip-text text-transparent">
+                      {section.heading}
+                    </span>
+                  </h2>
+                  <div className="mt-4 space-y-4 text-muted leading-relaxed">
+                    {section.paragraphs.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                  {section.bullets ? (
+                    <div className="mt-6">
+                      {section.bulletsHeading ? (
+                        <h3 className="text-sm font-semibold uppercase tracking-wide text-accent-deep">
+                          {section.bulletsHeading}
+                        </h3>
+                      ) : null}
+                      <div className="mt-3 grid gap-3">
+                        {section.bullets.map((bullet) => (
+                          <div
+                            key={bullet.label}
+                            className="rounded-xl border border-gray-100 bg-muted-light/60 p-5 transition-colors duration-300 hover:border-accent/40 hover:bg-accent-soft/50"
+                          >
+                            <h4 className="font-semibold text-foreground">{bullet.label}</h4>
+                            <p className="mt-2 text-muted leading-relaxed">{bullet.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </Reveal>
+              ))}
+            </div>
+          ) : null}
+
+          {service.workedExample ? (
+            <Reveal as="section" className="mt-14 card-fancy p-7">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                <span className="bg-gradient-to-r from-accent to-accent-deep bg-clip-text text-transparent">
+                  {service.workedExample.heading}
+                </span>
+              </h2>
+              <p className="mt-4 text-muted leading-relaxed">
+                {service.workedExample.context}
+              </p>
+              {service.workedExample.steps ? (
+                <ol className="mt-6 space-y-4">
+                  {service.workedExample.steps.map((step, index) => (
+                    <li key={step.label} className="flex gap-3">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-xs font-semibold text-accent-deep">
+                        {index + 1}
+                      </span>
+                      <span>
+                        <span className="block font-semibold text-foreground">{step.label}</span>
+                        <span className="mt-1 block text-muted leading-relaxed">{step.text}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              ) : null}
+              {service.workedExample.result ? (
+                <p className="mt-6 rounded-xl border border-accent/20 bg-accent-soft/50 p-5 text-muted leading-relaxed">
+                  {service.workedExample.result}
+                </p>
+              ) : null}
+            </Reveal>
+          ) : null}
+
+          {service.relatedProject ? (
+            <Reveal className="mt-8">
+              <Link
+                href={service.relatedProject.href}
+                className="block rounded-2xl border border-accent/20 bg-accent-soft/50 p-6 transition-colors hover:border-accent/50 hover:bg-accent-soft"
+              >
+                <span className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
+                  {service.relatedProject.label}
+                </span>
+                <span className="mt-2 block font-semibold text-foreground">
+                  {service.relatedProject.title}
+                </span>
+                <span className="mt-2 block text-sm leading-relaxed text-muted">
+                  {service.relatedProject.text}
+                </span>
+              </Link>
+            </Reveal>
+          ) : null}
+
+          {service.faq ? (
+            <Reveal as="section" className="mt-14">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                <span className="bg-gradient-to-r from-accent to-accent-deep bg-clip-text text-transparent">
+                  Questions we get asked about this
+                </span>
+              </h2>
+              <div className="mt-6 grid gap-4">
+                {service.faq.map((item) => (
+                  <div
+                    key={item.question}
+                    className="rounded-xl border border-gray-100 bg-muted-light/60 p-5"
+                  >
+                    <h3 className="font-semibold text-foreground">{item.question}</h3>
+                    <p className="mt-2 text-muted leading-relaxed">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
           ) : null}
 
           <Reveal className="mt-8 grid gap-4 rounded-2xl border border-gray-100 bg-muted-light/60 p-7 md:grid-cols-2">

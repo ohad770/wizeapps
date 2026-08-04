@@ -17,7 +17,48 @@ export const navigation = [
   { href: "/contact", label: "Contact" },
 ];
 
-export const services = [
+type ServiceBullet = {
+  label: string;
+  text: string;
+};
+
+type ServiceSection = {
+  heading: string;
+  paragraphs: string[];
+  bullets?: ServiceBullet[];
+  bulletsHeading?: string;
+};
+
+type ServiceWorkedExample = {
+  heading: string;
+  context: string;
+  steps?: ServiceBullet[];
+  result?: string;
+};
+
+type ServiceFaq = {
+  question: string;
+  answer: string;
+};
+
+type Service = {
+  slug: string;
+  title: string;
+  summary: string;
+  bestFor: string;
+  deliverables: string[];
+  sections?: ServiceSection[];
+  workedExample?: ServiceWorkedExample;
+  relatedProject?: {
+    href: string;
+    label: string;
+    title: string;
+    text: string;
+  };
+  faq?: ServiceFaq[];
+};
+
+export const services: Service[] = [
   {
     slug: "reservation-and-booking-automation",
     title: "Reservation and booking automation",
@@ -30,6 +71,122 @@ export const services = [
       "Confirmation and reminder messages",
       "Cancellation and rescheduling logic",
       "Staff notifications and status tracking",
+    ],
+    sections: [
+      {
+        heading: "What the system has to get right before it sends anything",
+        paragraphs: [
+          "The first job is to write a booking down in one place, in a shape the rest of the system can act on: who, which service, which slot, which staff member or location, and how to reach them. The confirmation, the reminder, the reschedule link and the staff day view all read from that one record. If the record is incomplete, or lives in two places, no amount of messaging automation fixes it.",
+          "That is also why the phone does not have to go away. A booking taken at the counter or on a call gets entered into the same record as an online one, which is what makes the calendar worth trusting. A system that only knows about its own online bookings is the one staff quietly route around, and then you are paying for software and still keeping a notebook.",
+        ],
+      },
+      {
+        heading: "The decisions that actually shape the build",
+        paragraphs: [
+          "Most of the build time goes into rules that are obvious to your staff and invisible to a developer until somebody writes them down. On the Domino Ra'anana ordering site, which took about two months and has been in daily use for more than five years, the rules that mattered were not visual at all.",
+        ],
+        bulletsHeading: "Where the real work sits",
+        bullets: [
+          {
+            label: "Who is allowed to hold a slot",
+            text: "Is every request accepted automatically, or do new customers, large groups, or particular services need a person to approve them first?",
+          },
+          {
+            label: "Eligibility, not just display",
+            text: "Domino's delivery zones each carry a delivery cost and a minimum order amount. Those are checkout rules: they decide whether an order can be placed at all, not just what the page shows.",
+          },
+          {
+            label: "The order of operations around money",
+            text: "A card order there creates a pending order and a Cardcom payment URL first. Only after payment succeeds does the order update, the emails go out, and the order reach the Aviv POS. Getting that sequence wrong is how you end up with paid orders nobody sees, or unpaid orders in the kitchen.",
+          },
+          {
+            label: "Changes and cancellations",
+            text: "How late can a customer move a booking, who can override that, and what happens to a deposit when they do? These are business decisions, and they have to be made before they can be coded.",
+          },
+        ],
+      },
+      {
+        heading: "Reminders are a scheduling problem, not a messaging problem",
+        paragraphs: [
+          "Sending one message is easy. Sending the right message to the right person at the right minute, every day, without a queue somebody has to babysit, is the part worth designing. Mincha Time does this in production: a Firebase Cloud Function runs once a minute and looks for a Firestore document at the bucket for the current time, keyed hour_minute, so 13:47 is the document 13_47. If that document is not there, the run does nothing and costs almost nothing.",
+          "Two more choices keep it cheap. Users are grouped by rounded latitude and longitude, so the Hebcal zmanim API is called once per location per day instead of once per user. And each run writes tomorrow's bucket for that group after it finishes today's send, so the schedule advances itself one day at a time rather than precomputing a calendar that might need invalidating.",
+          "Booking reminders need the same discipline plus the opt-outs. Mincha Time checks two independent flags before every send, a permanent disable and a same-day snooze. A booking reminder needs the equivalent: somebody who has already confirmed, already cancelled, or asked to be left alone should not get the day-before nudge.",
+        ],
+      },
+      {
+        heading: "Which language the message goes out in",
+        paragraphs: [
+          "This matters more than it sounds and it is cheap to get right at the start. Mincha Time sends notification copy in six languages — Hebrew, English, Russian, Spanish, French and Yiddish — chosen from a per-user language field and stored as plain lookup objects rather than through an i18n library. The mechanism is not clever: know the language when the person signs up, then send every outbound message through the same lookup.",
+          "For a booking flow aimed at customers in Israel that usually means Hebrew and English, which also means right-to-left layout in the customer-facing screens and in anything you send them. Retrofitting that later touches every template and every screen at once, so it belongs in the first version even if only one language is switched on at launch.",
+        ],
+      },
+      {
+        heading: "What version one deliberately leaves out",
+        paragraphs: [
+          "The fastest way to never launch is to try to cover every service, location and exception at once. A first version usually covers one location, one group of services, one reminder pattern and one payment path. Deposits, waitlists, recurring appointments, multi-staff calendars and no-show reporting are all easier to add once you can see which of them your bookings actually need.",
+          "Leaving something out is not the same as ignoring it. Domino's checkout calculates pricing and delivery rules in one place, which is why adding a zone or a new deal is a small change instead of a rewrite. The parts still worth improving are written down in that case study, including moving more checkout validation into shared functions that can be tested without rendering the whole checkout page.",
+        ],
+      },
+      {
+        heading: "How long a build like this takes",
+        paragraphs: [
+          "The honest anchor is the Domino build: about two months for a public menu with search and category filtering, deals that carry their own selectable options, a cart, delivery and pickup checkout, card payment through Cardcom, a separate cash path, customer and admin emails with full order details, the POS handoff, and the admin screens behind all of it.",
+          "A booking flow that stops before payments and before an external system handoff is a smaller job than that. Adding either one moves it back toward that shape. For contrast, Mincha Time's first version, including the minute-resolution reminder engine described above, was about a month, because it had one calculation, one reminder and no payment step. Scope is what moves the date.",
+        ],
+      },
+    ],
+    workedExample: {
+      heading: "Worked example: an ordering flow end to end",
+      context:
+        "From outside, the Domino Ra'anana site is a menu. The build is the checkout. Here is the path an order takes, and where a person is still involved.",
+      steps: [
+        {
+          label: "Browse and build the cart",
+          text: "Active products and active deals share one cart, with deals shown first. Both write structured cart items so totals are calculated the same way. Cart, delivery method, chosen zone, payment method and checkout form fields persist in localStorage so a customer does not lose the order by reloading.",
+        },
+        {
+          label: "Apply the zone rules",
+          text: "The selected delivery zone sets the delivery cost and the minimum order amount, and those decide whether checkout can continue at all.",
+        },
+        {
+          label: "Take the payment",
+          text: "A card order creates a pending order plus a Cardcom payment URL. Cash orders take a separate path that skips this step entirely.",
+        },
+        {
+          label: "Confirm, then hand off",
+          text: "On payment success the order status updates, customer and admin emails go out with the full order, the cart clears, and the order is delivered to the Aviv POS.",
+        },
+      ],
+      result:
+        "The branch owns an ordering channel instead of renting one from a marketplace app, and orders reach the register without anyone retyping them. Owner Eran Atra has been running it for more than five years.",
+    },
+    relatedProject: {
+      href: "/case-studies/domino-ranana",
+      label: "Real build",
+      title: "Domino Ra'anana: ordering, payment, and the POS handoff",
+      text: "The full teardown, including the parts that were harder than they look: deal structure in the cart, asynchronous payment status, and delivery-zone rules that gate checkout.",
+    },
+    faq: [
+      {
+        question: "Can we keep taking bookings by phone?",
+        answer:
+          "Yes, and most businesses should for a while. The change is where a phone booking ends up: staff enter it into the same record as the online ones, so reminders, cancellations and the day view are complete. A system that only knows about its own online bookings is the one people work around.",
+      },
+      {
+        question: "Do we have to replace the software we already use?",
+        answer:
+          "Not usually. The Domino site keeps its own order records and hands each paid order to the Aviv POS, so the branch kept the register it already had. Owning the customer-facing flow and handing off to the existing system of record is normally cheaper and far less disruptive than replacing something your team already trusts.",
+      },
+      {
+        question: "How do we keep reminders from annoying people?",
+        answer:
+          "Give people more than one way out and check it before every send. Mincha Time uses two independent flags, a permanent disable and a same-day snooze, so somebody can quiet one day without unsubscribing forever. Booking reminders also need a one-tap cancel, because a cancelled slot you can refill is more useful than a silent no-show.",
+      },
+      {
+        question: "What happens if a confirmation message fails to send?",
+        answer:
+          "The booking is written first and messaging is a separate step, so a failed send never loses the appointment. The staff view is where it surfaces: if a customer has no confirmation, somebody can see that and call. Payment-linked flows need the same care in the other direction, which is why Domino only sends an order onward after the payment result comes back.",
+      },
     ],
   },
   {
@@ -45,6 +202,125 @@ export const services = [
       "Internal review queues",
       "Follow-up emails and task creation",
     ],
+    sections: [
+      {
+        heading: "Intake is a data-shape decision, not a form-design decision",
+        paragraphs: [
+          "Any intake form is easy to build and easy to get wrong. What decides whether it was worth building is what you intend to do with the answers: sort them, route them, compare them, match them against something else, or simply read them. One free-text box collects everything and supports none of that. Separate fields collect less and can be acted on.",
+          "So the first conversation is about the decisions the intake has to support. Who should handle this? Is it in scope for us? Which questions can we stop asking on the first call? Each answer becomes a field with a small set of allowed values, and everything that does not serve a decision goes into one optional notes box at the end.",
+        ],
+      },
+      {
+        heading: "Djob is the long version of this argument",
+        paragraphs: [
+          "Djob is a two-sided recruiting workspace that took about six months, and intake quality is the whole product. Candidates and jobs are not stored as one blob of text each. They are synced into statement-part tables, and OpenAI's text-embedding-3-small runs over those structured statements rather than over a CV as a single document.",
+          "That choice is what makes the result explainable. Cosine similarity gives a closeness score, and a score on its own is not a decision, because a candidate can read as close to a role and still fail a hard requirement. So the matching service computes a title score, a required score, an optional score and time gates, and it keeps the pass or fail reason. A recruiter can see why something matched, not only that it did.",
+          "The last piece is performance. Match views read from snapshot tables rebuilt daily instead of recalculating every candidate against every job when a page opens. Same intake data, precomputed once. Djob is live at djob.agency with public plans starting at $29/month.",
+        ],
+      },
+      {
+        heading: "Short form, complete record",
+        paragraphs: [
+          "There is a real tension in intake: the shorter the form, the more people finish it, and the less you know when you follow up. Djob handles it by not treating the two as the same object. The public job card supports a quick apply with no CV, but the modal still tries to find or create a full candidate record, so an applicant does not end up stranded in a disconnected applications table.",
+          "The same approach works for a service business. Ask a handful of things on the public form, and let the internal record carry the rest of the detail your team fills in as the conversation goes on. Enriching a record after first contact is normal. Losing the enquiry because the form demanded a budget on the first screen is avoidable.",
+        ],
+        bulletsHeading: "What a review queue needs to be trusted",
+        bullets: [
+          {
+            label: "One list, in the order it should be worked",
+            text: "Everything that arrived, showing only the fields that decide who picks it up next.",
+          },
+          {
+            label: "A state you can see",
+            text: "New, waiting on the client, qualified, declined. A state that exists only in somebody's head will not be trusted by anybody else.",
+          },
+          {
+            label: "A reason attached to every rejection",
+            text: "Djob keeps pass and fail reasons on every match for exactly this purpose. Rejections without reasons make it impossible to tell whether your rules are too strict.",
+          },
+          {
+            label: "Follow-up that does not rely on memory",
+            text: "Djob tracks whether a matched role was emailed or sent over WhatsApp, so two people do not chase the same person twice.",
+          },
+        ],
+      },
+      {
+        heading: "What the first version leaves out",
+        paragraphs: [
+          "Version one is usually one form, one set of routing rules, one review queue and one follow-up message. What waits: dashboards nobody has a question for yet, an integration for every channel enquiries currently arrive through, and automated replies that need judgment to be correct.",
+          "Djob is a fair warning about the cost of getting the shape wrong. Its matching layer had to be reworked into the snapshot model because recruiter screens needed fast, repeatable rankings. That kind of change is cheap when the intake data is already structured into separate statements, and expensive when everything was stored as prose.",
+        ],
+      },
+      {
+        heading: "How long this takes",
+        paragraphs: [
+          "A single intake flow — form, qualification rules, internal routing, a review queue, a follow-up email — is a much smaller job than Djob, which took about six months because it covered two audiences plus the matching and admin layer between them. It is closer in size to Mincha Time's first version, about a month, when the rules are already clear on day one.",
+          "The variable is almost never the form. It is how many exceptions the routing has to respect, and how many other systems the qualified enquiry has to land in.",
+        ],
+      },
+    ],
+    workedExample: {
+      heading: "Worked example: intake that has to be machine-readable",
+      context:
+        "Djob's intake exists so that a recruiter can be handed a ranked, explained shortlist instead of a folder of CVs. That requirement reaches all the way back into the form.",
+      steps: [
+        {
+          label: "Capture statements, not paragraphs",
+          text: "Job and candidate information is synced into statement-part tables so each requirement and each claim is a separate row that can be scored on its own.",
+        },
+        {
+          label: "Embed the structured parts",
+          text: "text-embedding-3-small runs over those statements. Embedding one large blob per record would have made the closeness score impossible to explain afterwards.",
+        },
+        {
+          label: "Gate the score with business rules",
+          text: "Title, required and optional scores plus time gates produce a pass or fail with a reason, so semantic closeness cannot overrule a hard requirement.",
+        },
+        {
+          label: "Precompute what the screens read",
+          text: "Ranked results live in snapshot tables rebuilt daily, so opening a match view is a read rather than a recalculation.",
+        },
+        {
+          label: "Keep the follow-up state on the record",
+          text: "Djob tracks whether a matched role was emailed or sent over WhatsApp, so the record, rather than somebody's memory, is what says a person has already been contacted.",
+        },
+      ],
+      result:
+        "Two different audiences work from the same intake data: candidates applying, and recruiters reviewing a shortlist that can explain itself. Covering both sides is what made this a six-month build rather than a one-month one.",
+    },
+    relatedProject: {
+      href: "/case-studies/djob-agency",
+      label: "Real build",
+      title: "Djob: structured intake, gated matching, snapshot tables",
+      text: "The full teardown of the recruiting workspace, including why one match score was never enough and how the sync layer normalises records that arrive in different shapes.",
+    },
+    faq: [
+      {
+        question: "How short should the public form be?",
+        answer:
+          "Short enough that a serious enquiry finishes it in one sitting, structured enough that whoever picks it up knows why it reached them. A useful test: if a field does not change who handles the lead, what you quote, or whether you take the work at all, it can wait for the first conversation.",
+      },
+      {
+        question: "Do we need AI in our intake?",
+        answer:
+          "Only if you need to compare or rank things at a volume a person cannot. Djob needed it because matching many candidates against many roles by hand is not realistic. A business that receives a handful of enquiries a day gets far more out of clean fields and firm routing rules than out of a model.",
+      },
+      {
+        question: "Most of our leads arrive on WhatsApp and by phone. Does that break this?",
+        answer:
+          "No, it changes what the first version is for. The form defines the shape of the record, and enquiries that arrive elsewhere get entered into the same record, by staff at first. Automating a specific channel is worth doing once you can see how much of your real volume comes through it.",
+      },
+      {
+        question: "Can the intake write into the tools we already use?",
+        answer:
+          "Usually. Handing data to an external system is ordinary work: the Domino build sends each paid order to the Aviv POS after Cardcom confirms the payment. What matters is whether the target system has a documented way in, and what should happen when it is briefly unavailable. That second question is the one most plans skip.",
+      },
+      {
+        question: "Is this a CRM?",
+        answer:
+          "No. It is the front door to whatever you already use to track work. Intake ends at the point where a qualified enquiry becomes a job, a client, or a decline. If your team likes its current CRM, the intake should hand over to it and stop there.",
+      },
+    ],
   },
   {
     slug: "mvp-builds",
@@ -59,6 +335,109 @@ export const services = [
       "Authentication and basic admin views",
       "Deployment and launch checklist",
     ],
+    sections: [
+      {
+        heading: "An MVP is the smallest version of the loop that can be used for real",
+        paragraphs: [
+          "A useful first version is not a cheaper copy of the finished product. It is the shortest path through the thing that has to work — the sequence a user repeats to get the value you promised — built well enough that real people can use it without being coached through it.",
+          "Writing that loop as a single sentence is the first deliverable, and it is where most scope arguments get settled. Mincha Time's loop was: know where the user is, calculate today's window, remind them before it closes. Everything else a prayer-time app could be — a full siddur, a calendar, community features, a settings-heavy utility — was left out on purpose. That decision is why the first version took about a month.",
+        ],
+      },
+      {
+        heading: "Mincha Time: what one month bought",
+        paragraphs: [
+          "The visible half is a landing page with multilingual messaging and a phone-style preview of the two reminder moments. The other half is a scheduled notification engine that has to fire the right message, in the right language, at the right minute, every day, for every location, built on Firebase Cloud Functions, Firestore and Firebase Cloud Messaging, with zmanim from the Hebcal API.",
+          "Six languages — Hebrew, English, Russian, Spanish, French and Yiddish — live in a plain translations map keyed by a per-user language field, with no i18n library. A monthly cleanup job removes tokens and records for users inactive more than thirty days. Neither is impressive engineering. Both are much cheaper to include on day one than to retrofit later.",
+        ],
+        bulletsHeading: "Cheap architecture choices that still hold up",
+        bullets: [
+          {
+            label: "The schedule is data, not infrastructure",
+            text: "A function runs every minute and checks whether a Firestore document exists for the current time bucket, keyed hour_minute. No queue service, no per-user cron job, nothing extra to operate.",
+          },
+          {
+            label: "Call the expensive thing once",
+            text: "Users are grouped by rounded latitude and longitude, so the Hebcal API is called once per location per day rather than once per user.",
+          },
+          {
+            label: "Let each run schedule the next one",
+            text: "After today's send for a location, the same run fetches tomorrow's times and writes tomorrow's bucket. The system moves forward one day at a time instead of precomputing a calendar it might have to throw away.",
+          },
+          {
+            label: "Two independent ways to stop",
+            text: "A permanent disable and a same-day snooze, both checked before every send. For anything that sends messages, opt-outs are not a version-two feature.",
+          },
+        ],
+      },
+      {
+        heading: "Where the shortcuts are, and why they were still the right call",
+        paragraphs: [
+          "Being specific about the seams is part of the work. In Mincha Time the next day's time bucket needs a UTC offset, and that offset is parsed out of the Hebcal response string. It works, and it is the kind of manual parsing that would have to become a proper timezone library if Hebcal ever changed the response format. The per-minute run also fires whether or not anything is due, which is cheap at this scale and is the first thing that would change if the user base grew by an order of magnitude.",
+          "Both are written down in the case study rather than hidden. Knowing where a shortcut is means it can be replaced deliberately, when traffic or the roadmap calls for it, instead of being discovered during an outage.",
+        ],
+      },
+      {
+        heading: "How long an MVP takes, using builds you can go and look at",
+        paragraphs: [
+          "Three real durations, all shipped and live. Mincha Time, about one month: one calculation, one reminder, no payment step. Domino Ra'anana, about two months: a public menu, deals with their own options, cart and checkout, card payment through Cardcom, a cash path, customer and admin emails, admin screens and the Aviv POS handoff. Djob, about six months: a two-sided recruiting workspace with embeddings, gated matching, snapshot tables and admin flows on both sides.",
+          "None of those is a quote for your project, and none of them is a rate card. They are the shape of the answer. One integration and one user flow is a month-sized problem. Money plus an external system of record is a two-month-sized problem. Two audiences who need different things out of the same data is a six-month-sized problem. If an estimate you are reading sits far off that scale, the useful question is what it contains that Domino's checkout did not.",
+        ],
+      },
+      {
+        heading: "What launch day is actually for",
+        paragraphs: [
+          "The point of shipping early is evidence: which step people abandon, which message they ignore, which feature nobody opens. That is why a first build includes enough admin visibility to operate it — you cannot learn from a product you cannot watch. The list of what to build next comes out of that, and it is usually shorter, and different, from the list you started with.",
+        ],
+      },
+    ],
+    workedExample: {
+      heading: "Worked example: a first version that had to run unattended",
+      context:
+        "Mincha Time could not be a clickable prototype, because the whole promise happens when the user is not looking at the app. That constraint decided the scope of the first month.",
+      steps: [
+        {
+          label: "Decide what the product refuses to be",
+          text: "Not a siddur, not a calendar, not a community platform. One daily outcome: help somebody know when mincha is relevant where they are, and remind them before it passes.",
+        },
+        {
+          label: "Build the loop, including the unattended half",
+          text: "Location, zmanim from Hebcal, and a minute-resolution scheduled send covering both location-group reminders and personal reminder times.",
+        },
+        {
+          label: "Add only the operational necessities",
+          text: "Two opt-outs, six languages as lookup objects, and a monthly cleanup for users inactive more than thirty days.",
+        },
+        {
+          label: "Write the known tradeoffs down",
+          text: "The offset parsing and the always-on per-minute check are recorded as the first things to revisit, so growth does not turn them into surprises.",
+        },
+      ],
+      result:
+        "A live product doing one job reliably, delivered in about a month, with the next round of work already identified rather than guessed at.",
+    },
+    relatedProject: {
+      href: "/case-studies/mincha-time",
+      label: "Real build",
+      title: "Mincha Time: the one-month first version, in full",
+      text: "What shipped, which architecture decisions kept it small, the parts that were tricky, and what would be done differently next time.",
+    },
+    faq: [
+      {
+        question: "We already have a no-code prototype. Is that enough?",
+        answer:
+          "It is often enough to prove people are interested, and not enough to run a business on. Mincha Time and the Domino site both use Base44 alongside their own React front ends, and Mincha adds Firebase Cloud Functions for the scheduled work. The line to watch is whether the next thing you need is a screen or a process that runs when nobody is looking. Prototypes are good at screens.",
+      },
+      {
+        question: "Does an MVP get thrown away once it works?",
+        answer:
+          "Not necessarily, and it is worth building as though it will not be. The Domino ordering site has been in daily use for more than five years, and the direct connection to the register was added later, after the site had proven itself. A first version that was scoped tightly and written clearly is usually the cheapest thing to extend.",
+      },
+      {
+        question: "What if the MVP shows the idea does not work?",
+        answer:
+          "Then it did its job at the cheapest point in the project, and it usually points at the nearby problem that is the real one. Finding that out at the scale of a one-month build is the entire reason for keeping the scope tight.",
+      },
+    ],
   },
   {
     slug: "internal-operations-tools",
@@ -72,6 +451,119 @@ export const services = [
       "Role-based workflows",
       "Automated notifications",
       "Exportable reports and handoff notes",
+    ],
+    sections: [
+      {
+        heading: "The tool exists so the process stops living in one person's head",
+        paragraphs: [
+          "Most internal processes work fine until two things happen together: volume rises, and the person who holds the process in their head is busy. What breaks is rarely the decision-making. It is the handoff — a step done twice, a step skipped, a status nobody can see without asking somebody.",
+          "So an internal tool gets judged on unglamorous questions. Is this the one place the state lives? Can a manager see status without interrupting anybody? Can a new employee follow it without a tutorial? Does it stop people keeping a private spreadsheet on the side? If the answer to the last one is no, the tool is not finished yet.",
+        ],
+      },
+      {
+        heading: "Admin screens are most of the build",
+        paragraphs: [
+          "This is easy to underestimate, because the admin side is invisible from outside. The Domino Ra'anana project, about two months in total, shipped management screens for products, deals, categories, pizza sizes, beverages, sauces, delivery zones, site settings and orders. That list is the operational reality of a pizza branch, and every entry is something staff need to change themselves without calling a developer.",
+          "The design question inside each screen is which rules the tool enforces and which it leaves to a person. Delivery zones carry a delivery cost and a minimum order amount, so the tool enforces them at checkout. Deals can contain several products with their own selectable options, so the data model has to preserve that structure instead of flattening a deal into a discounted line item — otherwise the admin screen quietly loses the ability to express real promotions.",
+        ],
+      },
+      {
+        heading: "Handoffs to systems you do not control",
+        paragraphs: [
+          "The most valuable part of an internal tool is often the point where it hands work to something else. On the Domino build a card order creates a pending order and a Cardcom payment URL, and only a successful payment triggers the rest: the status update, the customer and admin emails, and delivery of the order to the Aviv POS. Orders arrive at the register without anybody retyping them, which the owner, Eran Atra, describes as the biggest change the site has had.",
+          "Every handoff needs three answers before it is built: what proves the other system accepted the work, what happens when it does not, and who finds out. Skipping the second and third is how an integration looks finished in a demo and generates phone calls in production.",
+        ],
+        bulletsHeading: "The parts teams forget to ask for",
+        bullets: [
+          {
+            label: "Roles that match how people actually work",
+            text: "Not a permissions matrix for its own sake. Just enough separation that the person taking orders and the person changing prices are not looking at the same screen.",
+          },
+          {
+            label: "Exports",
+            text: "Somebody will need the data in a spreadsheet whatever the tool does. Planning for that is what keeps the spreadsheet from becoming a second system of record.",
+          },
+          {
+            label: "A record of what happened",
+            text: "Domino's own list of next steps includes an internal event timeline per order, so staff can see payment, email and POS handoff status in one place. Nearly every operations tool wants this eventually.",
+          },
+          {
+            label: "An obvious way to correct a mistake",
+            text: "Somebody will enter the wrong thing. The tool needs a correction path a normal user can find, and it should record that a correction happened instead of silently overwriting the original.",
+          },
+          {
+            label: "One painful slice first",
+            text: "Version one should cover a single workflow properly. Covering the whole department is what version two is for, once the team has shown you which slice hurt most.",
+          },
+        ],
+      },
+      {
+        heading: "What version one leaves out",
+        paragraphs: [
+          "Reporting is the usual candidate: dashboards built before anybody has a question to ask of them tend to go unread. So are notifications for events nobody acts on, and permission schemes with more roles than the team has people.",
+          "The Domino project's own next steps are a good example of restraint. Pull the checkout rules into shared pure functions, so pricing, minimums and zone eligibility can be tested without rendering a page. Add the per-order event timeline. Add abandoned-cart follow-up only if the branch turns out to lose enough orders to justify it. That last condition is the part most feature lists are missing.",
+        ],
+      },
+      {
+        heading: "How long this takes",
+        paragraphs: [
+          "Domino's two months covered both sides: the public ordering flow and the admin and integration work behind it. A purely internal tool — one workflow, one team, a tracker with roles, notifications and exports — is a narrower job than that, because there is no customer-facing surface to design and no payment provider in the path.",
+          "What pushes it back toward two months is integration. Every external system the tool has to read from or write into is real work, and the POS handoff was one of the more demanding parts of that build. It is worth pricing the integrations separately in your own head before you judge whether an estimate is high.",
+        ],
+      },
+    ],
+    workedExample: {
+      heading: "Worked example: the operations half of a live ordering site",
+      context:
+        "Customers see a menu. The branch sees a set of screens and an integration that decide whether the day runs smoothly.",
+      steps: [
+        {
+          label: "Give staff the levers",
+          text: "Products, deals, categories, pizza sizes, beverages, sauces, delivery zones, site settings and orders are all editable in the admin screens, so day-to-day changes never wait on a developer.",
+        },
+        {
+          label: "Encode the rules that must not be remembered",
+          text: "Delivery cost and minimum order per zone are enforced during checkout rather than written on a note by the phone.",
+        },
+        {
+          label: "Sequence the money and the kitchen correctly",
+          text: "Pending order, Cardcom payment, then status update, emails, cart clear, and POS delivery. Nothing reaches the register before the payment result does.",
+        },
+        {
+          label: "Keep test paths for the risky edges",
+          text: "The project includes test pages for payment and POS validation, because those are the two places where a silent failure costs a real order.",
+        },
+      ],
+      result:
+        "Staff run the branch from the tool instead of around it, and the register receives orders directly. The whole build, public side included, took about two months.",
+    },
+    relatedProject: {
+      href: "/case-studies/domino-ranana",
+      label: "Real build",
+      title: "Domino Ra'anana: the admin and integration work behind the menu",
+      text: "Deal structure that survives the cart, asynchronous payment status, delivery-zone rules that gate checkout, and the order handoff to the Aviv POS.",
+    },
+    faq: [
+      {
+        question: "Our process lives in a spreadsheet. Why change it?",
+        answer:
+          "Do not change it if it still works. Spreadsheets fail on three specific things: two people editing at once, a rule that has to be enforced rather than remembered, and a status somebody outside the sheet needs to see. If none of those is hurting yet, a tool is premature.",
+      },
+      {
+        question: "How do we get staff to actually use it?",
+        answer:
+          "Build a slice where the tool removes work instead of adding a reporting duty. The Domino admin screens get used because they are the only way to change products, deals, sizes and zones — the tool sits on a path staff already had to walk. Anything that is only useful to a manager tends to get filled in badly.",
+      },
+      {
+        question: "Can it connect to our POS, accounting, or supplier system?",
+        answer:
+          "Often, and it is worth checking before scoping anything else. Cardcom and the Aviv POS both have a defined way in, which is what made the Domino handoff practical. When a system has no documented interface, the honest options are a manual step, a scheduled export, or a different plan — and which one you are in should not be a mid-build surprise.",
+      },
+      {
+        question: "Who maintains it when our rules change?",
+        answer:
+          "Rules that change often should be data your team edits, not code. That is why Domino has screens for zones, prices, sizes and deals rather than a developer editing a config file every time a promotion changes. Genuinely structural changes, like a new workflow or a new integration, are change requests, and they stay small when the first version was scoped and written cleanly.",
+      },
     ],
   },
 ];
@@ -294,7 +786,7 @@ export const caseStudies = [
     approach:
       "We map the actual flow from booking request to arrival, then build a confirmation path that records the reservation, sends a reminder, and gives staff a simple view of the evening.",
     outcome:
-      "The team spends less time on the phone, guests receive clearer confirmations, and cancellations are easier to catch before the table is lost. In a scenario like this, no-show rates typically drop from the 12-15% range down toward 5-6% once a reminder and one-tap cancel link are in place.",
+      "The team spends less time on the phone, guests receive clearer confirmations, and cancellations are easier to catch before the table is lost. We have not measured no-show rates for a restaurant, so we will not quote a figure. What a reminder and a one-tap cancel link actually change is that a guest who cannot come now has an easy way to say so, and the table becomes refillable instead of quietly staying empty.",
   },
   {
     slug: "clinic-reminders",
@@ -305,7 +797,7 @@ export const caseStudies = [
     approach:
       "We create a patient reminder workflow that confirms the appointment, follows up before the visit, and flags cancellations or unanswered messages for the team.",
     outcome:
-      "The clinic keeps the human touch where it matters, while the repeated reminder work runs in the background. In a clinic of this size, that pattern usually frees up somewhere around 2-3 hours of staff time per day that used to go into manual confirmations.",
+      "The clinic keeps the human touch where it matters, while the repeated reminder work runs in the background. We have no measured time saving to report for a clinic, so we will not invent one. The concrete change is that confirmations stop depending on someone remembering to send them, and the only cases that still reach a person are the ones where a patient did not reply or asked to move the visit.",
   },
   {
     slug: "marketplace-mvp",
@@ -316,7 +808,7 @@ export const caseStudies = [
     approach:
       "We reduce the product to the core loop: a provider profile, a request flow, a match step, and a basic admin view to manage early activity.",
     outcome:
-      "The founder can test demand with real users and make product decisions from usage rather than guesses. A loop this narrow usually ships in 3-4 weeks instead of the 4-6 months a fuller feature list would have taken.",
+      "The founder can test demand with real users and make product decisions from usage rather than guesses. For a sense of scale from work we have actually shipped rather than a projection: Mincha Time's first usable version took about a month, while Djob — a two-sided matching platform with a far wider scope — took about six months.",
   },
 ];
 
@@ -1784,7 +2276,7 @@ export const resources: Resource[] = [
         bullets: [
           {
             label: "MVP (minimum viable product)",
-            text: "The smallest version of a product that can test the core idea with real users. Budget implication: an MVP that takes six months is not an MVP; the word is doing marketing work in that sentence.",
+            text: "The smallest version of a product that can test the core idea with real users. Budget implication: an MVP that takes six months is not an MVP; the word is doing marketing work in that sentence. For scale from our own work: Mincha Time's first usable version — location, prayer-time calculation, reminder — took about a month.",
           },
           {
             label: "Prototype",
@@ -1824,15 +2316,15 @@ export const resources: Resource[] = [
           },
           {
             label: "Database",
-            text: "Where the data lives: customers, bookings, jobs, messages. The key question for you is not which database, but who can access it and how it is backed up.",
+            text: "Where the data lives: customers, bookings, jobs, messages. The key question for you is not which database, but who can access it and how it is backed up. Djob runs on PostgreSQL and Mincha Time on Firestore — the choice follows the access pattern, not fashion.",
           },
           {
             label: "API (application programming interface)",
-            text: "The doorway one system offers another. 'It has an API' means other software can connect to it; 'we'll use their API' means your system will depend on someone else's doorway staying open.",
+            text: "The doorway one system offers another. 'It has an API' means other software can connect to it; 'we'll use their API' means your system will depend on someone else's doorway staying open. Mincha Time depends on the Hebcal zmanim API this way, which is why it calls Hebcal once per location per day and stores the answer rather than asking on every screen load.",
           },
           {
             label: "Integration",
-            text: "Connecting your system to another — calendar, payments, accounting, WhatsApp. Each integration is real work and a real ongoing dependency; a quote that lists features but not integrations is incomplete.",
+            text: "Connecting your system to another — calendar, payments, accounting, WhatsApp. Each integration is real work and a real ongoing dependency; a quote that lists features but not integrations is incomplete. Domino Ra'anana has two that carry real weight: Cardcom for card payments, and a handoff into the Aviv POS so nobody retypes an order at the register.",
           },
           {
             label: "Hosting / the cloud",
@@ -1842,6 +2334,12 @@ export const resources: Resource[] = [
       },
       {
         heading: "The words in the quote",
+        relatedCaseStudy: {
+          href: "/case-studies/djob-agency",
+          label: "These words on a real build",
+          title: "Where scope, integrations and technical debt showed up in Djob",
+          text: "Djob is the clearest place to see this vocabulary attached to something real: about six months of scope, a PostgreSQL database, an embeddings API it depends on, and a deliberate decision to precompute matches daily rather than pay the cost of recomputing them on every view.",
+        },
         paragraphs: [
           "These are the commercial terms — the ones that decide who pays when reality diverges from the plan.",
         ],

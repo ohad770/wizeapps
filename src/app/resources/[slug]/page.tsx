@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AdSense from "@/components/AdSense";
 import InteractiveResourceTool from "@/components/InteractiveResourceTool";
 import Reveal from "@/components/Reveal";
-import { diagrams } from "@/components/ResourceDiagrams";
+import { diagramCaptions, diagrams } from "@/components/ResourceDiagrams";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { author, resources, siteUrl } from "@/lib/site";
+import { author, realProjects, resources, siteUrl } from "@/lib/site";
 
 type ResourcePageProps = {
   params: Promise<{ slug: string }>;
@@ -20,6 +21,65 @@ function formatDate(date: string) {
     day: "numeric",
     timeZone: "UTC",
   });
+}
+
+function findRealProject(href: string) {
+  return realProjects.find((project) => project.detailHref === href);
+}
+
+function displayHost(url: string) {
+  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+}
+
+function RelatedCaseStudyCallout({
+  href,
+  label,
+  title,
+  text,
+}: {
+  href: string;
+  label: string;
+  title: string;
+  text: string;
+}) {
+  const project = findRealProject(href);
+
+  return (
+    <Link
+      href={href}
+      className="mt-6 block overflow-hidden rounded-xl border border-accent/20 bg-accent-soft/50 transition-colors hover:border-accent/50 hover:bg-accent-soft"
+    >
+      {project ? (
+        <span className="block border-b border-accent/20 bg-white">
+          <Image
+            src={project.screenshot}
+            alt={`Screenshot of ${project.title}, the live project behind this example`}
+            width={1440}
+            height={900}
+            loading="lazy"
+            sizes="(min-width: 768px) 720px, 100vw"
+            className="h-44 w-full object-cover object-top md:h-56"
+          />
+        </span>
+      ) : null}
+      <span className="block p-5">
+        <span className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
+          {label}
+        </span>
+        <span className="mt-2 block font-semibold text-foreground">
+          {title}
+        </span>
+        <span className="mt-2 block text-sm leading-relaxed text-muted">
+          {text}
+        </span>
+        {project ? (
+          <span className="mt-3 block text-xs text-muted">
+            {project.timeline} · live at {displayHost(project.url)}
+          </span>
+        ) : null}
+      </span>
+    </Link>
+  );
 }
 
 export function generateStaticParams() {
@@ -71,6 +131,18 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     (_, i) => resources[(index + i + 1) % resources.length],
   );
 
+  const bodyImages = Array.from(
+    new Set(
+      resource.sections
+        .map((section) =>
+          section.relatedCaseStudy
+            ? findRealProject(section.relatedCaseStudy.href)?.screenshot
+            : undefined,
+        )
+        .filter((screenshot): screenshot is string => Boolean(screenshot)),
+    ),
+  ).map((screenshot) => `${siteUrl}${screenshot}`);
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -79,6 +151,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     datePublished: resource.datePublished,
     dateModified: resource.dateModified,
     mainEntityOfPage: url,
+    ...(bodyImages.length > 0 ? { image: bodyImages } : {}),
     author: {
       "@type": "Person",
       name: author.name,
@@ -226,28 +299,20 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                   ))}
                 </div>
                 {section.diagramId && diagrams[section.diagramId] ? (
-                  <div className="mt-6 rounded-xl border border-gray-100 bg-white p-5 md:p-7">
+                  <figure className="mt-6 rounded-xl border border-gray-100 bg-white p-5 md:p-7">
                     {diagrams[section.diagramId]()}
-                  </div>
+                    {diagramCaptions[section.diagramId] ? (
+                      <figcaption className="mt-5 border-t border-gray-100 pt-4 text-sm leading-relaxed text-muted">
+                        {diagramCaptions[section.diagramId]}
+                      </figcaption>
+                    ) : null}
+                  </figure>
                 ) : null}
                 {section.interactiveToolId ? (
                   <InteractiveResourceTool id={section.interactiveToolId} />
                 ) : null}
                 {section.relatedCaseStudy ? (
-                  <Link
-                    href={section.relatedCaseStudy.href}
-                    className="mt-6 block rounded-xl border border-accent/20 bg-accent-soft/50 p-5 transition-colors hover:border-accent/50 hover:bg-accent-soft"
-                  >
-                    <span className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
-                      {section.relatedCaseStudy.label}
-                    </span>
-                    <span className="mt-2 block font-semibold text-foreground">
-                      {section.relatedCaseStudy.title}
-                    </span>
-                    <span className="mt-2 block text-sm leading-relaxed text-muted">
-                      {section.relatedCaseStudy.text}
-                    </span>
-                  </Link>
+                  <RelatedCaseStudyCallout {...section.relatedCaseStudy} />
                 ) : null}
                 {section.bullets ? (
                   <div className="mt-6 grid gap-3">
