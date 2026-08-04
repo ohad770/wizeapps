@@ -1564,14 +1564,42 @@ export const resources: Resource[] = [
     dateModified: "2026-07-06",
     title: "How much does it cost to build a small business app?",
     description:
-      "An honest breakdown of what drives software pricing, why quotes vary so widely, and how to get more product for the same budget.",
-    readTime: "9 min read",
+      "Our actual pricing in numbers — $5,000 to $10,000 per estimated month of work — with what three real builds cost, what drives the range, and how to get more product for the same budget.",
+    readTime: "12 min read",
     sections: [
       {
         heading: "Why \"how much does an app cost\" has no single answer",
         paragraphs: [
           "Asking what an app costs is a bit like asking what a building costs. A garden shed and an office tower are both buildings, and the honest answer is always \"it depends on what you need and who builds it.\" Software is the same. The same idea can cost a few thousand or a few hundred thousand depending on scope, quality, and who does the work, which is why a vague brief produces wildly different quotes.",
           "That uncertainty is uncomfortable, but it is also useful information. When quotes for the \"same\" project vary by 5x, it usually means the project was not actually defined the same way by each person. The most reliable way to control cost is not to hunt for the cheapest quote — it is to define the problem tightly enough that everyone is pricing the same thing.",
+        ],
+      },
+      {
+        heading: "What we charge, in actual numbers",
+        paragraphs: [
+          "Most articles on this question stop at \"it depends,\" so here is our own pricing, plainly. We estimate how many months of work a build needs, and each estimated month of work costs between $5,000 and $10,000. Where a project sits in that range depends on its complexity: a single, well-understood workflow sits near the bottom, while heavy business logic, payment handling, or an integration with a system we do not control pushes it toward the top.",
+          "\"A month of work\" means a month of building, not a month on the calendar. It is the unit we estimate in because it is the one that actually tracks effort — a feature list can look short and still take three months once its rules are written down.",
+        ],
+        bullets: [
+          {
+            label: "About one month — $5,000 to $10,000",
+            text: "One focused loop, end to end. Mincha Time's first usable version was this size: location, prayer-time calculation, reminder delivery, in six languages.",
+          },
+          {
+            label: "About two months — $10,000 to $20,000",
+            text: "A real transactional flow with money and an outside system in it. Domino Ra'anana was this size: menu, cart rules, delivery-zone eligibility, Cardcom payments, and a handoff into the Aviv POS.",
+          },
+          {
+            label: "About six months — $30,000 to $60,000",
+            text: "A platform with several user types and a non-trivial engine behind it. Djob was this size: two-sided matching over embeddings, business-rule gating, and precomputed daily snapshots.",
+          },
+        ],
+      },
+      {
+        heading: "The estimate is the uncertain part, not the rate",
+        paragraphs: [
+          "Notice where the risk actually sits. The rate is fixed and knowable. What moves a budget is the number of months, and that number moves for one reason: the scope was not pinned down before anyone estimated it. This is why we spend the first conversations mapping the current process rather than quoting from a feature list — a wrong month-count is a far more expensive mistake than a wrong rate.",
+          "It also means the lever in your hands is scope, not negotiation. Cutting a version-one feature that would have added a month saves between $5,000 and $10,000. No amount of haggling over a rate comes close to that.",
         ],
       },
       {
@@ -1614,6 +1642,7 @@ export const resources: Resource[] = [
         paragraphs: [
           "Most software work is sold in one of three ways, and understanding them helps you read a quote. Fixed price means an agreed amount for an agreed scope; it gives certainty but punishes change, so it rewards a very clear brief. Time and materials means you pay for the hours worked; it is flexible and honest about uncertainty but requires trust and good communication. A fixed-scope sprint sits between the two: a focused effort to deliver one defined outcome in a set window.",
           "For a first version, a focused fixed-scope build is often the best fit for a small business. It caps your risk, forces a clear definition of done, and produces something real you can react to before committing more. Open-ended hourly arrangements can be excellent with the right team, but they are unforgiving when the scope was never pinned down.",
+          "For the record, this is where we sit: we quote a fixed price for a defined version one, derived from the monthly figure above, and we bill hourly only for post-launch work, where the volume genuinely is unpredictable. You should expect any builder to tell you plainly which of the three models they are using before you see a number.",
         ],
       },
       {
@@ -1650,7 +1679,7 @@ export const resources: Resource[] = [
       {
         heading: "A realistic way to think about budget",
         paragraphs: [
-          "Rather than starting with \"how much does an app cost,\" start with \"how much is this problem worth solving, and what is the smallest version that would prove it?\" If a workflow wastes ten hours a week, a system that recovers most of that time pays for itself quickly, and that math should guide the budget more than any market average.",
+          "Rather than starting with \"how much does an app cost,\" start with \"how much is this problem worth solving, and what is the smallest version that would prove it?\" Put our numbers into that question and it gets concrete: if the smallest useful version is a one-month build, you are deciding whether the problem is worth $5,000 to $10,000 to solve — not whether software in general is affordable.",
           "Set aside a portion of your budget for after launch, too. Software is not finished when it ships; the first version teaches you what to change, and the most valuable improvements often come from real use. A team that delivers a lean first version and helps you iterate will usually give you a better outcome than one that spends the entire budget trying to predict everything up front.",
         ],
       },
@@ -1669,7 +1698,7 @@ export const resources: Resource[] = [
       {
         question: "What ongoing costs should I expect after launch?",
         answer:
-          "Hosting and third-party services (often modest monthly amounts), plus a budget for fixes and small changes as real use reveals what to improve. A practical planning habit is to reserve a meaningful slice of the build budget — many teams use 15–25% per year — for post-launch iteration.",
+          "Two separate things. First, hosting and third-party services, which are usually modest monthly amounts billed directly to you by the providers. Second, changes and fixes: we bill post-launch work hourly at $85 to $165 per hour, for hours actually worked, rather than a standing monthly fee — most months are quiet, and you should not pay for a retainer that goes unused.",
       },
     ],
   },
@@ -1995,8 +2024,8 @@ export const resources: Resource[] = [
       {
         heading: "A sensible maintenance budget",
         paragraphs: [
-          "A widely used planning figure for software upkeep is 15–25% of the original build cost per year, covering updates, fixes, and small improvements. A simple internal tool with few integrations sits at the low end or below it; a customer-facing system with payments, messaging, and third-party connections sits higher because more of the outside world can change underneath it.",
-          "Structure matters as much as the amount. For most small systems, the practical options are: a modest monthly retainer that includes updates and a few hours of changes; a pay-as-you-go arrangement with an agreed response time; or scheduled check-ups — a half-day every quarter where someone updates dependencies, reviews errors, and flags risks. The wrong option is the default one: nobody responsible, nothing scheduled, and a plan that amounts to hoping.",
+          "Rather than quote a percentage of the build, here is what we actually charge: post-launch work is billed hourly, at $85 to $165 per hour, for hours genuinely worked. A simple internal tool with few integrations may need almost none for months at a stretch. A customer-facing system with payments, messaging, and third-party connections needs more, because more of the outside world can change underneath it — a payment provider updates an API, an operating system changes how notifications behave, a dependency ships a security fix.",
+          "Structure matters as much as the amount, and we deliberately do not sell a standing monthly retainer for small systems: most months are quiet, and you should not pay for hours nobody used. The practical options are a pay-as-you-go arrangement with an agreed response time, or scheduled check-ups — a half-day every quarter where someone updates dependencies, reviews errors, and flags risks. The wrong option is the default one: nobody responsible, nothing scheduled, and a plan that amounts to hoping.",
         ],
       },
       {
