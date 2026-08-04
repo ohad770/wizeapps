@@ -566,6 +566,424 @@ export const services: Service[] = [
       },
     ],
   },
+  {
+    slug: "mobile-sdk-development",
+    title: "Mobile SDK development",
+    summary:
+      "Build and maintain libraries other developers embed: native Android and iOS targets, the React Native, Flutter and Unity wrappers around them, and release builds verified from the packaged artifact.",
+    bestFor:
+      "Product and engineering teams who distribute functionality to other companies' apps, and anyone whose SDK works in debug and breaks in a customer's release build.",
+    deliverables: [
+      "Native Android and iOS library targets",
+      "React Native, Flutter or Unity wrapper layer",
+      "Consumer keep rules and release-build verification",
+      "Sample apps, integration guide and a support matrix",
+    ],
+    sections: [
+      {
+        heading: "An SDK is judged by what the host app is allowed to assume",
+        paragraphs: [
+          "An app owns its process. It decides when it starts, which thread does what, how much it logs, and what happens when it crashes. An SDK owns none of that. Somebody else's app initializes your code, on a thread of their choosing, possibly before their first screen exists, next to other SDKs, compiled with their build settings, their minimum OS version, their dependency versions and their release configuration.",
+          "That changes what the deliverable is. The public surface becomes the product: a small number of entry points that are safe to call early, safe to call twice, and documented as to which thread they expect and what they do when they fail. An SDK that throws from an initializer takes the host app down with it, and the crash report lands on their desk with your class names in it. Their user blames them.",
+          "The second thing an integrator inherits is your dependency list. Every library you pull in is a library you force on them, at a version that has to coexist with whatever they already use. Gradle resolves a version conflict by taking the highest request, so a transitive dependency you bumped casually can change the behaviour of code you have never seen. Keeping the footprint small is a compatibility decision, not a style preference.",
+        ],
+      },
+      {
+        heading: "Per-platform reality, and why the wrapper is where it breaks",
+        paragraphs: [
+          "Native Android and iOS are one problem. React Native, Flutter and Unity add a wrapper layer, and the wrapper is where most breakage happens, because its whole job is forwarding calls one way and callbacks the other way while preserving things the underlying SDK cares about: which thread it is on, which lifecycle object it is attached to, and whether a callback fires once or twice.",
+          "None of those survive a naive bridge. A promise resolved twice crashes some runtimes and silently does nothing on others. A callback delivered on a background thread reaches code that then touches a view, which is a main-thread-only operation on both platforms. An object identity that the native SDK uses to correlate a request with its result gets recreated across the bridge and the correlation is lost. These are not exotic bugs; they are the default outcome of writing the wrapper by hand and testing it once on the happy path.",
+        ],
+        bulletsHeading: "What each target actually requires",
+        bullets: [
+          {
+            label: "Android",
+            text: "A Kotlin or Java library published as an .aar, shipping its own keep rules through consumerProguardFiles so the host does not have to paste anything into their configuration. Your minimum SDK version and your dependency versions become constraints on every app that embeds you.",
+          },
+          {
+            label: "iOS",
+            text: "An XCFramework consumed through Swift Package Manager or CocoaPods, with the simulator and device slices that customers expect. A binary Swift framework needs library evolution enabled to stay usable across compiler versions, and Apple's privacy manifest and signature requirements for third-party SDKs apply to you rather than to the app that embeds you.",
+          },
+          {
+            label: "React Native",
+            text: "A native module plus typed JavaScript definitions, an autolinking-friendly package and a podspec. Module methods do not run on the main thread by default, so anything that creates or attaches a view has to be dispatched there deliberately, and event emitters have to survive a reload during development.",
+          },
+          {
+            label: "Flutter",
+            text: "A Dart facade over per-platform implementations, communicating through method and event channels. Native views need a platform view, channel errors have to be mapped into Dart exceptions rather than silently returning null, and every value crossing the channel has to be a type the codec can carry.",
+          },
+          {
+            label: "Unity",
+            text: "A C# API over an Android plugin and an iOS plugin. Callbacks from Android come back through a proxy object, activity references have to be fetched from the player rather than cached, and Unity controls its own Gradle template and minification settings, so keep rules have to be delivered there too.",
+          },
+        ],
+      },
+      {
+        heading: "The release build is a different product from the debug build",
+        paragraphs: [
+          "On Android, release builds run R8, which shrinks, renames and optimizes based on what it can prove is reachable. Anything resolved by name at runtime is invisible to that analysis: a class named in a string, an adapter looked up reflectively, an entry point referenced from a manifest or a configuration file, a field name a serializer expects. The code compiles. The debug build works. The release build fails, or worse, quietly does nothing.",
+          "Keep rules are the fix, and reading the source cannot tell you whether yours are correct. A rule is a pattern; whether it matched the classes you meant is a property of the output, not of the rule. This is the single most common reason an SDK behaves differently at a customer's site than in your own project, because the customer builds release and you build debug all day.",
+          "An SDK also has to carry its own rules rather than documenting them. Rules in an integration guide get pasted once and never updated, so a customer on an old copy of your instructions is running last year's configuration against this year's library. Shipping them with the artifact makes the correct configuration the default one.",
+        ],
+      },
+      {
+        heading: "Verify from the artifact, not from the source",
+        paragraphs: [
+          "Unit tests structurally cannot catch this class of problem. They run against compiled classes in a test configuration, not against the shrunk, renamed bundle that ships. A class can pass every test and then be absent from the artifact a customer installs. The same gap covers packaging: a resource that did not get bundled, a slice missing from a framework, a transitive dependency that resolved locally because of a project path reference and does not exist for anyone consuming the published version.",
+          "So the verification that matters is mechanical and physical. Build the thing you will publish, consume it the way a customer will, look inside it, and then run it.",
+        ],
+        bulletsHeading: "The checks that actually catch packaging failures",
+        bullets: [
+          {
+            label: "Depend on it by version, not by path",
+            text: "Publish a release candidate and have the sample app resolve it as a normal dependency. A local project reference hides exactly the packaging mistakes you are looking for.",
+          },
+          {
+            label: "Build with shrinking on",
+            text: "The host sample app's release variant, minification enabled, your consumer rules in effect. This is the configuration your customers use and the one most SDK teams never build.",
+          },
+          {
+            label: "List what is in the bundle",
+            text: "Inspect the packages and classes in the dex output and confirm that everything resolved by name at runtime still exists under that name. Keep the R8 mapping file for the release, because it is also what lets you retrace a stack trace a customer sends you six months later.",
+          },
+          {
+            label: "Inspect the framework, not the build log",
+            text: "On iOS, check the architectures and the symbols present in the built binary. A successful build is not evidence that the symbol an integrator links against is exported.",
+          },
+          {
+            label: "Exercise every entry point on a device",
+            text: "A reflective lookup fails at the moment it runs and not before, so the release artifact has to be executed, not just produced.",
+          },
+        ],
+      },
+      {
+        heading: "Versioning is a promise to people who will not read the changelog",
+        paragraphs: [
+          "Host apps upgrade an SDK during a sprint that is about something else. That is the situation your version numbers have to survive. Semantic versioning honestly applied, deprecation before removal, and one short migration note per breaking change cover most of it. Removing a method in a minor version is the fastest way to be pinned to an old release forever.",
+          "The subtler breaking change is a dependency bump. If your library requires a newer version of a third-party SDK, you have changed the host app's build whether or not your own API moved, and if their code depends on the older behaviour, your minor upgrade broke them. Compile against the oldest version you claim to support, test against the newest, and say in writing which range you actually cover.",
+          "That statement of coverage is worth maintaining as a table: minimum OS versions, minimum React Native, Flutter or Unity versions, and which versions of any SDK you integrate with. Most support conversations are really requests for that table.",
+        ],
+      },
+      {
+        heading: "App Store and Google Play mechanics land on you anyway",
+        paragraphs: [
+          "An SDK does not ship to a store, but every one of its customers does, so store requirements become your requirements one step removed. Anything your library declares gets merged into the host's manifest, including permissions, which means a permission you added for an optional feature is a permission somebody now has to justify in a review or a data-safety declaration. Apple's privacy manifest and signing rules for third-party SDKs sit in the same category: they are conditions on your artifact that the app developer cannot satisfy on your behalf.",
+          "Platform deadlines also arrive as your problem, because a target API level requirement or a new declaration form reaches the app first and the app cannot move until its SDKs have. Being ahead of that is a large part of what makes an SDK pleasant to depend on.",
+          "The last piece is documentation and samples, which are part of the product rather than an afterthought. A working sample app per platform, resolved from the published artifact, is simultaneously the integration guide, the regression test and the reproduction case a support conversation starts from.",
+        ],
+      },
+    ],
+    workedExample: {
+      heading: "Worked example: the pass that proves a release build is intact",
+      context:
+        "This is the sequence we run before an SDK version goes out, because it is the only one that catches shrinking and packaging problems. None of these steps can be replaced by reviewing code or by adding tests.",
+      steps: [
+        {
+          label: "Publish a release candidate first",
+          text: "The artifact under test is the published one. Sample apps resolve it by version like any other dependency, so anything that was only working because of a local project reference fails here, where it is cheap.",
+        },
+        {
+          label: "Build the host app for release",
+          text: "Minification on, the library's consumer rules in effect, mapping file saved. This is the build configuration a customer ships and the one a debug-only test cycle never produces.",
+        },
+        {
+          label: "Look inside the bundle",
+          text: "Enumerate what survived and confirm that every class resolved by name at runtime is present under that name, not renamed and not removed.",
+        },
+        {
+          label: "Run the built artifact and touch everything",
+          text: "Install the release build on a device and exercise each public entry point, including the failure paths, because a missing class announces itself only when the lookup happens.",
+        },
+        {
+          label: "Repeat per wrapper",
+          text: "The React Native, Flutter and Unity samples are separate builds with separate configuration and separate minification settings. The one nobody rebuilt is reliably the one that breaks in the field.",
+        },
+      ],
+      result:
+        "The failure this prevents is the expensive one: a customer's release build crashing or silently doing nothing while your own build and your test suite are both green, and the report arriving days later with an obfuscated stack trace attached.",
+    },
+    faq: [
+      {
+        question: "Can you work on the SDK we already have?",
+        answer:
+          "That is the usual starting point, and the first pass is normally not a code review. It is building the artifacts and reproducing the reported failure in a release build, because a defect that only appears after shrinking or packaging cannot be found by reading the source that produced it.",
+      },
+      {
+        question: "Do we need all three wrappers?",
+        answer:
+          "No, and each one you add is a surface you maintain forever: its own sample app, its own release, its own set of host framework versions to support. Native Android and iOS first, then whichever wrapper your integrators actually ask for. A wrapper published and then left behind the native library is worse than not having it.",
+      },
+      {
+        question: "Why can't tests cover the release-build problem?",
+        answer:
+          "Because tests run before the step that causes it. Shrinking and renaming happen when the shippable artifact is assembled, and a test suite exercises classes that have not been through that. A green suite and a broken release build are entirely compatible states, which is why verification has to read the artifact.",
+      },
+      {
+        question: "How is this priced?",
+        answer:
+          "Build work is priced at $5,000 to $10,000 per estimated month of work, positioned in that range by complexity. Work after release, including per-version verification passes and support for a new host framework version, is billed at $85 to $165 per hour for hours actually worked. There is no standing retainer.",
+      },
+    ],
+  },
+  {
+    slug: "ad-monetization-integration",
+    title: "Ad monetization and ad server integration",
+    summary:
+      "Integrate Google Ad Manager, AdMob, IMA and GMA as the separate systems they are: correct initialization order, identity and signal enrichment at every request site, and verification against real ad requests.",
+    bestFor:
+      "Apps and publishers whose ad stack is technically live but under-delivering, and teams adding video, identity or signal enrichment to an integration that already exists.",
+    deliverables: [
+      "Documented initialization and consent ordering, in code",
+      "A single request path with enrichment applied everywhere",
+      "A verification pass against captured real ad requests",
+      "Per-platform integration notes and a failure-mode runbook",
+    ],
+    sections: [
+      {
+        heading: "Four systems that get talked about as one",
+        paragraphs: [
+          "Google Ad Manager, AdMob, IMA for video and GMA for mobile display are routinely discussed as a single interchangeable thing. They are not. Each has its own initialization order, its own request shape and its own failure modes, and treating them as one is the usual source of an integration that appears to work and earns less than it should.",
+          "The mobile display SDK serves both AdMob and Ad Manager, which is exactly why the confusion persists. The request objects are not the same: an Ad Manager request carries custom key-value targeting and publisher-supplied signals that an AdMob request has nowhere to put, and the two use different ad unit identifier formats. Code written for one and pointed at the other compiles, requests ads, renders ads, and drops the targeting on the floor.",
+          "Video is a different model again. IMA requests against an ad tag rather than an ad unit, gets back a VAST or VMAP response, and has to be wired into your content player: an ads loader, an ads manager, a display container over the video surface, and a scheduler that pauses content, plays the break, and returns control. Its failures look nothing like display failures, and none of them resemble a null pointer.",
+        ],
+        bulletsHeading: "Where each one goes wrong first",
+        bullets: [
+          {
+            label: "Google Ad Manager",
+            text: "Targeting that never arrives, usually because it was set on the wrong request type or set after the request object was already built. The ad still fills, so nothing looks wrong from inside the app.",
+          },
+          {
+            label: "AdMob",
+            text: "Being treated as Ad Manager with a different account. Ad unit formats, targeting support and reporting granularity differ, and a migration done as a configuration change leaves capabilities silently switched off.",
+          },
+          {
+            label: "IMA",
+            text: "Player and ad lifecycle mistakes: an empty VAST response handled as a crash instead of a skipped break, content that never resumes, progress not reported so mid-roll breaks never trigger.",
+          },
+          {
+            label: "GMA",
+            text: "Requests fired before initialization completes. The initialization callback reports per-adapter readiness for a reason, and ignoring it means the first requests of the session go out against a partially ready stack.",
+          },
+        ],
+      },
+      {
+        heading: "Ordering: the mistake that costs money and reports nothing",
+        paragraphs: [
+          "Identity and signal enrichment has an ordering constraint that nothing in the toolchain enforces. The adapter or signal collector has to be registered and ready before the ads SDK initializes, and its readiness has to be awaited. Get that wrong and the first ad request of the session goes out unenriched. No exception is thrown. No log line appears. An ad is returned and displayed. The only symptom is that the session earned less than it should have.",
+          "This matters more than a normal bug because of which request is affected. The first request of a session is often the app-open or first-screen placement, which is frequently the most valuable one, and it is precisely the request that a warm-up race condition loses. QA cannot see it: an ad appeared, the screen looked right, the tester moves on.",
+          "Consent sits in the same sequence and is subject to the same trap. A consent decision collected after the ads SDK has already initialized and requested did not apply to those requests. On iOS, the tracking permission prompt is part of this ordering too. So the initialization path deserves to be written down as an explicit sequence and reviewed as one, rather than distributed across whichever lifecycle callbacks were convenient.",
+          "Awaiting readiness means awaiting it. A timer that waits a second and hopes is not a fix; it is the same bug with worse reproducibility, and it will behave differently on a cold start, on a slow network and on a low-end device. If requests can arrive before the stack is ready, queue them and flush the queue when the completion callback fires.",
+        ],
+      },
+      {
+        heading: "Every ad-request site, not the ones you remember",
+        paragraphs: [
+          "Enrichment has to be applied at every place the app requests an ad. Real apps accumulate request sites faster than anyone tracks: a banner in a list, an interstitial between two screens, a rewarded placement inside a game loop, a native unit in a feed, a pre-roll in the video player, and a second copy of one of those added behind a feature flag last quarter. Missing one degrades that placement quietly and permanently.",
+          "Nothing in the logs points at it, because there is no error. The request was well-formed and the ad server answered. This is why the durable fix is structural rather than diligent: one function builds every ad request, applies targeting and signals there, and is the only place a request object is constructed. Then coverage is a question you can answer by searching the codebase instead of by remembering.",
+        ],
+        bulletsHeading: "Keeping coverage from drifting back",
+        bullets: [
+          {
+            label: "One request builder",
+            text: "Every placement gets its request from the same code path. Constructing a raw request anywhere else becomes the thing code review looks for, which is a much easier rule to hold than remembering to add three parameters.",
+          },
+          {
+            label: "A maintained placement inventory",
+            text: "Every ad unit and ad tag, per platform, with the screen it appears on. This list is also what makes ad server reporting comparable to what the app believes it is doing.",
+          },
+          {
+            label: "Check both sides of the bridge",
+            text: "React Native, Flutter and Unity apps frequently have a second request path in native code, added for one placement that the wrapper did not support. It is enriched separately or not at all.",
+          },
+          {
+            label: "Cold start as its own test case",
+            text: "The first request after a launch is a different scenario from the fifth. Treating them as one case is what lets the ordering bug live.",
+          },
+        ],
+      },
+      {
+        heading: "Verification means real requests, captured and read",
+        paragraphs: [
+          "There is no unit test for whether the ad server received the parameter you think you sent. A test can assert that your code put a value into an object. It cannot tell you that the value left the device, survived the SDK, and arrived. Between the assertion and the ad server there is a request builder, an SDK version, a mediation layer, a consent state and a network, all of which can drop a field without complaining.",
+          "So verification is empirical. Make real ad requests. Capture them. Read them. The SDK's own inspector and test device configuration cover the client side; a proxy shows what actually went out; for video, the ad tag response is the artifact to read, since an empty response and a broken player look identical from the couch. On the receiving side, the ad server's own reporting and diagnostics are what confirm arrival, which means this work needs somebody with access to that account, not only to the codebase.",
+          "Confirm the negatives as well. A placement showing nothing can be a no-fill, an error, or a request that was never made, and those three have completely different fixes while looking the same to a user staring at an empty rectangle. Distinguishing them is most of an audit.",
+        ],
+      },
+      {
+        heading: "How this work gets scoped",
+        paragraphs: [
+          "It usually starts with an audit rather than a rewrite, because reading the code tells you what somebody intended and only the requests tell you what happens. That pass produces three things: the actual initialization sequence, the real list of request sites per platform, and a set of captured requests showing what each placement sends. Then the fixes are small and specific, and they can be verified the same way they were found.",
+          "The multiplier is platforms. The same integration on Android, iOS and a cross-platform wrapper is three integrations with three sets of failure modes, and the Android side inherits the release-build problem: ad SDKs and mediation adapters get resolved by class name, so shrinking without correct keep rules produces an integration that works in debug and fails in the build you publish. That verification belongs to the same job.",
+          "Audit and fix work of this kind normally sits in hourly work at $85 to $165 per hour for hours actually worked. A full integration across platforms is scoped as a build instead, at $5,000 to $10,000 per estimated month of work, positioned in the range by how many platforms and placements are in scope.",
+        ],
+      },
+    ],
+    workedExample: {
+      heading: "Worked example: the order of operations for an enriched request",
+      context:
+        "Almost every silently under-delivering integration has one of these steps in the wrong place. The sequence is short, which is what makes it easy to get wrong and easy to fix once it is written down.",
+      steps: [
+        {
+          label: "Resolve consent before anything requests",
+          text: "The consent state has to exist before the first ad request, because a decision recorded afterwards did not apply to requests that already went out.",
+        },
+        {
+          label: "Register the collector or adapter before initializing",
+          text: "Registration happens before the ads SDK initializes, not on the first screen that shows an ad. After initialization is too late for the requests already in flight.",
+        },
+        {
+          label: "Await readiness on the callback, not on a timer",
+          text: "Use the initialization completion signal, hold ad requests until it fires, then flush them. A fixed delay is the same race with a different disguise.",
+        },
+        {
+          label: "Build every request through one path",
+          text: "A single builder sets targeting and signals for every placement, so adding a placement cannot mean adding an unenriched one.",
+        },
+        {
+          label: "Cold start, capture, read",
+          text: "Launch from cold, capture the first request, and confirm the enrichment is on that one rather than only on the third. Then repeat per platform and per wrapper.",
+        },
+      ],
+      result:
+        "What this closes is the failure no dashboard reports, no exception surfaces and no test detects: a request that went out looking perfectly healthy and was worth less than it should have been.",
+    },
+    faq: [
+      {
+        question: "Our ads work. Why would we audit them?",
+        answer:
+          "Because working and enriched are different states, and only one of them is visible. An ad rendering proves a request was made and filled. It says nothing about whether the request carried the targeting and signals you configured, and the case where it does not is not an error condition anywhere in the stack.",
+      },
+      {
+        question: "Can you tell from our code whether the integration is correct?",
+        answer:
+          "Only partly, and that is not a limitation we can engineer around. Reading the code shows the intended sequence and finds request sites. Whether the parameters survive the SDK, the mediation layer and the consent state is a property of the requests that leave the device, so real requests have to be captured and read.",
+      },
+      {
+        question: "Is moving from AdMob to Ad Manager a configuration change?",
+        answer:
+          "No. The identifier formats differ, the request types differ, and custom key-value targeting has nowhere to live on an AdMob request. A migration done purely in configuration typically ends up serving ads correctly with the targeting quietly absent, which is the hardest version of this problem to notice.",
+      },
+      {
+        question: "We are on React Native, Flutter or Unity. Does that change the work?",
+        answer:
+          "It adds the layer where most breakage happens. The wrapper has to forward calls and callbacks that the underlying SDK expects, including main-thread requirements for anything that creates an ad view. It is also common to find a native request path added alongside the wrapper for one placement, which is then enriched separately or not at all.",
+      },
+      {
+        question: "Do you work on the ad server side too, or only the app?",
+        answer:
+          "The app side is the engineering work. The ad server side is where arrival gets confirmed, so the verification pass needs somebody with account access working alongside us, whether that is your ad ops person or your network contact. An integration verified only from inside the app is half verified.",
+      },
+      {
+        question: "What about mediation adapters?",
+        answer:
+          "They are versioned artifacts of their own and have to match the SDK version they are used with, which makes an SDK upgrade a coordinated change rather than a single bump. The initialization callback reports readiness per adapter, and on Android each adapter is resolved by name, so they need keep rules in the release build like any other reflective lookup.",
+      },
+    ],
+  },
+  {
+    slug: "ai-feature-integration",
+    title: "AI features inside existing products",
+    summary:
+      "Add an AI feature to a product that already has users: embeddings and ranking where they help, plain business rules where they must decide, and cost and latency handled as design constraints.",
+    bestFor:
+      "Teams with a live product and a real matching, ranking, drafting or classification problem, who need the result to be explainable to the people using it.",
+    deliverables: [
+      "One scoped AI feature inside the product you already run",
+      "A retrieval or scoring layer with the rules that gate it",
+      "Precomputed or cached read path with measured cost",
+      "A correction path, a fallback, and a way to review wrong answers",
+    ],
+    sections: [
+      {
+        heading: "The existing product is the constraint",
+        paragraphs: [
+          "Adding AI to something already in use is mostly not a model problem. The model is a hosted API call. The problem is that there are users with expectations, screens that are currently fast and should stay fast, a database with a shape, and a support process that will receive the complaints when an answer is wrong. A greenfield demo has none of those and is therefore not evidence about anything.",
+          "The first question is narrow and it decides the rest of the design: which decision is this feature allowed to make? A feature that drafts something a person confirms can be wrong occasionally at almost no cost. A feature that decides something and acts on it turns every wrong answer into an incident that somebody has to discover, explain and undo. Those two need different architectures, and the second one needs a much better reason to exist.",
+        ],
+      },
+      {
+        heading: "Djob, where this is already running",
+        paragraphs: [
+          "Djob is a two-sided recruiting SaaS built over about six months on PostgreSQL and Base44, live at djob.agency with public plans starting at $29/month. Its matching layer is the AI feature, and three decisions inside it are the ones worth reusing anywhere.",
+          "The first is what gets embedded. Candidate and job records are not stored as one document each and embedded as a blob. They are broken into structured statement parts, and OpenAI's text-embedding-3-small runs over those parts. Embedding a whole CV gives you one number and no way to say what it was responding to. Embedding separate statements gives you something you can point at when a recruiter asks why a candidate surfaced.",
+          "The second is that similarity does not decide. Cosine similarity produces a closeness score, and a score is an input to a decision, not the decision itself, because a candidate can read as extremely close to a role and still fail a hard requirement. So plain pass or fail business rules sit around the score, and the reason is kept with the result. A rule written in code can be read, argued with and changed by whoever owns the business logic. A threshold buried in a prompt cannot.",
+          "The third is where the work happens. Match views read from snapshot tables rebuilt daily rather than recomputing every candidate against every job when a page opens. Same inputs, same outputs, computed once on a schedule instead of once per view, which is what makes the screen a database read.",
+        ],
+        bulletsHeading: "The three decisions, stated generally",
+        bullets: [
+          {
+            label: "Structure the input before embedding it",
+            text: "Separate fields and separate statements survive scoring individually. One blob of text produces one opaque number, and no amount of prompt work afterwards recovers the detail you flattened away.",
+          },
+          {
+            label: "Gate the score with rules that a human wrote",
+            text: "Semantic closeness should never be able to overrule a hard requirement. Keep the pass or fail reason attached to the result, because a rejection with no reason makes it impossible to tell whether your rules are simply too strict.",
+          },
+          {
+            label: "Precompute what the screens read",
+            text: "Move the expensive computation off the request path and onto a schedule. Opening the view becomes a read, which also means the feature keeps working when the model provider does not.",
+          },
+        ],
+      },
+      {
+        heading: "Let the model draft, let rules decide",
+        paragraphs: [
+          "This is the pattern that makes AI features safe to leave switched on in a product with paying users. The model does the part it is genuinely better at: reading unstructured input, finding candidates, proposing text, spotting similarity. Deterministic code does the part that has to be correct and defensible: eligibility, thresholds, ordering, permissions, anything with a number attached that somebody will be held to.",
+          "It also changes how the feature appears in the interface. Output presented as a suggestion, in a draft state, with an obvious way to accept, edit or discard it, sets expectations honestly and gives you a stream of corrections to learn from. Output presented as an authoritative answer invites the user to trust it exactly as much as it does not deserve.",
+          "One more piece belongs in the first version: a path where the feature declines. Returning nothing, or returning the plain rules-based result, is nearly always better than producing a confident answer built from too little signal. Products that cannot say they have nothing are the ones that generate the support tickets.",
+        ],
+      },
+      {
+        heading: "What to do when the model is wrong",
+        paragraphs: [
+          "It will be wrong, and the plan for that is a feature, not an operational afterthought. Four things cover most of it. Log enough to reproduce: the input, the output, and which model, prompt version and embedding version produced it, so a complaint three weeks later is investigable rather than a shrug. Bound what a wrong answer can touch: draft states, confirmation steps, and limits on what the feature is allowed to write.",
+          "Then give the product a correction path that a normal user can find, and record that a correction happened instead of silently overwriting the original. Corrections are the most valuable data the feature produces, and a system that discards them can only be improved by guesswork.",
+          "The fourth is unglamorous and gets skipped: a rebuild you can actually run. Changing an embedding model, a prompt or a scoring rule invalidates everything precomputed under the old one, and mixed-vintage data is a genuinely nasty class of bug because it looks like intermittent model flakiness. A scheduled snapshot rebuild, as in Djob's daily job, means the answer to that is running it again rather than writing a migration under pressure.",
+        ],
+      },
+      {
+        heading: "Cost and latency are design inputs, not tuning",
+        paragraphs: [
+          "Two numbers should exist before anything is built: what one use of the feature costs, and how many times a day it will happen. Multiply them and the design either survives or it does not, and finding out at that point is free. Prototypes that were abandoned as too expensive were usually not expensive because of the model. They called it on the read path, once per page view, per user, forever.",
+          "The fixes are architectural. Embed on write rather than on read, so the cost is paid once per record instead of once per view. Precompute rankings on a schedule. Cache aggressively where inputs have not changed. Use the smallest model that actually separates your data, which for Djob's structured statements is text-embedding-3-small rather than anything larger.",
+          "Latency deserves the same treatment, because it lands on somebody doing their job. A screen backed by a snapshot table is a database read. A screen that calls a model when it opens is a network round trip plus a model wait, sitting on the critical path of a recruiter working through a list. And since the provider will eventually be slow or unavailable, the feature needs a defined behaviour for that: serve the last good snapshot, or fall back to the rules-only result, rather than showing a spinner and blocking the work.",
+        ],
+      },
+    ],
+    relatedProject: {
+      href: "/case-studies/djob-agency",
+      label: "Real build",
+      title: "Djob: embeddings over structured statements, gated by rules",
+      text: "The full teardown of the recruiting workspace: why one similarity score was never enough, how pass and fail reasons are kept, and why the ranked results live in snapshot tables rebuilt daily.",
+    },
+    faq: [
+      {
+        question: "Do we need to train or host our own model?",
+        answer:
+          "Almost never for this kind of feature. A hosted embedding or generation API plus your own data, your own rules and your own precomputation is the shape that works, and it is the shape Djob uses. The differentiating work is in how you structure the inputs and what you do with the score, not in the model.",
+      },
+      {
+        question: "Our data is messy. Does that rule this out?",
+        answer:
+          "No, it identifies where the work is. Djob's records arrive in different shapes and get normalised into statement parts before anything is embedded, and that structuring is a large part of the six months it took. It is also the part that keeps paying off, because structured inputs can be scored, filtered and explained individually.",
+      },
+      {
+        question: "How do we know the AI version is better than what we have now?",
+        answer:
+          "By deciding what better means before building it, which usually means writing down the current behaviour and a comparison you can actually run. If the honest answer is that nobody can tell the difference on your volume, that is worth discovering early. Clean fields and firm rules beat a model for a product handling a handful of records a day.",
+      },
+      {
+        question: "Can this be added without rewriting the product?",
+        answer:
+          "Usually, and it should be. The feature sits beside what exists: new tables for the computed results, a scheduled job to fill them, and one or two screens reading from them. Precomputation helps here too, since a snapshot table is an addition rather than a change to the paths your users already depend on.",
+      },
+      {
+        question: "What does it cost to build and to run?",
+        answer:
+          "Build work is priced at $5,000 to $10,000 per estimated month of work, positioned in that range by complexity, and work after launch is $85 to $165 per hour for hours actually worked. The running cost is your provider bill, and the architecture decides it: embedding on write and precomputing on a schedule is the difference between a bill that tracks your data volume and one that tracks your page views.",
+      },
+    ],
+  },
 ];
 
 export const realProjects = [

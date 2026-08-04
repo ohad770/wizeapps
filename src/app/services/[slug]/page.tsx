@@ -92,6 +92,63 @@ const serviceDetails: Record<
     outcome:
       "Less status chasing, fewer handoff mistakes, and a process the business can actually scale.",
   },
+  "mobile-sdk-development": {
+    intro:
+      "An SDK runs inside somebody else's app, on their threads, with their dependency versions and their release configuration. That one difference is what separates it from building an app: the public surface, the dependency footprint, the wrapper layer and the shipped artifact all become the product.",
+    signs: [
+      "Your library works in a debug build and a customer reports it failing in release.",
+      "The native Android and iOS side is fine and the React Native, Flutter or Unity wrapper keeps falling behind it.",
+      "The same integration questions arrive repeatedly, which usually means the entry points or the guide are the problem.",
+      "Nobody can state which OS, host framework and dependency versions the current release actually supports.",
+    ],
+    process: [
+      "Agree the public surface: entry points, threading, failure behaviour, and what is safe to call twice.",
+      "Build the native Android and iOS libraries first, then wrap them one platform at a time.",
+      "Ship keep rules with the library and test them from a release build of a consuming app.",
+      "Verify from the packaged artifact — the AAB, APK or framework — rather than from the source.",
+      "Publish with a support matrix, sample apps that resolve the published version, and a guide a developer can follow unaided.",
+    ],
+    outcome:
+      "An SDK another team can integrate without contacting you, that survives their release build, and whose next version does not break their app.",
+  },
+  "ad-monetization-integration": {
+    intro:
+      "Google Ad Manager, AdMob, IMA for video and GMA for mobile display are four systems with their own initialization order, request shape and failure modes. Most broken integrations are not broken in a way anyone notices: the ads appear, and the requests leaving the device are missing something.",
+    signs: [
+      "Ads render, and nobody can demonstrate which parameters the ad server actually received.",
+      "Identity or signal enrichment was added, and the first ad request of a cold session was never checked.",
+      "The app has more live placements than there are request sites anyone can point to in the code.",
+      "Video was added to an app that already had display, and it behaves like an unrelated product.",
+      "The release build behaves differently from the debug build everything was tested against.",
+    ],
+    process: [
+      "Read the initialization path and list every ad-request site, per platform and per wrapper.",
+      "Fix the ordering: consent, then adapter registration, then awaited initialization, then requests.",
+      "Route every placement through one request builder so a new placement cannot be an unenriched one.",
+      "Verify with real ad requests, captured and read, including the first request after a cold start.",
+    ],
+    outcome:
+      "An integration whose request contents you can demonstrate instead of assume, with the silent losses — unenriched first requests and unenriched placements — closed.",
+  },
+  "ai-feature-integration": {
+    intro:
+      "Putting AI into a product that already has users is mostly not a model problem. It is a question of which decisions the model is allowed to make, what happens when it is wrong, and whether the screens people use every day stay as fast as they were.",
+    signs: [
+      "You have a matching, ranking or classification problem that a person cannot keep up with at your volume.",
+      "A feature was prototyped and turned out too slow or too expensive to leave switched on.",
+      "The output is plausible and nobody can explain to a user why it came out that way.",
+      "The model is right most of the time, and there is no defined path for the rest.",
+    ],
+    process: [
+      "Pick one decision the feature supports, and settle whether it drafts or decides.",
+      "Structure the inputs before reaching for a model — separate statements beat one blob of text.",
+      "Put plain pass or fail rules around the score, and keep the reason with the result.",
+      "Move the cost off the read path with precomputation, then measure what a single use costs.",
+      "Ship the correction path and the provider-down fallback in the first version.",
+    ],
+    outcome:
+      "One AI feature that earns its place in a product already in use: explainable to the people reading it, cheap enough to leave on, and safe when the model is wrong.",
+  },
 };
 
 export function generateStaticParams() {

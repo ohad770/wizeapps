@@ -9,7 +9,7 @@ import { author, siteUrl } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About WizeApps",
   description:
-    "Who runs WizeApps, what we have shipped, how a build actually runs, and the company details behind the site: Softphone Ltd., Kfar-Saba, Israel.",
+    "Who runs WizeApps, what we have shipped, the mobile SDK and ad-tech side of the work, how a build actually runs, and the company details behind the site: Softphone Ltd., Kfar-Saba, Israel.",
   alternates: { canonical: `${siteUrl}/about` },
 };
 
@@ -99,6 +99,90 @@ const workflow = [
     text: "Software in daily use meets things that were not in the plan: a payment provider changes, an API response shifts, volume grows, staff want a field they did not ask for. We stay close enough to the code to handle that, and we say plainly which parts we already know are the weak ones.",
     example:
       "One example we do not hide: Mincha Time reads the UTC offset out of the Hebcal response string to build tomorrow's bucket. It works in production, and it is the first thing we would replace if that response format ever changed.",
+  },
+];
+
+type EngineeringArea = {
+  label: string;
+  title: string;
+  href?: string;
+  hrefLabel?: string;
+  paragraphs: string[];
+};
+
+const engineering: EngineeringArea[] = [
+  {
+    label: "Mobile SDKs",
+    title: "Code that has to behave inside somebody else's app",
+    href: "/services/mobile-sdk-development",
+    hrefLabel: "Mobile SDK development",
+    paragraphs: [
+      "An SDK is a different problem from an app. The public surface has to be small enough to explain in a README and stable enough that a host app moving to a new version does not have to rewrite its call sites. Everything behind that surface — initialization, threading, what happens with no network, what happens when a callback arrives after the screen it belonged to is gone — is ours to get right, because the integrating team cannot see into it and should not have to.",
+      "Platform coverage is not one job either. Native Android and native iOS are one problem, with two languages, two build systems and two sets of lifecycle rules. React Native, Flutter and Unity sit on top of that as a wrapper layer, and the wrapper is where most breakage happens, because it has to forward every call and every callback the host SDK expects — including the ones that only fire in situations nobody demos.",
+      "What the integrator receives is a built artifact, not our source: an APK or AAB on Android, a framework on iOS, a package for the wrapper platform. The artifact is therefore the only thing worth verifying against, and that habit is the second lesson further down this page.",
+    ],
+  },
+  {
+    label: "Ad monetization",
+    title: "Ad server and mediation integration",
+    href: "/services/ad-monetization-integration",
+    hrefLabel: "Ad monetization and ad server integration",
+    paragraphs: [
+      "Google Ad Manager, AdMob, IMA for video and GMA for mobile display get discussed as one thing called \"ads\". They are not interchangeable. Each has its own initialization order, its own request shape and its own failure modes, and treating them as a single swappable component is the ordinary reason an integration is wrong in a way nobody catches.",
+      "The characteristic failure in this area is silence. A request that goes out missing a parameter does not throw, does not log an error and does not show a broken screen. It fills. A user sees an ad, the session looks healthy, and the placement earns less than it should have. Nothing in the app is in a state you would call a bug.",
+      "So verification is not a code review. It is making real ad requests from the real build and inspecting what went out and what came back, per platform and per format. There is no unit test for \"did the ad server receive the parameter we think we sent\", and writing one that passes proves only that the code we read does what we read it to do.",
+    ],
+  },
+  {
+    label: "Identity and signals",
+    title: "Signal enrichment, where ordering is the whole game",
+    paragraphs: [
+      "Identity and signal enrichment has one constraint that is easy to say and easy to get wrong: the adapter has to be registered and ready before the ads SDK initializes, and its readiness has to be awaited rather than assumed. If initialization races ahead of it, the first ad request of the session goes out unenriched. Nothing errors. That request is simply worth less, once per session, on every device.",
+      "The second rule is coverage. Enrichment has to happen at every ad-request site in the app — each banner, each interstitial, each rewarded placement, each video slot. Miss one site and that one placement degrades quietly, and it stays invisible in logs unless somebody goes looking for it specifically, which nobody does unless they already suspect it.",
+      "Both of those are why this kind of engagement ends with a pass over the installed build watching live requests, and with a written list of every call site we found, rather than with a green test suite.",
+    ],
+  },
+  {
+    label: "AI features",
+    title: "The model drafts, the rules decide",
+    href: "/services/ai-feature-integration",
+    hrefLabel: "AI features inside existing products",
+    paragraphs: [
+      "The AI work we can point at publicly is inside Djob, and its shape is the shape we reuse. Jobs and candidates are split into structured statement parts, and each part is embedded with OpenAI's text-embedding-3-small, rather than pushing a whole CV through as one blob of text — a blob averages away the specific thing you wanted to match on. Cosine similarity then produces a ranking.",
+      "A ranking is not a decision, and that is the part most AI features get wrong. In Djob the similarity score is gated by pass/fail business rules, and when a candidate who reads as close to a role is excluded, the system says which hard requirement excluded them. The model drafts; the rules decide, and the rules are readable by the person who owns the outcome. We would build a summariser, a categoriser or a suggestion feature the same way.",
+      "Cost and latency belong in the design from the start. Djob reads its rankings from precomputed snapshot tables in PostgreSQL rebuilt daily, not from pairs scored when a page opens, because a recruiter who waits for a shortlist goes back to their spreadsheet and does not come back.",
+    ],
+  },
+  {
+    label: "Backends and infrastructure",
+    title: "The layer underneath all of it",
+    paragraphs: [
+      "Every project on this page needed the same unglamorous half: scheduled work, a data model that can be queried the way the product actually reads it, an admin screen a non-technical person can operate, and some way to see afterwards what happened. Mincha Time runs on Firebase Cloud Functions with Firestore and Cloud Messaging. Djob runs on PostgreSQL with a daily rebuild. The Domino site has admin screens for products, deals, categories, pizza sizes, beverages, sauces, delivery zones, site settings and orders, because a menu only a developer can change is a menu that goes stale.",
+      "Workflow automation is usually one shape: something runs on a schedule, decides whether there is anything to do, and does it. Mincha Time is that at its cheapest — a function every minute, a Firestore lookup for the current time bucket, and almost no cost on the runs where the answer is no. Most automation people ask for is a variation on that, and the interesting decisions are about idempotency and what happens on the run after a failed one, not about the trigger.",
+    ],
+  },
+];
+
+const lessons = [
+  {
+    from: "From the small-business builds",
+    title: "Scope is a skill you learn by having to finish",
+    text: "Mincha Time was about a month, the Domino ordering site about two, Djob about six. Those numbers exist because each build named the one load-bearing mechanism early and built it first: the minute-resolution scheduler, the checkout and payment state, the embedding and snapshot pipeline. Integration work rewards the same habit, except the load-bearing part is almost never the demo screen — it is initialization order, the release build, and the list of call sites.",
+  },
+  {
+    from: "From the SDK and ad-tech work",
+    title: "A release build is not a debug build",
+    text: "On Android, release builds run R8 and ProGuard, which can strip or rename classes that an ad SDK resolves reflectively at runtime. That needs keep rules, and reading the source cannot tell you whether the keep rules are correct: the debug build passes and the release build fails on the same code. So for anything to do with packaging, shrinking or keep rules, the only verification that means anything is to build the artifact and open it. Unit tests structurally cannot catch a class that compiled fine and then got stripped out of the shipped bundle.",
+  },
+  {
+    from: "What both halves agree on",
+    title: "Silent failure is the expensive kind",
+    text: "An unenriched first ad request earns less and reports nothing. The business-systems version of that is a reminder that never sends or an order that never reaches the register — no error, no complaint, just less. Both are handled the same way: check at every site rather than once at the top, and leave something behind you can look at afterwards. Mincha Time checks two independent opt-outs before every send. The Domino site fixes the order of operations so a paid order reaches the Aviv POS and an unpaid one does not reach the kitchen.",
+  },
+  {
+    from: "How the engineering engagements run",
+    title: "Working inside a team you do not own",
+    text: "With product and engineering teams the deliverable is usually not a product — it is a change inside theirs, plus a build that proves it, plus a note saying what we verified and how somebody else can verify it again. That means their conventions, their branch rules and their release process, not ours, and it means saying out loud which parts we could not prove. Commercially it is priced like the rest of the work on this site: $5,000 to $10,000 per estimated month for a scoped build, positioned in that range by complexity, and $85 to $165 per hour for work after launch, for hours actually worked, with no standing retainer.",
   },
 ];
 
@@ -295,6 +379,136 @@ export default function AboutPage() {
         <section className="relative overflow-hidden bg-muted-light">
           <div
             aria-hidden="true"
+            className="blob blob-accent-2 -top-32 -right-20 h-80 w-80 opacity-30"
+          />
+          <div className="max-w-5xl mx-auto px-6 py-16 md:py-24 relative">
+            <Reveal as="h2" className="text-3xl font-semibold tracking-tight">
+              The other half: <span className="text-gradient">SDKs, ad tech and AI</span>
+            </Reveal>
+            <Reveal
+              delay={100}
+              className="mt-5 max-w-3xl space-y-4 text-muted leading-relaxed"
+            >
+              <p>
+                Alongside the client builds above, WizeApps works with product
+                and engineering teams on problems that live inside their
+                products rather than next to them: mobile SDKs, ad monetization
+                and ad server integration, identity and signal enrichment, AI
+                features, and the backend and cloud plumbing all of that needs.
+                This part of the work is usually a scoped piece of somebody
+                else&apos;s roadmap, not a product with our name on it.
+              </p>
+              <p>
+                It is described below in engineering terms on purpose. If you
+                are hiring for a technical team, the questions you need answered
+                are what breaks, how it is verified, and what the failure looks
+                like when it happens quietly — not what the category is called.
+              </p>
+            </Reveal>
+            <div className="mt-10 space-y-8">
+              {engineering.map((area, i) => (
+                <Reveal
+                  as="article"
+                  key={area.title}
+                  delay={(i % 2) * 90}
+                  className="rounded-2xl border border-gray-100 bg-white p-7 md:p-9"
+                >
+                  <p className="eyebrow-badge">{area.label}</p>
+                  <h3 className="mt-4 text-2xl font-semibold tracking-tight">
+                    {area.title}
+                  </h3>
+                  <div className="mt-4 max-w-3xl space-y-4 text-muted leading-relaxed">
+                    {area.paragraphs.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                  {area.href ? (
+                    <Link
+                      href={area.href}
+                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
+                    >
+                      {area.hrefLabel}
+                      <span aria-hidden="true" className="arrow-nudge">
+                        &rarr;
+                      </span>
+                    </Link>
+                  ) : null}
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-5xl mx-auto px-6 py-16 md:py-24">
+          <Reveal as="h2" className="text-3xl font-semibold tracking-tight">
+            What each half taught <span className="text-gradient">the other</span>
+          </Reveal>
+          <Reveal
+            delay={100}
+            className="mt-5 max-w-3xl space-y-4 text-muted leading-relaxed"
+          >
+            <p>
+              These two kinds of work are not separate skills that happen to
+              share an office. Each one corrected something the other was
+              getting away with, and it is worth being specific about which is
+              which rather than claiming they are naturally the same job.
+            </p>
+          </Reveal>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {lessons.map((item, i) => (
+              <Reveal
+                as="article"
+                key={item.title}
+                delay={i * 90}
+                className="card-fancy p-7 md:p-8 group"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
+                  {item.from}
+                </p>
+                <h3 className="mt-4 text-lg font-semibold transition-colors duration-300 group-hover:text-accent-deep">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-muted text-[15px] leading-relaxed">
+                  {item.text}
+                </p>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal
+            delay={180}
+            className="mt-8 max-w-3xl text-muted leading-relaxed"
+          >
+            <p>
+              The three new service pages —{" "}
+              <Link
+                href="/services/mobile-sdk-development"
+                className="text-accent hover:underline"
+              >
+                mobile SDK development
+              </Link>
+              ,{" "}
+              <Link
+                href="/services/ad-monetization-integration"
+                className="text-accent hover:underline"
+              >
+                ad monetization and ad server integration
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="/services/ai-feature-integration"
+                className="text-accent hover:underline"
+              >
+                AI features inside existing products
+              </Link>{" "}
+              — go further into each of these, including the checks we run
+              before calling an integration done.
+            </p>
+          </Reveal>
+        </section>
+
+        <section className="relative overflow-hidden bg-muted-light">
+          <div
+            aria-hidden="true"
             className="blob blob-accent -top-24 -left-16 h-64 w-64 opacity-30"
           />
           <div className="max-w-5xl mx-auto px-6 py-16 md:py-24 relative">
@@ -360,6 +574,14 @@ export default function AboutPage() {
                 Firestore document keys and payment reconciliation rather than
                 in marketing language. If you email about a project, you are
                 writing to the person who would work on it.
+              </p>
+              <p>
+                The SDK, ad server and identity sections above come from the
+                same pair of hands. They are written as failure modes rather
+                than as a feature list because failure modes are what you learn
+                from doing the work: which build configuration hides a problem,
+                which callback never fires on one platform, which request went
+                out without the parameter you thought you attached.
               </p>
               <p>
                 Every guide published in the{" "}
