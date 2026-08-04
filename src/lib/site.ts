@@ -648,6 +648,12 @@ export const realProjects = [
     screenshot: "/case-studies/domino-ranana.webp",
     industry: "Food and delivery",
     timeline: "Built in about 2 months",
+    relatedResource: {
+      href: "/resources/delivery-zone-rules-at-checkout",
+      label: "Technical deep-dive",
+      title: "How the delivery-zone rules gate checkout",
+      text: "Each zone carries its own delivery cost and minimum order amount, and those two values decide whether an address can complete an order before any payment is created.",
+    },
     testimonial: {
       quote:
         "We've been running on this site for more than five years, and the order volume through it is strong. The biggest change was about two years ago, when we connected the site directly to the register — orders come straight in, no retyping. It's very convenient.",
@@ -2607,6 +2613,167 @@ export const resources: Resource[] = [
         question: "How do you handle a user who changes location mid-day?",
         answer:
           "The location grouping is read fresh each time a schedule is written forward, so a user who moves gets regrouped into whichever location bucket they belong to the next time their notification type is recalculated — normally the next day's write. It is not instantaneous, which is an acceptable tradeoff for a daily reminder product.",
+      },
+    ],
+  },
+  {
+    slug: "delivery-zone-rules-at-checkout",
+    datePublished: "2026-08-04",
+    dateModified: "2026-08-04",
+    title: "Do we deliver there, and is the order big enough?",
+    description:
+      "The delivery-zone rules behind a pizza ordering site that has been live for more than five years: how one cost and one minimum per zone decide whether an address can check out at all.",
+    readTime: "10 min read",
+    sections: [
+      {
+        heading: "The rule that decides whether an order can happen",
+        paragraphs: [
+          "Domino Ra'anana has taken orders through the site we built for it for more than five years. It took about two months to build, and the owner, Eran Atra, changes the menu, the deals and the delivery areas himself. Customers notice the menu. The piece that decides whether an order is possible at all is much smaller and never gets looked at: a list of delivery zones, each one carrying its own delivery cost and its own minimum order amount.",
+          "Those two values per zone are not labels on a checkout screen. They are a gate. Given an address and a cart, they answer one question — can this order be completed as a delivery, or not. Get it wrong and you are not showing a slightly inaccurate fee. You are taking money for an order the branch cannot fill.",
+        ],
+      },
+      {
+        heading: "\"We deliver to these areas\" is not yet a rule",
+        paragraphs: [
+          "Every delivery business already has this rule. It just lives in people. The driver knows which streets are too far to be worth it. Whoever answers the phone knows that a small order to the far end of town does not pay for the drive, and says so politely. None of that survives the move to a website, because on a website there is nobody on the line to make the call.",
+          "So the rule has to be written down as data before anyone writes code. In practice that means being specific about four things per zone. Vagueness in any one of them turns into either a checkout that blocks orders you wanted, or a kitchen that receives orders it cannot serve.",
+        ],
+        bullets: [
+          {
+            label: "The boundary",
+            text: "Which addresses count as being in this zone, described in terms a customer would recognise — a neighbourhood, a street list, a nearby village. If your own staff argue about an address, the software will have the same argument.",
+          },
+          {
+            label: "The delivery cost",
+            text: "What delivery to this zone costs. It does not have to be the same number everywhere, and once zones exist there is no reason for it to be.",
+          },
+          {
+            label: "The order minimum",
+            text: "The smallest cart you are willing to send there. Farther zones usually carry a higher one, because the drive costs the same whether the bag holds one item or six.",
+          },
+          {
+            label: "The fallback",
+            text: "What happens to an address that is in none of your zones. Silence is the worst available answer. Pickup, a phone number, or a plain \"we don't deliver there yet\" are all better than a checkout button that quietly refuses to work.",
+          },
+        ],
+      },
+      {
+        heading: "Enforce it before the payment page, not after",
+        paragraphs: [
+          "The order flow on the Domino site runs in a fixed sequence. A pending order is created first. The customer is sent to Cardcom to pay. Only after payment succeeds does the order get its status update, the confirmation email, and the handoff into the Aviv POS at the branch so nobody retypes it at the register.",
+          "That sequence is exactly why the zone rules have to be settled early. Every step after Cardcom is expensive to undo. A refund is a support conversation and a payment fee. An order that has already reached the POS has been seen by the kitchen. You cannot fix that order afterwards — you can only refund it and phone the customer. So eligibility, meaning is this address in a zone and does the cart clear that zone's minimum, has to be decided before the pending order is created.",
+          "The site also takes cash orders, which skip Cardcom entirely. That path is shorter, and it is the one people forget when they attach the eligibility check to the payment step: a cash order still lands in the POS and still commits a driver. Two ways to place an order means the zone rule has to sit somewhere both of them pass through, rather than in the card flow because that is where it happened to get written first.",
+          "It follows that the check cannot live only in the checkout screen. Whatever code creates the pending order is the last honest place to ask the question, and it should ask it there too, even if the button that leads to it was already disabled.",
+        ],
+        relatedCaseStudy: {
+          href: "/case-studies/domino-ranana",
+          label: "Real build example",
+          title: "See the full Domino Ra'anana build teardown",
+          text: "The zone rules described here are one part of a live ordering site: menu, deals, cart, Cardcom payment, the Aviv POS handoff, and the admin screens behind all of it.",
+        },
+      },
+      {
+        heading: "Three ways to charge for delivery",
+        paragraphs: [
+          "A zone list with a cost and a minimum attached to each zone is one option out of three, and choosing between them is a business decision more than a technical one. What changes between them is where the ongoing work sits: in deciding boundaries, in an external service, or in absorbing costs quietly.",
+        ],
+        comparison: [
+          {
+            tool: "One flat fee everywhere",
+            bestFor:
+              "A small, tight radius where every delivery costs roughly the same to make.",
+            strengths:
+              "Nothing to maintain, and every customer understands it immediately. No boundaries to argue about.",
+            tradeoffs:
+              "Near customers subsidise far ones, and there is no natural place to hang an order minimum — so small far-away orders keep arriving.",
+          },
+          {
+            tool: "A zone list, each zone with its own cost and minimum",
+            bestFor:
+              "A branch with a known catchment area and different economics at the edges. This is what Domino Ra'anana runs.",
+            strengths:
+              "Two numbers per zone express the whole rule, and each zone can be adjusted without touching the others. Nothing external to call, nothing to go down.",
+            tradeoffs:
+              "Someone has to decide where the lines are, and addresses sitting on a line still need a human answer.",
+          },
+          {
+            tool: "Distance or drive-time pricing",
+            bestFor:
+              "A wide service area, or couriers whose cost genuinely scales with the trip.",
+            strengths:
+              "The fee tracks the real cost of the delivery instead of approximating it.",
+            tradeoffs:
+              "Needs geocoding and a routing service, which means a per-lookup cost, a failure path when the lookup does not answer, and a price the customer cannot predict before entering an address.",
+          },
+        ],
+      },
+      {
+        heading: "Tell the customer the number while they can still act on it",
+        paragraphs: [
+          "A blocked checkout is only infuriating when it arrives as a surprise at the end. The useful moment is earlier. Once a delivery zone is selected, the cart can show that zone's delivery cost and how far the order still is from the minimum. Now the customer has two reasonable moves — add something, or switch to pickup — instead of one dead end.",
+          "One detail matters more than it sounds. Hold on to that state. On the Domino site the cart, the delivery method, the selected zone, the payment method and the checkout form fields are all persisted in localStorage. People order food on a phone while doing something else, and they do reload the page mid-order. Losing the bag and the zone at that point loses the order.",
+          "Then there is the address that sits right on a line. Someone is always just outside a zone, and no set of boundaries removes that case. The phone is the answer there — the branch can take the order and charge whatever it thinks is fair. What the site should not do is guess on the customer's behalf, either by quietly stretching a zone or by acting as though the address does not exist. Show which zone was matched, show that zone's cost and minimum, and keep a way to reach a person visible.",
+        ],
+      },
+      {
+        heading: "The admin screen is the actual feature",
+        paragraphs: [
+          "Zone rules change. Fuel gets more expensive, a new neighbourhood fills in, a courier arrangement shifts. The build includes management screens for products, deals, categories, pizza sizes, beverages, sauces, delivery zones, site settings and orders, so a delivery cost or a minimum is a field the owner edits in a form.",
+          "The alternative is worth pricing out honestly. Our post-launch work is billed hourly, $85 to $165 per hour, for hours actually worked, and we do not sell a standing monthly retainer for a small system like this. Even at the bottom of that range, a hard-coded delivery fee makes every adjustment a paid ticket, a deploy and a wait. Over a site that has been in daily use for more than five years, that is the difference between a number the owner controls and a number he has to book time to change. If you are sizing a build like this, our guide to what a small business app costs lists the ranges we actually quote, and the guide to software maintenance after launch covers what that hourly work usually goes on.",
+        ],
+        relatedCaseStudy: {
+          href: "/resources/how-much-does-a-small-business-app-cost",
+          label: "Related guide",
+          title: "What a build like this costs",
+          text: "The published ranges behind the numbers above — per estimated month of work for the build, hourly for everything after launch.",
+        },
+      },
+      {
+        heading: "What we would build differently now",
+        paragraphs: [
+          "The rule works, but it lives in an awkward place. Most of the zone logic is enforced inside the checkout page, which is the hardest part of the app to test — to confirm that a minimum behaves correctly you have to render the whole checkout and drive it by hand. Starting again, pricing, minimums and delivery rules would go into shared pure functions that can be tested on their own, with the checkout page calling them.",
+          "The second change is visibility. Payment, the confirmation email and the POS handoff each happen at their own moment, and when one of them fails the evidence is spread across three places. A per-order event timeline staff can open — payment result, email sent, POS accepted — would make a bad evening explainable while it is still going on.",
+        ],
+      },
+      {
+        heading: "This is not really about pizza",
+        paragraphs: [
+          "Any business whose service depends on where the customer is has the same rule hiding inside it. A mobile repair service has a travel radius and a smallest job worth driving to. A caterer has a delivery area and an order floor. A clinic has appointment types it will only do at certain locations. In each case somebody currently makes the call by feel, and the automation only works once that call is written down: a list of areas, and per area, what it costs and what the smallest acceptable job is.",
+          "The booking and order flows we build follow the same shape as this checkout. Settle eligibility before anything irreversible happens, and put the numbers where the owner can change them without calling a developer. If you can name your areas and, for each one, state the delivery cost and the smallest order you will send, you already have the rule written. The remaining work is a form and a check in the right place.",
+        ],
+        relatedCaseStudy: {
+          href: "/services/reservation-and-booking-automation",
+          label: "Related service",
+          title: "The same pattern applied to bookings",
+          text: "Rules settled before the irreversible step, exceptions routed to a person, and the numbers kept in screens the owner controls.",
+        },
+      },
+    ],
+    faq: [
+      {
+        question: "Can't we just charge one delivery fee for everywhere?",
+        answer:
+          "You can, and for a tight radius it is the right call. The problem appears as the area grows: near customers subsidise far ones, and a flat fee gives you nowhere natural to attach a minimum. Zones are what let the far edge of the map carry both a higher fee and a higher floor without changing anything for the customers next door.",
+      },
+      {
+        question: "Should the minimum count the delivery fee or only the food?",
+        answer:
+          "Pick one and make sure the site and the staff give the same answer. Most businesses mean the food total, because that is what they are judging as worth the drive. Whichever you choose, the number shown while the customer is shopping has to be measured the same way as the number the checkout enforces. The mismatch, not the rule, is what generates support calls.",
+      },
+      {
+        question: "What should happen when an address is not in any zone?",
+        answer:
+          "Say so plainly and offer whatever alternative you actually have. On the Domino site, pickup is a full path through the same cart, so an address outside the delivery zones does not have to be the end of the order. The failure mode to avoid is a checkout that refuses to continue without explaining why.",
+      },
+      {
+        question: "Who should be able to change the zones?",
+        answer:
+          "The owner, or whoever runs operations, through an admin screen and without a developer in the loop. That is how it works at Domino Ra'anana: delivery zones sit alongside products, deals and site settings in the management screens. Anything that changes with the seasons should not need a deploy.",
+      },
+      {
+        question: "How long does this part take to build?",
+        answer:
+          "It is rarely a project of its own. The whole Domino ordering site — menu, deals, cart, checkout, Cardcom payment, the POS handoff and the admin screens — took about two months, which at our published rate of $5,000 to $10,000 per estimated month of work puts it in the $10,000 to $20,000 range. The zone rules are a small slice of that. The slow part is agreeing on the boundaries and the numbers, and that work is yours rather than a developer's.",
       },
     ],
   },
