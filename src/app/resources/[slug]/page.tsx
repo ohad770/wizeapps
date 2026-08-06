@@ -298,6 +298,21 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                     <p key={paragraph}>{paragraph}</p>
                   ))}
                 </div>
+                {section.image ? (
+                  <figure className="mt-6 overflow-hidden rounded-xl border border-gray-100 bg-white">
+                    <Image
+                      src={section.image.src}
+                      alt={section.image.alt}
+                      width={section.image.width}
+                      height={section.image.height}
+                      sizes="(min-width: 768px) 720px, 100vw"
+                      className="h-auto w-full"
+                    />
+                    <figcaption className="border-t border-gray-100 px-5 py-4 text-sm leading-relaxed text-muted md:px-7">
+                      {section.image.caption}
+                    </figcaption>
+                  </figure>
+                ) : null}
                 {section.diagramId && diagrams[section.diagramId] ? (
                   <figure className="mt-6 rounded-xl border border-gray-100 bg-white p-5 md:p-7">
                     {diagrams[section.diagramId]()}

@@ -27,6 +27,7 @@ type ServiceSection = {
   paragraphs: string[];
   bullets?: ServiceBullet[];
   bulletsHeading?: string;
+  image?: SectionImage;
 };
 
 type ServiceWorkedExample = {
@@ -345,6 +346,14 @@ export const services: Service[] = [
       },
       {
         heading: "Mincha Time: what one month bought",
+        image: {
+          src: "/case-studies/mincha-time-home.png",
+          alt: "The Mincha Time landing page, offering the app for Android and iPhone with a phone mockup showing the current time",
+          caption:
+            "Mincha Time, live. The first usable version took about a month and did one thing: work out the right time for wherever you are, and tell you before it passes. Everything visible here follows from that one loop.",
+          width: 1600,
+          height: 1111,
+        },
         paragraphs: [
           "The visible half is a landing page with multilingual messaging and a phone-style preview of the two reminder moments. The other half is a scheduled notification engine that has to fire the right message, in the right language, at the right minute, every day, for every location, built on Firebase Cloud Functions, Firestore and Firebase Cloud Messaging, with zmanim from the Hebcal API.",
           "Six languages — Hebrew, English, Russian, Spanish, French and Yiddish — live in a plain translations map keyed by a per-user language field, with no i18n library. A monthly cleanup job removes tokens and records for users inactive more than thirty days. Neither is impressive engineering. Both are much cheaper to include on day one than to retrofit later.",
@@ -462,6 +471,14 @@ export const services: Service[] = [
       },
       {
         heading: "Admin screens are most of the build",
+        image: {
+          src: "/case-studies/domino-products.png",
+          alt: "Product management screen listing menu items with photo, category, size, price, a toppings flag and an availability switch",
+          caption:
+            "One of the management screens behind a live ordering site. Every row is something the team changes without a developer: the price, the size, whether toppings apply, whether the item is available at all, and the code that ties it to the till.",
+          width: 1600,
+          height: 711,
+        },
         paragraphs: [
           "This is easy to underestimate, because the admin side is invisible from outside. The Domino Ra'anana project, about two months in total, shipped management screens for products, deals, categories, pizza sizes, beverages, sauces, delivery zones, site settings and orders. That list is the operational reality of a pizza branch, and every entry is something staff need to change themselves without calling a developer.",
           "The design question inside each screen is which rules the tool enforces and which it leaves to a person. Delivery zones carry a delivery cost and a minimum order amount, so the tool enforces them at checkout. Deals can contain several products with their own selectable options, so the data model has to preserve that structure instead of flattening a deal into a discounted line item — otherwise the admin screen quietly loses the ability to express real promotions.",
@@ -903,6 +920,14 @@ export const services: Service[] = [
       },
       {
         heading: "Djob, where this is already running",
+        image: {
+          src: "/case-studies/djob-demo-jobs.png",
+          alt: "The public job board on the Djob demo, showing role cards with location, category, employment type and salary range",
+          caption:
+            "The public board on Djob's demo environment. The AI work sits behind this surface: candidates and roles are broken into structured statements, embedded, scored for similarity and then gated by business rules before anything reaches a screen like this one.",
+          width: 1600,
+          height: 1111,
+        },
         paragraphs: [
           "Djob is a two-sided recruiting SaaS built over about six months on PostgreSQL and Base44, live at djob.agency with public plans starting at $29/month. Its matching layer is the AI feature, and three decisions inside it are the ones worth reusing anywhere.",
           "The first is what gets embedded. Candidate and job records are not stored as one document each and embedded as a blob. They are broken into structured statement parts, and OpenAI's text-embedding-3-small runs over those parts. Embedding a whole CV gives you one number and no way to say what it was responding to. Embedding separate statements gives you something you can point at when a recruiter asks why a candidate surfaced.",
@@ -1250,6 +1275,14 @@ type ResourceBullet = {
   text: string;
 };
 
+type SectionImage = {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+};
+
 type ResourceSection = {
   heading: string;
   paragraphs: string[];
@@ -1257,6 +1290,7 @@ type ResourceSection = {
   comparison?: ResourceComparison[];
   diagramId?: string;
   interactiveToolId?: string;
+  image?: SectionImage;
   relatedCaseStudy?: {
     href: string;
     label: string;
@@ -3137,10 +3171,16 @@ export const resources: Resource[] = [
       },
       {
         heading: "The admin screen is the actual feature",
+        image: {
+          src: "/case-studies/domino-delivery-zones.png",
+          alt: "Delivery-zone admin screen showing two zones, each with its own delivery cost and estimated arrival window",
+          caption:
+            "The live delivery-zone screen. Each zone is a row the owner edits: its own delivery cost, its own arrival window, its own minimum order, and an active switch. Turning a zone off closes checkout for those addresses without a deploy.",
+          width: 1600,
+          height: 711,
+        },
         paragraphs: [
           "Zone rules change. Fuel gets more expensive, a new neighbourhood fills in, a courier arrangement shifts. The build includes management screens for products, deals, categories, pizza sizes, beverages, sauces, delivery zones, site settings and orders, so a delivery cost or a minimum is a field the owner edits in a form.",
-          "Two of those settings are worth singling out, because they are the ones a manual system gets wrong most often, and they are not really about delivery at all — they are about when the shop is open. Friday closing and Saturday-night opening move every week, so the admin computes them instead of storing them. Opening is set to a fixed number of minutes after Shabbat ends in Ra'anana, resolved from the Hebcal API, and the screen shows the owner both the Shabbat-end time it read and the opening time it derived, with a link back to the source so the number is checkable rather than trusted. Friday closing is defined as one time under winter clock and another under summer clock, and the screen states which one is in force this week. That last line matters more than it looks: the bug this design prevents is a shop that closes an hour late twice a year, on exactly the two weekends nobody is checking.",
-          "There is a small pleasing detail in this. Hebcal is the same API behind Mincha Time's prayer-time reminders, one of the other builds on this site. In one product it decides when to send a notification; in the other it decides when a pizza shop starts taking delivery orders. The engineering is nearly identical — call the source once per location per day, store the answer, derive the local rule from it — and only the business meaning changes.",
           "The alternative is worth pricing out honestly. Our post-launch work is billed hourly, $85 to $165 per hour, for hours actually worked, and we do not sell a standing monthly retainer for a small system like this. Even at the bottom of that range, a hard-coded delivery fee makes every adjustment a paid ticket, a deploy and a wait. Over a site that has been in daily use for more than five years, that is the difference between a number the owner controls and a number he has to book time to change. If you are sizing a build like this, our guide to what a small business app costs lists the ranges we actually quote, and the guide to software maintenance after launch covers what that hourly work usually goes on.",
         ],
         relatedCaseStudy: {
@@ -3149,6 +3189,22 @@ export const resources: Resource[] = [
           title: "What a build like this costs",
           text: "The published ranges behind the numbers above — per estimated month of work for the build, hourly for everything after launch.",
         },
+      },
+      {
+        heading: "The hours nobody should be typing in every week",
+        image: {
+          src: "/case-studies/domino-opening-hours.png",
+          alt: "Opening-hours settings showing automatic Saturday-night opening derived from Hebcal and a Friday closing time that differs between winter and summer clock",
+          caption:
+            "Opening hours are derived, not stored. The screen shows the Shabbat-end time it read, the opening time it worked out from it, a link back to the source, and which clock — winter or summer — is deciding Friday's closing this week.",
+          width: 1600,
+          height: 522,
+        },
+        paragraphs: [
+          "Two settings on that same admin deserve singling out, because they are the ones a manual system gets wrong most often, and they are not really about delivery at all — they are about when the shop is open. Friday closing and Saturday-night opening move every single week, so the system computes them rather than storing them.",
+          "Opening is defined as a fixed number of minutes after Shabbat ends in Ra'anana, resolved from the Hebcal API. The screen shows the owner both the Shabbat-end time it read and the opening time it derived, with a link back to the source, so the number is checkable rather than something to be trusted blindly. Friday closing is defined twice — one time under winter clock, another under summer clock — and the screen states plainly which one is in force this week. That last line matters more than it looks. The bug this design prevents is a shop that closes an hour late twice a year, on exactly the two weekends nobody thinks to check.",
+          "There is a detail here worth borrowing. Hebcal is the same API behind Mincha Time's prayer-time reminders, another build documented on this site. In one product it decides when to send a notification; in the other it decides when a pizza shop starts taking delivery orders. The engineering is nearly identical — call the source once per location per day, store the answer, derive the local rule from it — and only the business meaning changes. A date-and-time source that a business depends on is worth wrapping once and reusing, rather than re-deriving in every product that needs it.",
+        ],
       },
       {
         heading: "What we would build differently now",

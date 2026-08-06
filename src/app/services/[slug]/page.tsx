@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookingFlowDemo from "@/components/BookingFlowDemo";
@@ -303,6 +304,21 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
                       <p key={paragraph}>{paragraph}</p>
                     ))}
                   </div>
+                  {section.image ? (
+                    <figure className="mt-6 overflow-hidden rounded-xl border border-gray-100 bg-white">
+                      <Image
+                        src={section.image.src}
+                        alt={section.image.alt}
+                        width={section.image.width}
+                        height={section.image.height}
+                        sizes="(min-width: 768px) 720px, 100vw"
+                        className="h-auto w-full"
+                      />
+                      <figcaption className="border-t border-gray-100 px-5 py-4 text-sm leading-relaxed text-muted md:px-7">
+                        {section.image.caption}
+                      </figcaption>
+                    </figure>
+                  ) : null}
                   {section.bullets ? (
                     <div className="mt-6">
                       {section.bulletsHeading ? (
