@@ -606,6 +606,13 @@ export const services: Service[] = [
         ],
       },
       {
+        heading: "Where we do this, and for whom",
+        paragraphs: [
+          "This is not a capability described in the abstract. We work with IntentIQ, an ad-tech company, as a contract engineering team on exactly this work: mobile SDK development across native Android and iOS and the React Native, Flutter and Unity wrappers on top of them, alongside identity and secure-signals integration into the Google advertising stack.",
+          "What is inside their SDK is theirs, and none of it appears on this site. What the engagement produces that we can publish is the practice around it — the ordering constraints, the keep rules, the per-platform differences, and the habit of checking a release build against the packaged artifact instead of the source tree. Everything on this page comes out of doing that work rather than reading about it.",
+        ],
+      },
+      {
         heading: "Per-platform reality, and why the wrapper is where it breaks",
         paragraphs: [
           "Native Android and iOS are one problem. React Native, Flutter and Unity add a wrapper layer, and the wrapper is where most breakage happens, because its whole job is forwarding calls one way and callbacks the other way while preserving things the underlying SDK cares about: which thread it is on, which lifecycle object it is attached to, and whether a callback fires once or twice.",
@@ -781,6 +788,13 @@ export const services: Service[] = [
             label: "GMA",
             text: "Requests fired before initialization completes. The initialization callback reports per-adapter readiness for a reason, and ignoring it means the first requests of the session go out against a partially ready stack.",
           },
+        ],
+      },
+      {
+        heading: "Where this experience comes from",
+        paragraphs: [
+          "We work with IntentIQ, an ad-tech company, as a contract engineering team on identity and secure-signals integration into the Google advertising stack, alongside the mobile SDK work that carries it. That engagement is where the specifics on this page were learned: which of Google Ad Manager, AdMob, IMA and GMA behaves differently from the others, what the initialization order actually has to be, and how an enrichment failure manages to leave no trace anywhere.",
+          "Their implementation stays theirs and none of it is published here. The transferable part is the practice, and that is what you would be hiring: an engineer who has had to prove, from captured requests rather than from a code review, that the parameter he believes is being sent is the parameter the ad server received.",
         ],
       },
       {

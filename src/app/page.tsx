@@ -415,10 +415,13 @@ export default function Home() {
           <p className="mt-10 text-muted text-[15px] max-w-2xl leading-relaxed">
             Same terms as the rest of the work: a build is priced by the
             estimated month of work, hands-on integration is billed by the hours
-            actually worked, and there is no standing retainer to sign. We do
-            not publish client names for SDK and ad-tech work, so the thing to
-            judge us on up front is the engineering detail above rather than a
-            logo wall.
+            actually worked, and there is no standing retainer to sign. This is
+            where our contract engineering sits: we work with IntentIQ, an
+            ad-tech company, on mobile SDK development and on identity and
+            secure-signals integration across Google Ad Manager, AdMob, IMA and
+            GMA. What is inside their SDK stays theirs, so what we publish is
+            how this work is built and how it is checked, which is the
+            engineering detail above.
           </p>
           <Link
             href="/services"

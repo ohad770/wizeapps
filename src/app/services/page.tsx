@@ -234,12 +234,17 @@ export default function ServicesPage() {
             shaped each one.
           </p>
           <p className="mt-4 max-w-3xl text-muted leading-relaxed">
-            The SDK, ad monetization and AI integration work is deliberately not
-            represented here. That work is covered by confidentiality, so there
-            is no product name or link we can publish, and we would rather leave
-            the gap than pad this section. What we can show for it is how it is
-            built and how it is checked, which is what the section above
-            describes.
+            The SDK and ad monetization work is not represented above for a
+            simple reason: it is contract engineering inside another company&apos;s
+            product, so there is no site of ours to link to. The client is
+            IntentIQ, an ad-tech company we work with on mobile SDK development
+            — native Android and iOS plus the React Native, Flutter and Unity
+            wrappers — and on identity and secure-signals integration across
+            Google Ad Manager, AdMob, IMA and GMA. Their implementation details
+            stay theirs. What this work produces that we can publish is the
+            engineering practice around it: the ordering constraints, the keep
+            rules, and the habit of verifying against the packaged artifact
+            rather than the source tree.
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {serviceProof.map((item, i) => (
