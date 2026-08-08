@@ -51,7 +51,7 @@ const englishPages = [
   {
     href: "/services",
     label: "שירותים",
-    text: "עמוד לכל אחד מארבעת תחומי העבודה, עם דוגמאות מפורטות ושאלות נפוצות.",
+    text: "עמוד לכל אחד משבעת תחומי העבודה, עם דוגמאות מפורטות ושאלות נפוצות.",
   },
   {
     href: "/case-studies",
@@ -284,6 +284,14 @@ export default function HebrewPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <HtmlLang lang="he" dir="rtl" />
+      <script
+        // Set lang/dir synchronously during HTML parse; HtmlLang only fixes
+        // them after hydration, so crawlers reading raw SSR HTML saw lang="en".
+        dangerouslySetInnerHTML={{
+          __html:
+            "document.documentElement.lang='he';document.documentElement.dir='rtl';",
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

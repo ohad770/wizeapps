@@ -161,9 +161,10 @@ export default function Home() {
             <span className="text-accent">It just doesn&apos;t exist yet.</span>
           </h1>
           <p className="mt-6 text-lg md:text-xl text-muted max-w-xl leading-relaxed">
-            We turn business problems into working digital products — in weeks,
-            not months. No tech jargon. No wasted features. Just a system that
-            does what you actually need.
+            We turn business problems into working digital products — priced
+            before we start, shipped as a first version people can actually
+            use. No tech jargon. No wasted features. Just a system that does
+            what you actually need.
           </p>
           <p className="mt-5 text-[15px] text-muted max-w-xl leading-relaxed">
             That covers two kinds of work. Small businesses and founders come to

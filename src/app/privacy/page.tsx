@@ -24,7 +24,7 @@ export default function PrivacyPage() {
         />
         <section className="max-w-3xl mx-auto px-6 py-14 md:py-20">
           <span className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-deep">
-            Last updated: June 25, 2026
+            Last updated: August 8, 2026
           </span>
           <div className="mt-10 space-y-5 text-muted leading-relaxed">
             <Reveal as="section" className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">
@@ -98,6 +98,22 @@ export default function PrivacyPage() {
                 improve the website, provide requested services, prevent abuse,
                 and comply with legal obligations. WizeApps does not sell
                 personal information.
+              </p>
+            </Reveal>
+            <Reveal as="section" delay={80} className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">
+              <h2 className="text-xl font-semibold text-foreground">
+                Your choices and rights
+              </h2>
+              <p className="mt-4">
+                You can ask what information WizeApps holds about you, ask for
+                it to be corrected, or ask for it to be deleted, by writing to
+                the email address below. In practice the information we hold is
+                usually the email correspondence you sent us, so deletion means
+                deleting that correspondence. WizeApps is an Israeli company
+                and handles personal information under Israel&apos;s Privacy
+                Protection Law; if you contact us from elsewhere, we will honor
+                the same requests. Cookie choices can be changed at any time
+                with the preferences button above.
               </p>
             </Reveal>
             <Reveal as="section" delay={80} className="rounded-2xl border border-gray-100 bg-muted-light/40 p-6 md:p-7">

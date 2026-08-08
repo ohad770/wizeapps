@@ -1333,7 +1333,7 @@ export const resources: Resource[] = [
   {
     slug: "booking-automation-checklist",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "A practical checklist before automating bookings",
     description:
       "What to decide before replacing phone calls and manual appointment confirmations with a booking system — and how to keep the first version small enough to actually launch.",
@@ -1449,7 +1449,7 @@ export const resources: Resource[] = [
   {
     slug: "what-to-build-first-in-an-mvp",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "What to build first in an MVP",
     description:
       "A founder-friendly way to decide which product features should exist on day one, which should wait, and how to tell the difference before you spend a budget.",
@@ -1534,7 +1534,7 @@ export const resources: Resource[] = [
   {
     slug: "manual-processes-that-should-not-stay-manual",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "Manual processes that should not stay manual",
     description:
       "How to spot when a spreadsheet, phone call, or chat-based workflow has quietly outgrown itself and is ready to become a small, focused system.",
@@ -1612,7 +1612,7 @@ export const resources: Resource[] = [
   {
     slug: "how-to-prepare-for-a-software-build",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "How to prepare for a software build without writing a spec",
     description:
       "The plain-language information that helps a build start quickly and accurately, even when you are not technical and have never commissioned software before.",
@@ -1707,7 +1707,7 @@ export const resources: Resource[] = [
   {
     slug: "best-tools-for-building-websites",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "Which tools should you use to build a website?",
     description:
       "A practical comparison of Next.js, Astro, WordPress, Webflow, Shopify, and simple site builders for business websites.",
@@ -1873,7 +1873,7 @@ export const resources: Resource[] = [
   {
     slug: "best-tools-for-building-apps",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "Which tools should you use to build an app?",
     description:
       "A practical comparison of Expo, React Native, Flutter, native iOS and Android, PWAs, and no-code app builders.",
@@ -2030,12 +2030,17 @@ export const resources: Resource[] = [
         answer:
           "Typically days, not weeks, for a well-behaved app — but plan for a rejection or two on the first submission, especially around privacy declarations, sign-in rules, and payment policies. Build the review cycle into the launch timeline instead of discovering it at the end.",
       },
+      {
+        question: "What does WizeApps itself build with?",
+        answer:
+          "The three live projects on this site run on Vite and React over Base44. Mincha Time's reminder engine is Firebase Cloud Functions, Firestore and FCM; Djob's matching sits on PostgreSQL. Not because those are the best tools for every job — because they are tools we can ship and maintain quickly, which is the real tool question this guide keeps coming back to.",
+      },
     ],
   },
   {
     slug: "how-much-does-a-small-business-app-cost",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-08-04",
     title: "How much does it cost to build a small business app?",
     description:
       "Our actual pricing in numbers — $5,000 to $10,000 per estimated month of work — with what three real builds cost, what drives the range, and how to get more product for the same budget.",
@@ -2179,7 +2184,7 @@ export const resources: Resource[] = [
   {
     slug: "no-code-vs-custom-code",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "No-code vs. custom code: which should you choose?",
     description:
       "A clear-headed comparison of no-code tools and custom development, with the honest trade-offs each side rarely admits.",
@@ -2264,12 +2269,17 @@ export const resources: Resource[] = [
         answer:
           "Yes, and hybrids are often the best value: a custom core where the business logic is unusual, connected to no-code tools for the standard parts like forms, dashboards, or notifications. You pay for code only where code earns it.",
       },
+      {
+        question: "What has WizeApps actually shipped this way?",
+        answer:
+          "All three live projects on this site are hybrids in exactly this sense. The Domino Ra'anana ordering site runs on Base44 with custom code where the platform stopped being enough — the payment ordering around Cardcom and the handoff to the branch's POS. Djob pairs the same platform with a separate PostgreSQL matching layer. The platform carries the standard parts; code carries the logic that makes each business different.",
+      },
     ],
   },
   {
     slug: "build-vs-buy-software",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "Build vs. buy: when off-the-shelf software is the right call",
     description:
       "How to decide whether to use existing software or build your own — and why building should usually be your second choice, not your first.",
@@ -2357,7 +2367,7 @@ export const resources: Resource[] = [
   {
     slug: "how-to-choose-a-developer-or-agency",
     datePublished: "2026-06-25",
-    dateModified: "2026-07-06",
+    dateModified: "2026-06-25",
     title: "How to choose a developer or agency without being technical",
     description:
       "A practical guide to evaluating who builds your software when you cannot judge the code yourself — and the warning signs that matter most.",
@@ -2444,7 +2454,7 @@ export const resources: Resource[] = [
   {
     slug: "software-maintenance-after-launch",
     datePublished: "2026-07-06",
-    dateModified: "2026-07-06",
+    dateModified: "2026-08-04",
     title: "What it really takes to keep software running after launch",
     description:
       "Launch is the halfway point, not the finish line. A plain-language guide to hosting, updates, monitoring, and the maintenance budget nobody mentions in the sales conversation.",
@@ -2911,23 +2921,6 @@ export const resources: Resource[] = [
           "No glossary is complete, and new terms arrive constantly. The durable skill is not memorizing definitions — it is the habit of asking, in the meeting, \"what does that mean for this project, in plain words?\" Any builder worth hiring answers that question happily and concretely. Evasive or condescending answers to plain questions are among the most reliable early warnings you will ever get.",
           "It may help to know the dynamic runs both ways: good developers prefer clients who ask. A client who understands what staging is, why scope is written down, and what a change request costs is easier to serve well. Asking plain questions does not mark you as naive — it marks you as the kind of client whose project tends to go smoothly.",
         ],
-      },
-    ],
-    faq: [
-      {
-        question: "Do I need to learn technical terms before hiring a developer?",
-        answer:
-          "No — you need enough to follow the money and the decisions, which is roughly the contents of this page. Deep technical vocabulary is the builder's job. Your job is refusing to approve sentences you do not understand.",
-      },
-      {
-        question: "A proposal is full of terms not on this page. Bad sign?",
-        answer:
-          "Not necessarily — some projects genuinely need specialized language. The test is what happens when you ask for plain-language translation. A good builder provides it without friction; a proposal that stays foggy after questions is foggy on purpose or foggy in the author's own head. Both are warnings.",
-      },
-      {
-        question: "What is the single most important term here?",
-        answer:
-          "Scope. Nearly every software dispute — budget, timeline, disappointment — is at bottom a disagreement about what was included. A written scope, plus a named process for changing it, prevents more pain than any other habit on this page.",
       },
     ],
   },
