@@ -659,10 +659,10 @@ export default function AboutPage() {
               className="mt-5 max-w-3xl text-muted leading-relaxed"
             >
               <p>
-                WizeApps is operated by {company.legalName}. If you want to know
-                who is behind the site before you write to anyone, this is it —
-                a registered company with an address and a phone number, not a
-                contact form.
+                WizeApps is the English name of {company.legalName}, a software
+                company registered in Israel. If you want to know who is behind
+                the site before you write to anyone, this is it — a registered
+                company with an address and a phone number, not a contact form.
               </p>
             </Reveal>
             <Reveal
@@ -672,9 +672,11 @@ export default function AboutPage() {
               <dl className="space-y-4 text-[15px]">
                 <div>
                   <dt className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
-                    Company
+                    Registered name
                   </dt>
-                  <dd className="mt-1 text-muted">{company.legalName}</dd>
+                  <dd className="mt-1 text-muted">
+                    {company.legalName} (trading as WizeApps)
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-xs font-semibold uppercase tracking-wide text-accent-deep">

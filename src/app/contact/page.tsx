@@ -27,7 +27,7 @@ type CompanyDetail = {
 };
 
 const companyDetails: CompanyDetail[] = [
-  { label: "Registered company", value: companyName },
+  { label: "Registered name", value: `${companyName} (trading as WizeApps)` },
   {
     label: "Office",
     value: `${streetAddress}, ${locality}, Israel`,
@@ -88,7 +88,7 @@ const faqs = [
   {
     question: "Who is behind WizeApps, and where are you based?",
     answer:
-      `WizeApps is a software studio at ${streetAddress}, ${locality}, Israel, registered as ${companyName}. ${author.name} is the founder and the person who reads incoming messages. The office line is ${phoneDisplay} and email is ${siteEmail}.`,
+      `WizeApps is the English name of ${companyName}, a software company registered in Israel at ${streetAddress}, ${locality}. ${author.name} is the founder and the person who reads incoming messages. The office line is ${phoneDisplay} and email is ${siteEmail}.`,
   },
   {
     question: "Can I call instead of writing?",
@@ -256,10 +256,12 @@ export default function ContactPage() {
               <h2 className="text-xl font-semibold">Who you are actually contacting</h2>
               <div className="space-y-4 text-muted leading-relaxed">
                 <p>
-                  WizeApps is a software studio based at {streetAddress} in{" "}
-                  {locality}, Israel. The registered company behind it is{" "}
-                  <span dir="rtl">{companyName}</span>; WizeApps is the name the
-                  software work runs under.
+                  WizeApps is the English name of{" "}
+                  <span dir="rtl">{companyName}</span>, a software company
+                  registered in Israel and based at {streetAddress} in{" "}
+                  {locality}. One company, one office, one phone number — the
+                  Hebrew name is the registered one and WizeApps is how it
+                  trades in English.
                 </p>
                 <p>
                   That person is {author.name}. He reads what arrives at{" "}
