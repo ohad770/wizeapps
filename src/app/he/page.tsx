@@ -194,7 +194,7 @@ const processSteps = [
 ];
 
 const businessDetails = [
-  { label: "שם רשום", value: `${companyName} (פועלת כ-WizeApps)` },
+  { label: "שם רשום", value: companyName },
   { label: "כתובת", value: `${streetAddress}, ${locality}, ישראל` },
   { label: "טלפון", value: phoneDisplay, href: phoneHref },
   { label: "מייל", value: siteEmail, href: `mailto:${siteEmail}` },
@@ -654,10 +654,9 @@ export default function HebrewPage() {
               <h2 className="text-xl font-semibold">עם מי אתם מדברים</h2>
               <div className="mt-3 space-y-4 leading-relaxed text-muted">
                 <p>
-                  WizeApps הוא השם באנגלית של {companyName}, חברת תוכנה רשומה
-                  שיושבת ב{streetAddress} ב{locality}. חברה אחת, משרד אחד, מספר
-                  טלפון אחד — השם בעברית הוא השם הרשום, ו-WizeApps הוא השם
-                  שתחתיו היא פועלת באנגלית.
+                  WizeApps היא חברת תוכנה שיושבת ב{streetAddress} ב{locality}.
+                  חברה קטנה בכוונה — משרד אחד, קו טלפון אחד, ומי שבונה את
+                  התוכנה הוא גם מי שעונה לכם.
                 </p>
                 <p>
                   האדם הזה הוא אוהד, המייסד. הוא קורא את מה שמגיע ל-
