@@ -9,17 +9,16 @@ import { author, siteUrl } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact | WizeApps",
   description:
-    "Contact WizeApps — the product studio of Softphone Ltd., 117 Weizman Street, Kfar-Saba, Israel. Phone +972-9-7677094, hello@wizeapps.agency. English and Hebrew.",
+    "Contact WizeApps — 117 Weizman Street, Kfar-Saba, Israel. Phone +972-9-7677094, hello@wizeapps.agency. English and Hebrew.",
   alternates: { canonical: "/contact" },
 };
 
-const companyName = "Softphone Ltd.";
+const companyName = "המכון לאפליקציות חכמות";
 const streetAddress = "117 Weizman Street";
 const locality = "Kfar-Saba";
 const phoneDisplay = "+972-9-7677094";
 const phoneHref = "tel:+97297677094";
 const siteEmail = "hello@wizeapps.agency";
-const companyEmail = "office@softphone.co.il";
 
 type CompanyDetail = {
   label: string;
@@ -28,14 +27,13 @@ type CompanyDetail = {
 };
 
 const companyDetails: CompanyDetail[] = [
-  { label: "Company", value: companyName },
+  { label: "Registered company", value: companyName },
   {
     label: "Office",
     value: `${streetAddress}, ${locality}, Israel`,
   },
   { label: "Phone", value: phoneDisplay, href: phoneHref },
-  { label: "Email (projects)", value: siteEmail, href: `mailto:${siteEmail}` },
-  { label: "Email (company)", value: companyEmail, href: `mailto:${companyEmail}` },
+  { label: "Email", value: siteEmail, href: `mailto:${siteEmail}` },
   { label: "Who answers", value: `${author.name}, founder` },
   { label: "Working languages", value: "English and Hebrew" },
 ];
@@ -90,7 +88,7 @@ const faqs = [
   {
     question: "Who is behind WizeApps, and where are you based?",
     answer:
-      `WizeApps is the product studio of ${companyName}, at ${streetAddress}, ${locality}, Israel. ${author.name} is the founder and the person who reads incoming messages. The office line is ${phoneDisplay} and the company email is ${companyEmail}.`,
+      `WizeApps is a software studio at ${streetAddress}, ${locality}, Israel, registered as ${companyName}. ${author.name} is the founder and the person who reads incoming messages. The office line is ${phoneDisplay} and email is ${siteEmail}.`,
   },
   {
     question: "Can I call instead of writing?",
@@ -165,7 +163,6 @@ export default function ContactPage() {
       },
       {
         "@type": "ContactPoint",
-        email: companyEmail,
         telephone: phoneDisplay,
         contactType: "office",
         availableLanguage: ["English", "Hebrew"],
@@ -259,11 +256,10 @@ export default function ContactPage() {
               <h2 className="text-xl font-semibold">Who you are actually contacting</h2>
               <div className="space-y-4 text-muted leading-relaxed">
                 <p>
-                  WizeApps is the product-studio side of {companyName}, a company
-                  based at {streetAddress} in {locality}, Israel. Softphone is
-                  the registered company; WizeApps is the name the software work
-                  runs under. Same office, same phone number, same person picking
-                  up.
+                  WizeApps is a software studio based at {streetAddress} in{" "}
+                  {locality}, Israel. The registered company behind it is{" "}
+                  <span dir="rtl">{companyName}</span>; WizeApps is the name the
+                  software work runs under.
                 </p>
                 <p>
                   That person is {author.name}. He reads what arrives at{" "}
@@ -275,16 +271,9 @@ export default function ContactPage() {
                   </a>{" "}
                   and he is who you would be on a call with — there is no account
                   manager in between and no ticket queue. If you would rather
-                  reach the company directly, use{" "}
+                  talk than write, the office line is{" "}
                   <a href={phoneHref} className="text-accent hover:underline">
                     {phoneDisplay}
-                  </a>{" "}
-                  or{" "}
-                  <a
-                    href={`mailto:${companyEmail}`}
-                    className="text-accent hover:underline"
-                  >
-                    {companyEmail}
                   </a>
                   .
                 </p>

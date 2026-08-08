@@ -9,17 +9,16 @@ import { author, siteUrl } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About WizeApps",
   description:
-    "Who runs WizeApps, what we have shipped, the mobile SDK and ad-tech side of the work, how a build actually runs, and the company details behind the site: Softphone Ltd., Kfar-Saba, Israel.",
+    "Who runs WizeApps, what we have shipped, the mobile SDK and ad-tech side of the work, how a build actually runs, and the company details behind the site: 117 Weizman Street, Kfar-Saba, Israel.",
   alternates: { canonical: `${siteUrl}/about` },
 };
 
 const company = {
-  legalName: "Softphone Ltd.",
+  legalName: "המכון לאפליקציות חכמות",
   street: "117 Weizman Street",
   city: "Kfar-Saba",
   country: "Israel",
   phone: "+972-9-7677094",
-  officeEmail: "office@softphone.co.il",
   siteEmail: "hello@wizeapps.agency",
 };
 
@@ -259,7 +258,7 @@ export default function AboutPage() {
         <PageIntro
           eyebrow="About"
           title="We build small systems around real business problems."
-          description="WizeApps is run by Softphone Ltd. in Kfar-Saba, Israel. We work with business owners and founders who know what is broken in their day-to-day workflow, but do not want a bloated software project just to fix it."
+          description="WizeApps is a software studio in Kfar-Saba, Israel. We work with business owners and founders who know what is broken in their day-to-day workflow, but do not want a bloated software project just to fix it."
         />
 
         <section className="relative overflow-hidden bg-muted-light">
@@ -717,14 +716,14 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <dt className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
-                    Company email
+                    Email
                   </dt>
                   <dd className="mt-1 text-muted">
                     <a
-                      href={`mailto:${company.officeEmail}`}
+                      href={`mailto:${company.siteEmail}`}
                       className="link-underline hover:text-foreground transition-colors"
                     >
-                      {company.officeEmail}
+                      {company.siteEmail}
                     </a>
                   </dd>
                 </div>
@@ -752,10 +751,10 @@ export default function AboutPage() {
             >
               <p>
                 Use {company.siteEmail} for anything about a build — that
-                address goes straight to the work. {company.officeEmail} reaches
-                the company directly. Either way a person reads it and replies;
-                if you would rather start with the workflow questions we ask
-                first, they are listed on the{" "}
+                address goes straight to the work, and the office line above
+                reaches the same person. Either way a person reads it and
+                replies; if you would rather start with the workflow questions
+                we ask first, they are listed on the{" "}
                 <Link href="/contact" className="text-accent hover:underline">
                   contact page
                 </Link>

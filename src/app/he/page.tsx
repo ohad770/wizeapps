@@ -31,13 +31,12 @@ export const metadata: Metadata = {
   },
 };
 
-const companyName = "Softphone Ltd.";
+const companyName = "המכון לאפליקציות חכמות";
 const streetAddress = "רחוב ויצמן 117";
 const locality = "כפר סבא";
 const phoneDisplay = "+972-9-7677094";
 const phoneHref = "tel:+97297677094";
 const siteEmail = "hello@wizeapps.agency";
-const companyEmail = "office@softphone.co.il";
 
 const pageSections = [
   { href: "#services", label: "תחומי העבודה" },
@@ -195,11 +194,10 @@ const processSteps = [
 ];
 
 const businessDetails = [
-  { label: "חברה", value: companyName },
+  { label: "חברה רשומה", value: companyName },
   { label: "כתובת", value: `${streetAddress}, ${locality}, ישראל` },
   { label: "טלפון", value: phoneDisplay, href: phoneHref },
-  { label: "מייל לפרויקטים", value: siteEmail, href: `mailto:${siteEmail}` },
-  { label: "מייל החברה", value: companyEmail, href: `mailto:${companyEmail}` },
+  { label: "מייל", value: siteEmail, href: `mailto:${siteEmail}` },
   { label: "מי עונה", value: `${author.name}, מייסד` },
   { label: "שפות עבודה", value: "עברית ואנגלית" },
 ];
@@ -276,7 +274,6 @@ export default function HebrewPage() {
       },
       {
         "@type": "ContactPoint",
-        email: companyEmail,
         telephone: phoneDisplay,
         contactType: "office",
         availableLanguage: ["Hebrew", "English"],
@@ -657,10 +654,9 @@ export default function HebrewPage() {
               <h2 className="text-xl font-semibold">עם מי אתם מדברים</h2>
               <div className="mt-3 space-y-4 leading-relaxed text-muted">
                 <p>
-                  WizeApps הוא הצד של פיתוח המוצר ב-{companyName}, חברה שיושבת
-                  ב{streetAddress} ב{locality}. Softphone היא החברה הרשומה,
-                  ו-WizeApps הוא השם שתחתיו רצה עבודת התוכנה. אותו משרד, אותו
-                  מספר טלפון, אותו אדם עונה.
+                  WizeApps הוא סטודיו לפיתוח תוכנה שיושב ב{streetAddress} ב
+                  {locality}. החברה הרשומה מאחוריו היא {companyName}, ו-WizeApps
+                  הוא השם שתחתיו רצה עבודת התוכנה.
                 </p>
                 <p>
                   האדם הזה הוא אוהד, המייסד. הוא קורא את מה שמגיע ל-
@@ -671,16 +667,9 @@ export default function HebrewPage() {
                     {siteEmail}
                   </a>{" "}
                   והוא זה שתהיו איתו בשיחה. אין מנהל תיקים באמצע ואין תור קריאות.
-                  מי שמעדיף להגיע לחברה ישירות מוזמן לטלפון{" "}
+                  מי שמעדיף לדבר ולא לכתוב מוזמן לטלפון{" "}
                   <a href={phoneHref} className="text-accent hover:underline" dir="ltr">
                     {phoneDisplay}
-                  </a>{" "}
-                  או למייל{" "}
-                  <a
-                    href={`mailto:${companyEmail}`}
-                    className="text-accent hover:underline"
-                  >
-                    {companyEmail}
                   </a>
                   .
                 </p>
