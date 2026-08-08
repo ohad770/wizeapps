@@ -659,10 +659,14 @@ export default function AboutPage() {
               className="mt-5 max-w-3xl text-muted leading-relaxed"
             >
               <p>
-                WizeApps is a software company registered in Israel. If you
-                want to know who is behind the site before you write to
-                anyone, this is it — a real company with an address and a
-                phone number, not just a contact form.
+                WizeApps is a software company registered in Israel. The
+                brand is newer than the company: WizeApps is the name the
+                company started trading under in 2026, and the projects on
+                this site predate it — the Domino Ra&apos;anana ordering site
+                has been taking orders for more than five years. If you want
+                to know who is behind the site before you write to anyone,
+                this is it — a real company with an address and a phone
+                number, not just a contact form.
               </p>
             </Reveal>
             <Reveal
