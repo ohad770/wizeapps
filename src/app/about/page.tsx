@@ -705,19 +705,6 @@ export default function AboutPage() {
               <dl className="space-y-4 text-[15px]">
                 <div>
                   <dt className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
-                    Project email
-                  </dt>
-                  <dd className="mt-1 text-muted">
-                    <a
-                      href={`mailto:${company.siteEmail}`}
-                      className="link-underline hover:text-foreground transition-colors"
-                    >
-                      {company.siteEmail}
-                    </a>
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wide text-accent-deep">
                     Email
                   </dt>
                   <dd className="mt-1 text-muted">
@@ -752,10 +739,10 @@ export default function AboutPage() {
               className="mt-6 max-w-3xl text-muted leading-relaxed"
             >
               <p>
-                Use {company.siteEmail} for anything about a build — that
-                address goes straight to the work, and the office line above
-                reaches the same person. Either way a person reads it and
-                replies; if you would rather start with the workflow questions
+                Write to {company.siteEmail} or call the office line above —
+                both reach the same person, and the reply comes from someone
+                who understood the question. If you would rather start with
+                the workflow questions
                 we ask first, they are listed on the{" "}
                 <Link href="/contact" className="text-accent hover:underline">
                   contact page

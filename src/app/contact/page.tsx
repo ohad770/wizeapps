@@ -257,9 +257,10 @@ export default function ContactPage() {
               <div className="space-y-4 text-muted leading-relaxed">
                 <p>
                   WizeApps is a software company based at {streetAddress} in{" "}
-                  {locality}, Israel. It is small on purpose — one office, one
-                  phone line, and the person who builds the software is the
-                  same person who answers you.
+                  {locality}, Israel. When you write to us, you are talking to
+                  the engineer who will build your product — so decisions get
+                  made in the first conversation, and nothing gets lost on the
+                  way between a salesperson, a project manager and a developer.
                 </p>
                 <p>
                   That person is {author.name}. He reads what arrives at{" "}
