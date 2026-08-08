@@ -50,6 +50,67 @@ const engineeringLessons = [
   },
 ];
 
+const liveProjects = [
+  {
+    name: "Mincha Time",
+    url: "https://mincha-time.com",
+    href: "/case-studies/mincha-time",
+    timeline: "First version in about a month",
+    summary:
+      "A reminder app for prayer times. The user gets a notification before the relevant window closes wherever they happen to be, without setting anything up again each day. What you see from the outside is a notification arriving on time. What it takes is a send engine that fires on the right minute, every day, for every location.",
+    points: [
+      "Prayer times come from the Hebcal zmanim API. Notifications go out through Firebase Cloud Functions, Firestore and FCM.",
+      "There is no task queue. A function runs once a minute and checks whether a Firestore document exists for the current minute. Documents are keyed hour_minute, so 13:47 is the document 13_47. If it is not there, the run does nothing.",
+      "Users are grouped by rounded latitude and longitude, so the zmanim API is called once per location per day instead of once per user. Each run also writes tomorrow's document for that group, so the schedule advances one day at a time instead of being precomputed.",
+      "Two separate and independent ways to stop receiving: a permanent off switch and a same-day snooze. Both get checked before every send.",
+    ],
+  },
+  {
+    name: "Domino's Pizza Ra'anana",
+    url: "https://domino-rn.co.il",
+    href: "/case-studies/domino-ranana",
+    timeline: "About two months, in daily use for over five years",
+    summary:
+      "An ordering site for the Ra'anana branch: menu, deals, cart, payment and delivery. From the outside it looks like a menu. The real work starts the moment a customer hits checkout.",
+    points: [
+      "Built in Vite and React on top of Base44, with card payments through Cardcom.",
+      "Orders are handed to the branch's Aviv POS, so nobody retypes them at the register.",
+      "The order of operations around money: a pending order is created first, then payment runs at Cardcom, and only after that come the status update, the emails and the POS handoff.",
+      "Every delivery zone carries its own delivery fee and minimum order, and those two values decide whether an address can complete an order at all.",
+      "A deal is not a discounted product. It can hold several products with its own option choices, so the cart keeps the deal's structure instead of flattening it into one line.",
+    ],
+  },
+  {
+    name: "Djob",
+    url: "https://djob.agency",
+    href: "/case-studies/djob-agency",
+    timeline: "About six months",
+    summary:
+      "A two-sided recruitment workspace: candidates on one side, roles and recruiters on the other, and the matching between them. Public plans start at $29 a month.",
+    points: [
+      "The data sits in PostgreSQL, with the platform built on Base44.",
+      "Embeddings use OpenAI's text-embedding-3-small, computed over structured statement parts rather than one text blob per record.",
+      "That is what makes a result explainable. Cosine similarity gives a proximity score, and a score on its own is not a decision — a candidate can look close to a role and still fail a hard requirement, so the score passes through simple pass/fail business rules.",
+      "The matching screens read from snapshot tables rebuilt once a day, instead of scoring every candidate against every job each time a page opens.",
+      "Two audiences needing different things out of the same data is what made this a six-month project instead of a one-month one.",
+    ],
+  },
+];
+
+const pricingExamples = [
+  {
+    name: "Mincha Time",
+    duration: "About one month",
+    range: "$5,000 to $10,000",
+  },
+  {
+    name: "Domino's Pizza Ra'anana",
+    duration: "About two months",
+    range: "$10,000 to $20,000",
+  },
+  { name: "Djob", duration: "About six months", range: "$30,000 to $60,000" },
+];
+
 export default function Home() {
   const organizationJsonLd = {
     "@context": "https://schema.org",
@@ -243,7 +304,7 @@ export default function Home() {
                 {
                   label: "A clear problem definition",
                   detail:
-                    "Many clients say this alone was worth the engagement. You finally understand what you're actually solving.",
+                    "A written statement of what the system has to decide, what it must not do, and what version one deliberately leaves out.",
                 },
                 {
                   label: "A system map",
@@ -274,51 +335,135 @@ export default function Home() {
             </div>
             <p className="mt-10 text-lg text-muted">
               <span className="text-foreground font-semibold">Timeline:</span>{" "}
-              2–4 weeks from first conversation to working product. This
-              isn&apos;t a 6-month engagement — it&apos;s a focused sprint that
-              ends with something real.
+              scope sets it, not technology. The three builds on this site took
+              about one month, about two months, and about six. The estimate is
+              written down before work starts, and it is what the price is
+              derived from.
             </p>
           </div>
         </section>
 
-        {/* ── Section 5: Real Examples ── */}
-        <section className="max-w-5xl mx-auto px-6 py-20 md:py-28">
+        {/* ── Section 5: Three live projects ── */}
+        <section
+          id="projects"
+          className="max-w-5xl mx-auto px-6 py-20 md:py-28"
+        >
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-            Real situations, real outcomes
+            Three projects that are live right now
           </h2>
-          <div className="mt-12 space-y-12">
-            {[
-              {
-                title: "The restaurant that stopped losing reservations",
-                body: "They were handling bookings over the phone. Staff overwhelmed during peak hours, no-shows costing them tables. We mapped the real flow: book → confirm → remind → cancel automatically. Built in 2 weeks. No-shows dropped. Staff stopped answering phones during dinner.",
-              },
-              {
-                title: "The clinic that got 3 hours back every day",
-                body: "Appointment confirmations happening manually over WhatsApp — one message at a time. We built an automated flow: patient books, confirmation goes out instantly, reminder 24 hours before, cancellation handled without staff. What took 3 hours now takes zero.",
-              },
-              {
-                title: "The founder who launched in 3 weeks instead of 6 months",
-                body: "Had an idea for a service marketplace. Didn't know what to build first. We stripped it to the core loop — the one thing that proves the idea works. Built and deployed it. Real users, real feedback, before most startups finish their wireframes.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="border-l-2 border-accent pl-6 max-w-2xl"
-              >
-                <h3 className="text-lg font-semibold">{item.title}</h3>
-                <p className="mt-3 text-muted leading-relaxed text-[15px]">
-                  {item.body}
+          <p className="mt-4 max-w-2xl text-muted leading-relaxed">
+            All three of these are running and you can open any of them. Each
+            one says how long the build took and what the decisions were that
+            set that number. Nothing here is a mockup or a pilot.
+          </p>
+          <div className="mt-10 space-y-6">
+            {liveProjects.map((project) => (
+              <article key={project.name} className="card-fancy p-7">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                  <h3 className="text-2xl font-semibold">{project.name}</h3>
+                  <span className="rounded-full bg-accent-soft px-3 py-1 text-[13px] font-semibold text-accent-deep">
+                    {project.timeline}
+                  </span>
+                </div>
+                <p className="mt-4 text-muted leading-relaxed">
+                  {project.summary}
                 </p>
-              </div>
+                <ul className="mt-5 space-y-3 text-[15px] leading-relaxed text-muted">
+                  {project.points.map((point) => (
+                    <li key={point} className="flex gap-3">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-accent"
+                  >
+                    <span className="link-underline">Open the live site</span>
+                  </a>
+                  <Link
+                    href={project.href}
+                    className="inline-flex items-center gap-2 font-medium text-accent"
+                  >
+                    <span className="link-underline">Read the full teardown</span>
+                    <span aria-hidden="true" className="arrow-nudge">
+                      &rarr;
+                    </span>
+                  </Link>
+                </div>
+              </article>
             ))}
           </div>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 mt-12 text-accent font-medium hover:underline"
-          >
-            That sound like your situation? Let&apos;s talk
-            <span aria-hidden="true">&rarr;</span>
-          </Link>
+        </section>
+
+        {/* ── Section 5b: Pricing ── */}
+        <section id="pricing" className="bg-muted-light">
+          <div className="max-w-5xl mx-auto px-6 py-20 md:py-28">
+            <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+                  What this actually costs
+                </h2>
+                <div className="mt-6 space-y-5 text-muted leading-relaxed">
+                  <p>
+                    A build is priced by the estimated month of work: $5,000 to
+                    $10,000 for every month we estimate. Where a project lands
+                    inside that range is set by complexity. A build we estimate
+                    at two months is priced as two months, and the estimate goes
+                    into the written proposal before any work starts — so you
+                    are agreeing to a number, not to an hourly meter that runs
+                    until someone says stop.
+                  </p>
+                  <p>
+                    After launch, work is billed hourly at $85 to $165, against
+                    hours actually worked. There is no standing monthly retainer
+                    on a small system, so a month where nothing needed doing
+                    costs nothing.
+                  </p>
+                  <p>
+                    What moves the price is scope, not technology. One
+                    calculation and one reminder going out is roughly a
+                    one-month job. Add payments and an external system you have
+                    to push orders into and keep in sync, and you are at the
+                    Domino&apos;s Ra&apos;anana scale. Two audiences who need
+                    different things out of the same data is a different order
+                    of magnitude again.
+                  </p>
+                </div>
+              </div>
+              <div className="card-fancy bg-white p-7">
+                <h3 className="text-xl font-semibold">
+                  The same method, on three real builds
+                </h3>
+                <p className="mt-3 text-muted leading-relaxed text-[15px]">
+                  So the range is concrete, here is how it maps onto the three
+                  projects above. These are benchmarks, not a quote for your
+                  project.
+                </p>
+                <dl className="mt-6 divide-y divide-gray-100">
+                  {pricingExamples.map((item) => (
+                    <div key={item.name} className="py-4">
+                      <dt className="font-semibold">{item.name}</dt>
+                      <dd className="mt-1 text-[15px] leading-relaxed text-muted">
+                        {item.duration} — {item.range}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 mt-10 text-accent font-medium hover:underline"
+            >
+              Tell us what you are trying to build
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
+          </div>
         </section>
 
         <section className="bg-muted-light">
