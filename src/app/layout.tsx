@@ -13,14 +13,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "WizeApps — Your idea works. It just doesn't exist yet.",
   description:
-    "We turn business problems into working digital products — in weeks, not months. No tech jargon. No wasted features. Just a system that does what you actually need.",
+    "We turn business problems into working digital products — priced before we start, shipped as a first version people can actually use. No tech jargon. No wasted features.",
   openGraph: {
     type: "website",
     url: siteUrl,
     siteName: "WizeApps",
     title: "WizeApps — Your idea works. It just doesn't exist yet.",
     description:
-      "We turn business problems into working digital products — in weeks, not months.",
+      "We turn business problems into working digital products — priced before we start.",
   },
   // Ownership verification only. The ad-serving script is loaded per-page on
   // content articles, not globally, to avoid ads on screens without

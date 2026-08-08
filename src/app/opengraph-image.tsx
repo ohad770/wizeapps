@@ -8,7 +8,7 @@ export default async function OpenGraphImage() {
     eyebrowLabel: "Software agency",
     title: "Your idea works. It just doesn't exist yet.",
     description:
-      "We turn business problems into working digital products — in weeks, not months.",
+      "We turn business problems into working digital products — priced before we start.",
     footerLeft: "wizeapps.agency",
     footerRight: "Booking systems · MVPs · Automation",
   });
